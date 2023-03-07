@@ -23,9 +23,9 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Delivery\Entity\Modify;
+namespace BaksDev\Delivery\Entity\Delivery\Modify;
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
+use BaksDev\Delivery\Entity\Delivery\Event\DeliveryEvent;
 use BaksDev\Users\User\Entity\User;
 use BaksDev\Users\User\Type\Id\UserUid;
 use BaksDev\Core\Entity\EntityEvent;

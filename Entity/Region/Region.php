@@ -21,12 +21,53 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Entity\Modify;
+declare(strict_types=1);
 
-use BaksDev\Core\Type\Modify\ModifyAction;
+namespace BaksDev\Delivery\Entity\Delivery\Region;
 
-interface DeliveryModifyInterface
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+
+/* Region */
+
+
+#[ORM\Entity]
+#[ORM\Table(name: 'region')]
+class Region
 {
-	public function getModify() : ModifyAction;
+	public const TABLE = 'region';
+	
+	/** ID */
+	#[ORM\Id]
+	#[ORM\Column(type: RegionUid::TYPE)]
+	private RegionUid $id;
+	
+	/** ID События */
+	#[ORM\Column(type: RegionEventUid::TYPE, unique: true)]
+	private RegionEventUid $event;
+	
+	
+	public function __construct()
+	{
+		$this->id = new RegionUid();
+	}
+	
+	
+	public function getId() : RegionUid
+	{
+		return $this->id;
+	}
+	
+	
+	public function getEvent() : RegionEventUid
+	{
+		return $this->event;
+	}
+	
+	
+	public function setEvent(RegionEventUid|RegionEvent $event) : void
+	{
+		$this->event = $event instanceof RegionEvent ? $event->getId() : $event;
+	}
 	
 }

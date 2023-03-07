@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2023.  Baks.dev <admin@baks.dev>
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *  
+ *
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *  
+ *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,24 +21,56 @@
  *  THE SOFTWARE.
  */
 
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+declare(strict_types=1);
 
-use BaksDev\Delivery\Entity;
-use BaksDev\Delivery\EntityListeners;
+namespace BaksDev\Delivery\Entity\Delivery;
 
-return static function (ContainerConfigurator $configurator)
+use BaksDev\Delivery\Entity\Delivery\Event\DeliveryEvent;
+use BaksDev\Delivery\Event\DeliveryEventUid;
+use BaksDev\Delivery\Id\DeliveryUid;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+
+/* Delivery */
+
+
+#[ORM\Entity]
+#[ORM\Table(name: 'delivery')]
+class Delivery
 {
-    $services = $configurator->services()
-      ->defaults()
-      ->autowire()
-      ->autoconfigure();
-    
-    /** EntityListeners */
-    $services->set(EntityListeners\DeliveryModifyListener::class)
-      ->class(EntityListeners\DeliveryModifyListener::class)
-      ->tag(
-        'doctrine.orm.entity_listener',
-        ['event' => 'prePersist', 'lazy' => true, 'entity' => Entity\Delivery\Modify\DeliveryModify::class]);
-    
-
-};
+	public const TABLE = 'delivery';
+	
+	/** ID */
+	#[ORM\Id]
+	#[ORM\Column(type: DeliveryUid::TYPE)]
+	private DeliveryUid $id;
+	
+	/** ID События */
+	#[ORM\Column(type: DeliveryEventUid::TYPE, unique: true)]
+	private DeliveryEventUid $event;
+	
+	
+	public function __construct()
+	{
+		$this->id = new DeliveryUid();
+	}
+	
+	
+	public function getId() : DeliveryUid
+	{
+		return $this->id;
+	}
+	
+	
+	public function getEvent() : DeliveryEventUid
+	{
+		return $this->event;
+	}
+	
+	
+	public function setEvent(DeliveryEventUid|DeliveryEvent $event) : void
+	{
+		$this->event = $event instanceof DeliveryEvent ? $event->getId() : $event;
+	}
+	
+}

@@ -25,7 +25,7 @@ namespace BaksDev\Delivery\EntityListeners;
 
 
 use BaksDev\Core\Type\Ip\IpAddress;
-use BaksDev\Delivery\Entity\Modify\DeliveryModify;
+use BaksDev\Delivery\Entity\Delivery\Modify\DeliveryModify;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;

@@ -23,12 +23,12 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Delivery\Entity\Event;
+namespace BaksDev\Delivery\Entity\Delivery\Event;
 
 use App\System\Type\Locale\Locale;
 use BaksDev\Core\Type\Modify\ModifyAction;
 use BaksDev\Core\Type\Modify\ModifyActionEnum;
-use BaksDev\Delivery\Entity\Modify\DeliveryModify;
+use BaksDev\Delivery\Entity\Delivery\Modify\DeliveryModify;
 use BaksDev\Delivery\Event\DeliveryEventUid;
 use BaksDev\Delivery\Id\DeliveryUid;
 use Doctrine\Common\Collections\Collection;
