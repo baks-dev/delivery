@@ -23,7 +23,7 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Delivery\Id;
+namespace BaksDev\Delivery\Type\Id;
 
 use BaksDev\Core\Type\UidType\UidType;
 

@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace BaksDev\Delivery\Entity\Delivery;
 
 use BaksDev\Delivery\Entity\Delivery\Event\DeliveryEvent;
-use BaksDev\Delivery\Event\DeliveryEventUid;
-use BaksDev\Delivery\Id\DeliveryUid;
+use BaksDev\Delivery\Type\Event\DeliveryEventUid;
+use BaksDev\Delivery\Type\Id\DeliveryUid;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 

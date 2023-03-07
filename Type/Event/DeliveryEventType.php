@@ -23,7 +23,7 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Delivery\Event;
+namespace BaksDev\Delivery\Type\Event;
 
 use BaksDev\Core\Type\UidType\UidType;
 

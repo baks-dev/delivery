@@ -25,10 +25,10 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 
 
-use BaksDev\Delivery\Event\DeliveryEventType;
-use BaksDev\Delivery\Event\DeliveryEventUid;
-use BaksDev\Delivery\Id\DeliveryType;
-use BaksDev\Delivery\Id\DeliveryUid;
+use BaksDev\Delivery\Type\Event\DeliveryEventType;
+use BaksDev\Delivery\Type\Event\DeliveryEventUid;
+use BaksDev\Delivery\Type\Id\DeliveryType;
+use BaksDev\Delivery\Type\Id\DeliveryUid;
 use Symfony\Config\DoctrineConfig;
 
 return static function(ContainerConfigurator $container, DoctrineConfig $doctrine) {
