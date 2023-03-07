@@ -1,0 +1,49 @@
+{
+  "name": "baks-dev/delivery",
+  "description": "Модуль доставки",
+  "homepage": "https://github.com/baks-dev/delivery",
+  "keywords": [
+    "symfony",
+    "bundle",
+    "library",
+    "module",
+    "plugin",
+    "delivery",
+    "baksdev"
+  ],
+  "license": "MIT",
+  "type": "symfony-bundle",
+  "authors": [
+    {
+      "name": "Baks Development",
+      "email": "admin@baks.dev"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "symfony/uid": "^6.2",
+    "symfony/security-bundle": "^6.2",
+    "doctrine/doctrine-bundle": "^2.8",
+    "baks-dev/products-product": "^6.2"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "symfony/test-pack": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "BaksDev\\Delivery\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BaksDev\\Delivery\\Tests\\": "Tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/flex": true
+    }
+  }
+}
