@@ -1,6 +1,6 @@
 {
   "name": "baks-dev/delivery",
-  "description": "Модуль доставки",
+  "description": "Модуль доставки заказов ",
   "homepage": "https://github.com/baks-dev/delivery",
   "keywords": [
     "symfony",
