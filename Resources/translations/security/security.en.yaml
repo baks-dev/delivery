@@ -1,0 +1,20 @@
+
+ROLE_DELIVERY:
+  name: 'Delivery methods'
+  desc: 'Delivery methods for orders'
+
+ROLE_DELIVERY_INDEX:
+  name: 'View'
+  desc: ''
+
+ROLE_DELIVERY_NEW:
+  name: 'Add'
+  desc: ''
+
+ROLE_DELIVERY_EDIT:
+  name: 'Edit'
+  desc: ''
+
+ROLE_DELIVERY_DELETE:
+  name: 'Delete'
+  desc: ''

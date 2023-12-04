@@ -1,0 +1,23 @@
+# Роль
+ROLE_DELIVERY:
+  name: 'Способы доставки'
+  desc: 'Способы доставки заказов'
+
+# Правила
+ROLE_DELIVERY_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_DELIVERY_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_DELIVERY_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_DELIVERY_DELETE:
+  name: 'Удалить'
+  desc: ''
+
+

@@ -1,0 +1,8 @@
+{
+  "namespaces": [
+    {
+      "namespace": "delivery",
+      "path": "Resources/view"
+    }
+  ]
+}
