@@ -55,7 +55,7 @@ final class DeliveryForm extends AbstractType
 	{
 		/** Профиль пользователя, которому доступна доставка (null - все) */
 		
-		$profileChoice = $this->profileChoice->getTypeProfileChoice();
+		$profileChoice = $this->profileChoice->getActiveTypeProfileChoice();
 		
 		$builder
 			->add('type', ChoiceType::class, [
