@@ -46,12 +46,12 @@ class DeliveryTrans extends EntityEvent
 	#[ORM\Id]
 	#[ORM\ManyToOne(targetEntity: DeliveryEvent::class, inversedBy: "translate")]
 	#[ORM\JoinColumn(name: 'event', referencedColumnName: "id")]
-	private readonly DeliveryEvent $event;
+	private DeliveryEvent $event;
 	
 	/** Локаль */
 	#[ORM\Id]
 	#[ORM\Column(type: Locale::TYPE, length: 2)]
-	private readonly Locale $local;
+	private Locale $local;
 	
 	/** Название */
 	#[ORM\Column(type: Types::STRING, length: 100)]

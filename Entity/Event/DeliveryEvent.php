@@ -176,4 +176,11 @@ class DeliveryEvent extends EntityEvent
 		
 		return $name;
 	}
+
+
+    public function getUploadCover(): DeliveryCover
+    {
+        return $this->cover ?: $this->cover = new DeliveryCover($this);
+    }
+
 }

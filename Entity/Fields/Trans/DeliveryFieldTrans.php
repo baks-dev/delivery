@@ -46,12 +46,12 @@ class DeliveryFieldTrans extends EntityEvent
 	#[ORM\Id]
 	#[ORM\ManyToOne(targetEntity: DeliveryField::class, inversedBy: "translate")]
 	#[ORM\JoinColumn(name: 'field', referencedColumnName: "id")]
-	private readonly DeliveryField $field;
+	private DeliveryField $field;
 	
 	/** Локаль */
 	#[ORM\Id]
 	#[ORM\Column(type: Locale::TYPE, length: 2)]
-	private readonly Locale $local;
+	private Locale $local;
 	
 	/** Название */
 	#[ORM\Column(type: Types::STRING, length: 100)]

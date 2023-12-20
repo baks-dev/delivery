@@ -33,7 +33,6 @@ use Doctrine\DBAL\Types\Types;
 
 /* Delivery */
 
-
 #[ORM\Entity]
 #[ORM\Table(name: 'delivery')]
 class Delivery

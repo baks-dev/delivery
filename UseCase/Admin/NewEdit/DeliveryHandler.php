@@ -25,42 +25,44 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\UseCase\Admin\NewEdit;
 
+use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Messenger\DeliveryMessage;
 use BaksDev\Files\Resources\Upload\Image\ImageUploadInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class DeliveryHandler
+final class DeliveryHandler extends AbstractHandler
 {
-    private EntityManagerInterface $entityManager;
-
-    private ValidatorInterface $validator;
-
-    private LoggerInterface $logger;
-
-    private ImageUploadInterface $imageUpload;
-    private MessageDispatchInterface $messageDispatch;
-
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator,
-        LoggerInterface $logger,
-        ImageUploadInterface $imageUpload,
-        MessageDispatchInterface $messageDispatch
-
-    )
-    {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-        $this->logger = $logger;
-        $this->imageUpload = $imageUpload;
-        $this->messageDispatch = $messageDispatch;
-    }
+//    private EntityManagerInterface $entityManager;
+//
+//    private ValidatorInterface $validator;
+//
+//    private LoggerInterface $logger;
+//
+//    private ImageUploadInterface $imageUpload;
+//    private MessageDispatchInterface $messageDispatch;
+//
+//
+//    public function __construct(
+//        EntityManagerInterface $entityManager,
+//        ValidatorInterface $validator,
+//        LoggerInterface $logger,
+//        ImageUploadInterface $imageUpload,
+//        MessageDispatchInterface $messageDispatch
+//
+//    )
+//    {
+//        $this->entityManager = $entityManager;
+//        $this->validator = $validator;
+//        $this->logger = $logger;
+//        $this->imageUpload = $imageUpload;
+//        $this->messageDispatch = $messageDispatch;
+//    }
 
 
     public function handle(
@@ -68,142 +70,55 @@ final class DeliveryHandler
         //?UploadedFile $cover = null
     ): string|Delivery
     {
-        /**
-         * Валидация DTO
-         */
-        $errors = $this->validator->validate($command);
+        /* Валидация DTO  */
+        $this->validatorCollection->add($command);
 
-        if(count($errors) > 0)
+        $this->main = new Delivery();
+        $this->event = new DeliveryEvent();
+
+        try
         {
-            /** Ошибка валидации */
-            $uniqid = uniqid('', false);
-            $this->logger->error(sprintf('%s: %s', $uniqid, $errors), [__FILE__.':'.__LINE__]);
-
-            return $uniqid;
+            $command->getEvent() ? $this->preUpdate($command) : $this->prePersist($command);
+        }
+        catch(DomainException $errorUniqid)
+        {
+            return $errorUniqid->getMessage();
         }
 
-        if($command->getEvent())
-        {
-            $EventRepo = $this->entityManager->getRepository(DeliveryEvent::class)->find(
-                $command->getEvent()
-            );
 
-            if($EventRepo === null)
+
+        /* Загружаем файл обложки */
+        if(method_exists($command, 'getCover'))
+        {
+            /** @var Cover\DeliveryCoverDTO $Avatar */
+            $Cover = $command->getCover();
+
+            if($Cover->file !== null)
             {
-                $uniqid = uniqid('', false);
-                $errorsString = sprintf(
-                    'Not found %s by id: %s',
-                    DeliveryEvent::class,
-                    $command->getEvent()
-                );
-                $this->logger->error($uniqid.': '.$errorsString);
-
-                return $uniqid;
-            }
-
-            $EventRepo->setEntity($command);
-            $EventRepo->setEntityManager($this->entityManager);
-            $Event = $EventRepo->cloneEntity();
-        }
-        else
-        {
-            $Event = new DeliveryEvent();
-            $Event->setEntity($command);
-            $this->entityManager->persist($Event);
-        }
-
-//        $this->entityManager->clear();
-//        $this->entityManager->persist($Event);
-
-
-        /** @var Delivery $Main */
-        if($Event->getMain())
-        {
-            $Main = $this->entityManager->getRepository(Delivery::class)
-                ->findOneBy(['event' => $command->getEvent()]);
-
-            if(empty($Main))
-            {
-                $uniqid = uniqid('', false);
-                $errorsString = sprintf(
-                    'Not found %s by event: %s',
-                    Delivery::class,
-                    $command->getEvent()
-                );
-                $this->logger->error($uniqid.': '.$errorsString);
-
-                return $uniqid;
+                $DeliveryCover = $this->event->getUploadCover();
+                $this->imageUpload->upload($Cover->file, $DeliveryCover);
             }
         }
-        else
+
+
+
+        /* Валидация всех объектов */
+        if($this->validatorCollection->isInvalid())
         {
-
-            $Main = new Delivery();
-            $this->entityManager->persist($Main);
-            $Event->setMain($Main);
+            return $this->validatorCollection->getErrorUniqid();
         }
-
-
-        /**
-         * Загружаем файл обложки
-         *
-         * @var Cover\DeliveryCoverDTO $Cover
-         */
-        $Cover = $command->getCover();
-        if($Cover->file !== null)
-        {
-            $PaymentCover = $Cover->getEntityUpload();
-            $this->imageUpload->upload($Cover->file, $PaymentCover);
-        }
-
-        /* присваиваем событие корню */
-        $Main->setEvent($Event);
-
-
-        /**
-         * Валидация Event
-         */
-
-        $errors = $this->validator->validate($Event);
-
-        if(count($errors) > 0)
-        {
-            /** Ошибка валидации */
-            $uniqid = uniqid('', false);
-            $this->logger->error(sprintf('%s: %s', $uniqid, $errors), [__FILE__.':'.__LINE__]);
-
-            return $uniqid;
-        }
-
-        /**
-         * Валидация Main
-         */
-
-        $errors = $this->validator->validate($Main);
-
-        if(count($errors) > 0)
-        {
-            /** Ошибка валидации */
-            $uniqid = uniqid('', false);
-            $this->logger->error(sprintf('%s: %s', $uniqid, $errors), [__FILE__.':'.__LINE__]);
-
-            return $uniqid;
-        }
-
-
-        /**
-         * Сохраняем сущность
-         */
 
         $this->entityManager->flush();
 
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(
-            message: new DeliveryMessage($Main->getId(), $Main->getEvent(), $command->getEvent()),
+            message: new DeliveryMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
             transport: 'delivery'
         );
 
-        return $Main;
+        return $this->main;
     }
+
+
 
 }
