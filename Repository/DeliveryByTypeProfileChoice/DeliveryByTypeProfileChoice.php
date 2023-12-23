@@ -82,5 +82,42 @@ final class DeliveryByTypeProfileChoice implements DeliveryByTypeProfileChoiceIn
 		
 		return $qb->getQuery()->getResult();
 	}
+
+
+    public function fetchAllDelivery() : ?array
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $select = sprintf('new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
+            DeliveryUid::class
+        );
+
+        $qb->select($select);
+
+        $qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
+
+        $qb->join(DeliveryEntity\Event\DeliveryEvent::class,
+            'event',
+            'WITH',
+            'event.id = delivery.event AND event.active = true'
+        );
+
+        $qb->leftJoin(DeliveryEntity\Trans\DeliveryTrans::class,
+            'trans',
+            'WITH',
+            'trans.event = delivery.event AND trans.local = :local'
+        );
+
+        $qb->leftJoin(DeliveryEntity\Price\DeliveryPrice::class, 'price', 'WITH', 'price.event = delivery.event');
+
+        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
+
+        $qb->orderBy('event.sort');
+
+
+
+
+        return $qb->getQuery()->getResult();
+    }
 	
 }
