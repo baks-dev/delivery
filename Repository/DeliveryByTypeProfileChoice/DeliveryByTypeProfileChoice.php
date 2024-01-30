@@ -84,6 +84,7 @@ final class DeliveryByTypeProfileChoice implements DeliveryByTypeProfileChoiceIn
 	}
 
 
+
     public function fetchAllDelivery() : ?array
     {
         $qb = $this->entityManager->createQueryBuilder();
