@@ -20,6 +20,8 @@ namespace BaksDev\Delivery\Controller\User;
 
 use BaksDev\Contacts\Region\Repository\ContactCallByRegion\ContactCallByRegionInterface;
 use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Core\Form\Search\SearchDTO;
+use BaksDev\Core\Form\Search\SearchForm;
 use BaksDev\Delivery\Forms\RegionFilter\RegionFilterDTO;
 use BaksDev\Delivery\Forms\RegionFilter\RegionFilterForm;
 use BaksDev\Delivery\Repository\AllDeliveryDetail\DeliveryByTypeProfileInterface;
@@ -40,8 +42,8 @@ final class DeliveryController extends AbstractController
         DeliveryByTypeProfileInterface $delivery,
         DeliveryRegionDefaultInterface $defaultRegion,
         ContactCallByRegionInterface $callRegion,
-    ): Response {
-
+    ): Response
+    {
 
         $profiles = $allTypeProfile->getTypeProfile();
 
@@ -58,29 +60,32 @@ final class DeliveryController extends AbstractController
 
         if($profiles)
         {
-            foreach ($profiles as $profile) {
+            foreach($profiles as $profile)
+            {
                 $delivers[(string) $profile['id']] =
                     $delivery->fetchAllDeliveryAssociative($profile['id'], $RegionFilterDTO->getRegion());
             }
         }
 
 
-
         /** Пункты выдачи товаров */
         $calls =
             $callRegion->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion(), true);
 
-        /*if(empty($calls))
-        {
-            $calls =
-                $callRegion->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion(), true);
-        }*/
 
+        // Поиск по всему сайту
+        $allSearch = new SearchDTO($request);
+        $allSearchForm = $this->createForm(SearchForm::class, $allSearch, [
+            'action' => $this->generateUrl('core:search'),
+        ]);
+
+        // 'all_search' => $allSearchForm->createView(),
         return $this->render([
             'profiles' => $profiles,
             'delivers' => $delivers,
             'calls' => $calls,
             'form' => $form->createView(),
+            'all_search' => $allSearchForm->createView(),
         ]);
     }
 }
