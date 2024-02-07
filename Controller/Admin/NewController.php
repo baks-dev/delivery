@@ -55,12 +55,12 @@ final class NewController extends AbstractController
             $Delivery = $deliveryHandler->handle($DeliveryDTO);
 
             if ($Delivery instanceof Delivery) {
-                $this->addFlash('success', 'admin.success.new', 'admin.delivery');
+                $this->addFlash('success', 'admin.success.new', 'delivery.admin');
 
                 return $this->redirectToRoute('delivery:admin.index');
             }
 
-            $this->addFlash('danger', 'admin.danger.new', 'admin.delivery', $Delivery);
+            $this->addFlash('danger', 'admin.danger.new', 'delivery.admin', $Delivery);
 
             return $this->redirectToReferer();
         }

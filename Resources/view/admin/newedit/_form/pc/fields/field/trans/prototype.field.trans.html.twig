@@ -1,11 +1,11 @@
-{% trans_default_domain 'admin.delivery' %}
+{% trans_default_domain 'delivery.admin' %}
 
 
 {% set identifier = trans_prototype.vars.id %}
 
 {% set prototype_local = form_row(trans_prototype.local, { value: '__LOCALE__' }) %}
-{% set prototype_name = form_row(trans_prototype.name, { label: 'admin.form.label.field.trans.name'|trans }) %}
-{% set prototype_description = form_row(trans_prototype.description, { label: 'admin.form.label.field.trans.desc'|trans }) %}
+{% set prototype_name = form_row(trans_prototype.name, { label: 'form.label.field.trans.name'|trans }) %}
+{% set prototype_description = form_row(trans_prototype.description, { label: 'form.label.field.trans.desc'|trans }) %}
 
 {% if form.translate.count > 1 %}
 	

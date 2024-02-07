@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,62 +25,56 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Controller\Admin;
 
+
 use BaksDev\Core\Controller\AbstractController;
 use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
-use BaksDev\Delivery\Entity;
-use BaksDev\Delivery\UseCase\Admin\Delete\PaymentDeleteDTO;
-use BaksDev\Delivery\UseCase\Admin\Delete\PaymentDeleteForm;
-use BaksDev\Delivery\UseCase\Admin\Delete\PaymentDeleteHandler;
+use BaksDev\Delivery\Entity\Delivery;
+use BaksDev\Delivery\Entity\Event\DeliveryEvent;
+use BaksDev\Delivery\UseCase\Admin\Delete\DeliveryDeleteDTO;
+use BaksDev\Delivery\UseCase\Admin\Delete\DeliveryDeleteForm;
+use BaksDev\Delivery\UseCase\Admin\Delete\DeliveryDeleteHandler;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-#[RoleSecurity(['ROLE_ADMIN', 'ROLE_DELIVERY_DELETE'])]
+#[RoleSecurity('ROLE_DELIVERY_DELETE')]
 final class DeleteController extends AbstractController
 {
     #[Route('/admin/delivery/delete/{id}', name: 'admin.delete', methods: ['GET', 'POST'])]
     public function delete(
         Request $request,
-        #[MapEntity] Entity\Event\PaymentEvent $Event,
-        PaymentDeleteHandler $handler,
-    ): Response {
-
-        dd('DeleteController.php');
-
-        $PaymentDeleteDTO = new PaymentDeleteDTO();
-        $Event->getDto($PaymentDeleteDTO);
-        $form = $this->createForm(PaymentDeleteForm::class, $PaymentDeleteDTO, [
-            'action' => $this->generateUrl('payment:admin.delete', ['id' => $PaymentDeleteDTO->getEvent()]),
+        #[MapEntity] DeliveryEvent $DeliveryEvent,
+        DeliveryDeleteHandler $DeliveryDeleteHandler,
+    ): Response
+    {
+        $DeliveryDeleteDTO = new DeliveryDeleteDTO();
+        $DeliveryEvent->getDto($DeliveryDeleteDTO);
+        $form = $this->createForm(DeliveryDeleteForm::class, $DeliveryDeleteDTO, [
+            'action' => $this->generateUrl('delivery:admin.delete', ['id' => $DeliveryDeleteDTO->getEvent()]),
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('payment_delete')) {
-            $Payment = $handler->handle($PaymentDeleteDTO);
+        if($form->isSubmitted() && $form->isValid() && $form->has('delivery_delete'))
+        {
+            $handle = $DeliveryDeleteHandler->handle($DeliveryDeleteDTO);
 
-            if ($Payment instanceof Entity\Payment) {
-                $this->addFlash('admin.page.delete', 'admin.success.delete', 'admin.payment');
-
-                return $this->redirectToRoute('payment:admin.index');
-            }
-
-            $this->addFlash(
+            $this->addFlash
+            (
                 'admin.page.delete',
-                'admin.danger.delete',
-                'admin.payment',
-                $Payment
+                $handle instanceof Delivery ? 'admin.success.delete' : 'admin.danger.delete',
+                'delivery.admin',
+                $handle
             );
 
-            return $this->redirectToRoute('payment:admin.index', status: 400);
+            return $this->redirectToRoute('delivery:admin.index');
         }
 
-        return $this->render(
-            [
-                'form' => $form->createView(),
-                'name' => $Event->getNameByLocale($this->getLocale()), // название согласно локали
-            ]
-        );
+        return $this->render([
+            'form' => $form->createView(),
+            'name' => $DeliveryEvent->getNameByLocale($this->getLocale()), // название согласно локали
+        ]);
     }
 }

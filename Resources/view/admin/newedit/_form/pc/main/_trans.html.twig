@@ -1,4 +1,4 @@
-{% trans_default_domain 'admin.delivery' %}
+{% trans_default_domain 'delivery.admin' %}
 
 {% if form.translate.count > 1 %}
 	
@@ -39,10 +39,10 @@
 			{{ form_row(translate.local) }}
 			
 			{# Название способа оплаты #}
-			{{ form_row(translate.name, { label : 'admin.form.label.trans.name'|trans, attr: { 'data-lang' : translate.vars.id ~ "_"~translate.vars.value.local  }  }) }}
+			{{ form_row(translate.name, { label : 'form.label.trans.name'|trans, attr: { 'data-lang' : translate.vars.id ~ "_"~translate.vars.value.local  }  }) }}
 			
 			{# Краткое описание #}
-			{{ form_row(translate.description, { label : 'admin.form.label.trans.desc'|trans }) }}
+			{{ form_row(translate.description, { label : 'form.label.trans.desc'|trans }) }}
 		</div>
 	{% endfor %}
 

@@ -38,37 +38,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DeliveryHandler extends AbstractHandler
 {
-//    private EntityManagerInterface $entityManager;
-//
-//    private ValidatorInterface $validator;
-//
-//    private LoggerInterface $logger;
-//
-//    private ImageUploadInterface $imageUpload;
-//    private MessageDispatchInterface $messageDispatch;
-//
-//
-//    public function __construct(
-//        EntityManagerInterface $entityManager,
-//        ValidatorInterface $validator,
-//        LoggerInterface $logger,
-//        ImageUploadInterface $imageUpload,
-//        MessageDispatchInterface $messageDispatch
-//
-//    )
-//    {
-//        $this->entityManager = $entityManager;
-//        $this->validator = $validator;
-//        $this->logger = $logger;
-//        $this->imageUpload = $imageUpload;
-//        $this->messageDispatch = $messageDispatch;
-//    }
 
-
-    public function handle(
-        DeliveryDTO $command,
-        //?UploadedFile $cover = null
-    ): string|Delivery
+    public function handle(DeliveryDTO $command): string|Delivery
     {
         /* Валидация DTO  */
         $this->validatorCollection->add($command);

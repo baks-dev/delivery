@@ -40,15 +40,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[RoleSecurity('ROLE_DELIVERY')]
 final class IndexController extends AbstractController
 {
-    #[Route('/admin/delivers/{page<\d+>}', name: 'admin.index', methods: [
-        'GET',
-        'POST',
-    ])]
+    #[Route('/admin/delivers/{page<\d+>}', name: 'admin.index', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
         AllDeliveryInterface $allDelivery,
         int $page = 0,
-    ): Response {
+    ): Response
+    {
+
         // Поиск
         $search = new SearchDTO();
         $searchForm = $this->createForm(SearchForm::class, $search);

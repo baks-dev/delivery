@@ -1,4 +1,4 @@
-{% trans_default_domain 'admin.delivery' %}
+{% trans_default_domain 'delivery.admin' %}
 
 <div class="d-flex gap-2 mb-3">
 	
@@ -12,7 +12,7 @@
 				<div class="card-title">
 					<h4>
 						{# Основные настройки  #}
-						{{ 'admin.form.header.basic'|trans }}
+						{{ 'form.header.basic'|trans }}
 					</h4>
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 				<div class="card-title">
 					<h4>
 						{# Настройки локали  #}
-						 {{ 'admin.form.header.local'|trans }}
+						 {{ 'form.header.local'|trans }}
 					</h4>
 				</div>
 			</div>
@@ -80,13 +80,13 @@
 				<div class="card-title">
 					<h4>
 						{# Основные настройки  #}
-						Стомиость доставки
+						Стоимость доставки
 					</h4>
 				</div>
 			</div>
 			
 			<div class="card-body text-start pb-0">
-				{# Стомиость доставки #}
+				{# Стоимость доставки #}
 				{{ include(_self|replace({ "form.main.html.twig": "_price.html.twig" })) }}
 				
 			</div>

@@ -1,4 +1,4 @@
-{% trans_default_domain 'admin.delivery' %}
+{% trans_default_domain 'delivery.admin' %}
 
 {% set identifier = field.translate.vars.id %}
 
@@ -43,12 +43,12 @@
 			{# Название секции #}
 			{# {{ 'admin.product.section.form.name'|trans }} #}
 			{{ form_row(translate.name, {
-				label : 'admin.form.label.field.trans.name'|trans
+				label : 'form.label.field.trans.name'|trans
 			}) }}
 			
 			{# Краткое описание #}
 			{{ form_row(translate.description, {
-				label: 'admin.form.label.field.trans.desc'|trans
+				label: 'form.label.field.trans.desc'|trans
 			}) }}
 		</div>
 	{% endfor %}

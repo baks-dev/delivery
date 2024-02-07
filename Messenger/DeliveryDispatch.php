@@ -26,11 +26,14 @@ declare(strict_types=1);
 namespace BaksDev\Delivery\Messenger;
 
 use BaksDev\Core\Cache\AppCacheInterface;
+use BaksDev\Delivery\Repository\CurrentDeliveryEvent\CurrentDeliveryEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 final class DeliveryDispatch
 {
+    //public function __construct(CurrentDeliveryEvent $currentDeliveryEvent) {}
+
     public function __invoke(DeliveryMessage $message) :void {}
 }

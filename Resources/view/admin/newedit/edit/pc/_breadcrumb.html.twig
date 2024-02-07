@@ -1,4 +1,4 @@
-{% trans_default_domain 'admin.delivery' %}
+{% trans_default_domain 'delivery.admin' %}
 
 <nav class="small" style="--bs-breadcrumb-divider: '-';" aria-label="breadcrumb">
 	<ol class="breadcrumb small opacity-75">
@@ -34,14 +34,14 @@
 		<li class="breadcrumb-item">
 			<a href="{{ path('delivery:admin.index') }}"
 					class="text-decoration-none"
-					title="{{ 'admin.breadcrumb.index'|trans }}">
-				{{ 'admin.breadcrumb.index'|trans }}
+					title="{{ 'breadcrumb.index'|trans }}">
+				{{ 'breadcrumb.index'|trans }}
 			</a>
 		</li>
 		
 		<li class="breadcrumb-item active" aria-current="page"
-				title="{{ 'admin.breadcrumb.edit'|trans }}">
-			{{ 'admin.breadcrumb.edit'|trans }}
+				title="{{ 'breadcrumb.edit'|trans }}">
+			{{ 'breadcrumb.edit'|trans }}
 		</li>
 	</ol>
 </nav>

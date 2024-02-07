@@ -1,4 +1,4 @@
-{% trans_default_domain 'admin.delivery' %}
+{% trans_default_domain 'delivery.admin' %}
 
 <div class="card">
 	<div class="card-body">
@@ -30,8 +30,8 @@
 					<div class="w-100">
 						{{ form_row(field.type,
 							{
-								label : 'admin.form.label.field.type'|trans ,
-								placeholder: 'admin.form.placeholder.field'|trans,
+								label : 'form.label.field.type'|trans ,
+								placeholder: 'form.placeholder.field'|trans,
 								attr: { 'data-select' : 'select2'
 							} }) }}
 					</div>

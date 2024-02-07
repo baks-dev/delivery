@@ -24,8 +24,12 @@ use BaksDev\Users\User\Tests\TestUserAccount;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
+use BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest;
 
-/** @group delivery */
+/**
+ * @group delivery
+ * @depends BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest::class
+ */
 #[When(env: 'test')]
 final class EditControllerTest extends WebTestCase
 {
@@ -34,17 +38,17 @@ final class EditControllerTest extends WebTestCase
     private const ROLE = 'ROLE_DELIVERY_EDIT';
 
 
-    private static ?DeliveryEventUid $identifier = null;
-
-    public static function setUpBeforeClass(): void
-    {
-        // Получаем одно из событий Продукта
-        $em = self::getContainer()->get(EntityManagerInterface::class);
-        self::$identifier = $em->getRepository(Delivery::class)->findOneBy([], ['id' => 'DESC'])?->getEvent();
-
-        $em->clear();
-        //$em->close();
-    }
+//    private static ?DeliveryEventUid $identifier = null;
+//
+//    public static function setUpBeforeClass(): void
+//    {
+//        // Получаем одно из событий Продукта
+//        $em = self::getContainer()->get(EntityManagerInterface::class);
+//        self::$identifier = $em->getRepository(Delivery::class)->findOneBy([], ['id' => 'DESC'])?->getEvent();
+//
+//        $em->clear();
+//        //$em->close();
+//    }
 
 
 
@@ -52,10 +56,10 @@ final class EditControllerTest extends WebTestCase
     public function testRoleSuccessful(): void
     {
         // Получаем одно из событий
-        $identifier = self::$identifier;
+        //$identifier = self::$identifier;
 
-        if ($identifier)
-        {
+        //if ($identifier)
+        //{
             self::ensureKernelShutdown();
             $client = static::createClient();
 
@@ -66,11 +70,11 @@ final class EditControllerTest extends WebTestCase
                 $usr = TestUserAccount::getModer(self::ROLE);
 
                 $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, $identifier->getValue()));
+                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
 
                 self::assertResponseIsSuccessful();
             }
-        }
+        //}
 
         self::assertTrue(true);
     }
@@ -79,10 +83,10 @@ final class EditControllerTest extends WebTestCase
     public function testRoleAdminSuccessful(): void
     {
         // Получаем одно из событий
-        $identifier = self::$identifier;
-
-        if ($identifier)
-        {
+//        $identifier = self::$identifier;
+//
+//        if ($identifier)
+//        {
             self::ensureKernelShutdown();
             $client = static::createClient();
 
@@ -93,11 +97,11 @@ final class EditControllerTest extends WebTestCase
                 $usr = TestUserAccount::getAdmin();
 
                 $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, $identifier->getValue()));
+                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
 
                 self::assertResponseIsSuccessful();
             }
-        }
+        //}
 
         self::assertTrue(true);
     }
@@ -106,10 +110,10 @@ final class EditControllerTest extends WebTestCase
     public function testRoleUserDeny(): void
     {
         // Получаем одно из событий
-        $identifier = self::$identifier;
-
-        if ($identifier)
-        {
+//        $identifier = self::$identifier;
+//
+//        if ($identifier)
+//        {
             self::ensureKernelShutdown();
             $client = static::createClient();
 
@@ -119,11 +123,11 @@ final class EditControllerTest extends WebTestCase
 
                 $usr = TestUserAccount::getUsr();
                 $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, $identifier->getValue()));
+                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
 
                 self::assertResponseStatusCodeSame(403);
             }
-        }
+       // }
 
         self::assertTrue(true);
     }
@@ -131,11 +135,11 @@ final class EditControllerTest extends WebTestCase
     /** Доступ по без роли */
     public function testGuestFiled(): void
     {
-        // Получаем одно из событий
-        $identifier = self::$identifier;
-
-        if ($identifier)
-        {
+//        // Получаем одно из событий
+//        $identifier = self::$identifier;
+//
+//        if ($identifier)
+//        {
             self::ensureKernelShutdown();
             $client = static::createClient();
 
@@ -143,12 +147,12 @@ final class EditControllerTest extends WebTestCase
             {
                 $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                $client->request('GET', sprintf(self::URL, $identifier->getValue()));
+                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
 
                 // Full authentication is required to access this resource
                 self::assertResponseStatusCodeSame(401);
             }
-        }
+     //   }
 
         self::assertTrue(true);
     }

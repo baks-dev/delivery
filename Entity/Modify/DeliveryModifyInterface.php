@@ -27,6 +27,6 @@ use BaksDev\Core\Type\Modify\ModifyAction;
 
 interface DeliveryModifyInterface
 {
-	public function getModify() : ModifyAction;
+	//public function getModify() : ModifyAction;
 	
 }
