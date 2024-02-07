@@ -29,7 +29,7 @@ return static function(ContainerConfigurator $configurator)
             ->defaults()
             ->autowire()
             ->autoconfigure()
-            ->public()
+            //->public()
         ;
 
         $NAMESPACE = 'BaksDev\Delivery\\';

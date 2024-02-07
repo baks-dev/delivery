@@ -33,7 +33,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class DeliveryDispatch
 {
-    //public function __construct(CurrentDeliveryEvent $currentDeliveryEvent) {}
+    public function __construct(CurrentDeliveryEvent $currentDeliveryEvent) {}
 
     public function __invoke(DeliveryMessage $message) :void {}
 }

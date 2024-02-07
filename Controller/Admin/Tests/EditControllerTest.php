@@ -18,13 +18,11 @@
 
 namespace BaksDev\Delivery\Controller\Admin\Tests;
 
-use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
+use BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest;
 use BaksDev\Users\User\Tests\TestUserAccount;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
-use BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest;
 
 /**
  * @group delivery
@@ -38,43 +36,25 @@ final class EditControllerTest extends WebTestCase
     private const ROLE = 'ROLE_DELIVERY_EDIT';
 
 
-//    private static ?DeliveryEventUid $identifier = null;
-//
-//    public static function setUpBeforeClass(): void
-//    {
-//        // Получаем одно из событий Продукта
-//        $em = self::getContainer()->get(EntityManagerInterface::class);
-//        self::$identifier = $em->getRepository(Delivery::class)->findOneBy([], ['id' => 'DESC'])?->getEvent();
-//
-//        $em->clear();
-//        //$em->close();
-//    }
-
-
-
     /** Доступ по роли */
     public function testRoleSuccessful(): void
     {
-        // Получаем одно из событий
-        //$identifier = self::$identifier;
 
-        //if ($identifier)
-        //{
-            self::ensureKernelShutdown();
-            $client = static::createClient();
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                $usr = TestUserAccount::getModer(self::ROLE);
+            $usr = TestUserAccount::getModer(self::ROLE);
 
-                $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+            $client->loginUser($usr, 'user');
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
 
-                self::assertResponseIsSuccessful();
-            }
-        //}
+            self::assertResponseIsSuccessful();
+        }
+
 
         self::assertTrue(true);
     }
@@ -82,26 +62,21 @@ final class EditControllerTest extends WebTestCase
     // доступ по роли ROLE_ADMIN
     public function testRoleAdminSuccessful(): void
     {
-        // Получаем одно из событий
-//        $identifier = self::$identifier;
-//
-//        if ($identifier)
-//        {
-            self::ensureKernelShutdown();
-            $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-                $usr = TestUserAccount::getAdmin();
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+            $usr = TestUserAccount::getAdmin();
 
-                self::assertResponseIsSuccessful();
-            }
-        //}
+            $client->loginUser($usr, 'user');
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+
+            self::assertResponseIsSuccessful();
+        }
 
         self::assertTrue(true);
     }
@@ -109,25 +84,21 @@ final class EditControllerTest extends WebTestCase
     // доступ по роли ROLE_USER
     public function testRoleUserDeny(): void
     {
-        // Получаем одно из событий
-//        $identifier = self::$identifier;
-//
-//        if ($identifier)
-//        {
-            self::ensureKernelShutdown();
-            $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-                $usr = TestUserAccount::getUsr();
-                $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                self::assertResponseStatusCodeSame(403);
-            }
-       // }
+            $usr = TestUserAccount::getUsr();
+            $client->loginUser($usr, 'user');
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+
+            self::assertResponseStatusCodeSame(403);
+        }
+
 
         self::assertTrue(true);
     }
@@ -135,24 +106,19 @@ final class EditControllerTest extends WebTestCase
     /** Доступ по без роли */
     public function testGuestFiled(): void
     {
-//        // Получаем одно из событий
-//        $identifier = self::$identifier;
-//
-//        if ($identifier)
-//        {
-            self::ensureKernelShutdown();
-            $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                // Full authentication is required to access this resource
-                self::assertResponseStatusCodeSame(401);
-            }
-     //   }
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+
+            // Full authentication is required to access this resource
+            self::assertResponseStatusCodeSame(401);
+        }
 
         self::assertTrue(true);
     }

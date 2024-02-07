@@ -1,20 +1,26 @@
 <?php
 /*
- *  Copyright 2022.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *   limitations under the License.
- *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
  */
+
 namespace BaksDev\Delivery\Controller\Admin\Tests;
 
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
@@ -35,43 +41,24 @@ final class DeleteControllerTest extends WebTestCase
     private const ROLE = 'ROLE_DELIVERY_DELETE';
 
 
-//    private static ?DeliveryEventUid $identifier = null;
-//
-//    public static function setUpBeforeClass(): void
-//    {
-//        // Получаем одно из событий Продукта
-//        $em = self::getContainer()->get(EntityManagerInterface::class);
-//        self::$identifier = $em->getRepository(Delivery::class)->findOneBy([], ['id' => 'DESC'])?->getEvent();
-//
-//        $em->clear();
-//        //$em->close();
-//    }
-
-
-
     /** Доступ по роли */
     public function testRoleSuccessful(): void
     {
-        // Получаем одно из событий
-        //$identifier = self::$identifier;
 
-        //if ($identifier)
-        //{
-            self::ensureKernelShutdown();
-            $client = static::createClient();
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                $usr = TestUserAccount::getModer(self::ROLE);
+            $usr = TestUserAccount::getModer(self::ROLE);
 
-                $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+            $client->loginUser($usr, 'user');
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
 
-                self::assertResponseIsSuccessful();
-            }
-        //}
+            self::assertResponseIsSuccessful();
+        }
 
         self::assertTrue(true);
     }
@@ -79,26 +66,21 @@ final class DeleteControllerTest extends WebTestCase
     // доступ по роли ROLE_ADMIN
     public function testRoleAdminSuccessful(): void
     {
-        // Получаем одно из событий
-//        $identifier = self::$identifier;
-//
-//        if ($identifier)
-//        {
-            self::ensureKernelShutdown();
-            $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-                $usr = TestUserAccount::getAdmin();
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+            $usr = TestUserAccount::getAdmin();
 
-                self::assertResponseIsSuccessful();
-            }
-        //}
+            $client->loginUser($usr, 'user');
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+
+            self::assertResponseIsSuccessful();
+        }
 
         self::assertTrue(true);
     }
@@ -106,25 +88,20 @@ final class DeleteControllerTest extends WebTestCase
     // доступ по роли ROLE_USER
     public function testRoleUserDeny(): void
     {
-        // Получаем одно из событий
-//        $identifier = self::$identifier;
-//
-//        if ($identifier)
-//        {
-            self::ensureKernelShutdown();
-            $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-                $usr = TestUserAccount::getUsr();
-                $client->loginUser($usr, 'user');
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                self::assertResponseStatusCodeSame(403);
-            }
-       // }
+            $usr = TestUserAccount::getUsr();
+            $client->loginUser($usr, 'user');
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+
+            self::assertResponseStatusCodeSame(403);
+        }
 
         self::assertTrue(true);
     }
@@ -132,24 +109,19 @@ final class DeleteControllerTest extends WebTestCase
     /** Доступ по без роли */
     public function testGuestFiled(): void
     {
-//        // Получаем одно из событий
-//        $identifier = self::$identifier;
-//
-//        if ($identifier)
-//        {
-            self::ensureKernelShutdown();
-            $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
-            {
-                $client->setServerParameter('HTTP_USER_AGENT', $device);
+        self::ensureKernelShutdown();
+        $client = static::createClient();
 
-                $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+        foreach(TestUserAccount::getDevice() as $device)
+        {
+            $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-                // Full authentication is required to access this resource
-                self::assertResponseStatusCodeSame(401);
-            }
-     //   }
+            $client->request('GET', sprintf(self::URL, DeliveryEventUid::TEST));
+
+            // Full authentication is required to access this resource
+            self::assertResponseStatusCodeSame(401);
+        }
 
         self::assertTrue(true);
     }
