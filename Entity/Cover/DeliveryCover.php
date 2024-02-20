@@ -134,9 +134,11 @@ class DeliveryCover extends EntityEvent implements UploadEntityInterface
         if($ext)
         {
             $this->ext = $ext;
+            $this->cdn = true;
+            return;
         }
 
-        $this->cdn = true;
+        $this->cdn = false;
 	}
 	
 	
@@ -152,26 +154,5 @@ class DeliveryCover extends EntityEvent implements UploadEntityInterface
     {
         return $this->ext;
     }
-
-
-
-
-
-
-	
-//	public function getUploadDir() : object
-//	{
-//		return $this->event->getId();
-//	}
-//
-//    public function getDir(): DeliveryEventUid
-//    {
-//        return $this->dir;
-//    }
-//
-//    public static function getDirName(): string
-//    {
-//        return DeliveryEventUid::class;
-//    }
 
 }
