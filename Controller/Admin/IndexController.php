@@ -50,7 +50,9 @@ final class IndexController extends AbstractController
 
         // Поиск
         $search = new SearchDTO();
-        $searchForm = $this->createForm(SearchForm::class, $search);
+        $searchForm = $this->createForm(SearchForm::class, $search,
+            ['action' => $this->generateUrl('delivery:admin.index')]
+        );
         $searchForm->handleRequest($request);
 
         // Получаем список
