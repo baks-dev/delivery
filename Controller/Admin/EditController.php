@@ -56,17 +56,18 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && $form->has('delivery')) {
-            $Delivery = $deliveryHandler->handle($DeliveryDTO);
 
-            if ($Delivery instanceof Delivery) {
-                $this->addFlash('success', 'admin.success.new', 'delivery.admin');
+            $handle = $deliveryHandler->handle($DeliveryDTO);
 
-                return $this->redirectToRoute('delivery:admin.index');
-            }
+            $this->addFlash
+            (
+                'page.edit',
+                $handle instanceof Delivery ? 'success.edit' : 'danger.edit',
+                'delivery.admin',
+                $handle
+            );
 
-            $this->addFlash('danger', 'admin.danger.new', 'delivery.admin', $Delivery);
-
-            return $this->redirectToReferer();
+            return $handle instanceof Delivery ? $this->redirectToRoute('delivery:admin.index') : $this->redirectToReferer();
         }
 
         return $this->render(['form' => $form->createView()]);

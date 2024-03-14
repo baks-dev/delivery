@@ -51,18 +51,19 @@ final class NewController extends AbstractController
         $form = $this->createForm(DeliveryForm::class, $DeliveryDTO);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('delivery')) {
-            $Delivery = $deliveryHandler->handle($DeliveryDTO);
+        if ($form->isSubmitted() && $form->isValid() && $form->has('delivery'))
+        {
+            $handle = $deliveryHandler->handle($DeliveryDTO);
 
-            if ($Delivery instanceof Delivery) {
-                $this->addFlash('success', 'admin.success.new', 'delivery.admin');
+            $this->addFlash
+            (
+                'page.new',
+                $handle instanceof Delivery ? 'success.edit' : 'danger.edit',
+                'delivery.admin',
+                $handle
+            );
 
-                return $this->redirectToRoute('delivery:admin.index');
-            }
-
-            $this->addFlash('danger', 'admin.danger.new', 'delivery.admin', $Delivery);
-
-            return $this->redirectToReferer();
+            return $handle instanceof Delivery ? $this->redirectToRoute('delivery:admin.index') : $this->redirectToReferer();
         }
 
         return $this->render(['form' => $form->createView()]);

@@ -105,10 +105,10 @@ class DeliveryCover extends EntityEvent implements UploadEntityInterface
 			return false;
 		}
 		
-		if(!empty($dto->file))
-		{
-			$dto->setEntityUpload($this);
-		}
+//		if(!empty($dto->file))
+//		{
+//			$dto->setEntityUpload($this);
+//		}
 		
 		if($dto instanceof DeliveryCoverInterface || $dto instanceof self)
 		{

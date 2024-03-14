@@ -63,13 +63,13 @@ final class DeleteController extends AbstractController
 
             $this->addFlash
             (
-                'admin.page.delete',
-                $handle instanceof Delivery ? 'admin.success.delete' : 'admin.danger.delete',
+                'page.delete',
+                $handle instanceof Delivery ? 'success.delete' : 'danger.delete',
                 'delivery.admin',
                 $handle
             );
 
-            return $this->redirectToRoute('delivery:admin.index');
+            return $handle instanceof Delivery ? $this->redirectToRoute('delivery:admin.index') : $this->redirectToReferer();
         }
 
         return $this->render([

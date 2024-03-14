@@ -8,13 +8,11 @@
 
 	{% if form.cover.vars.data.ext is defined and form.cover.vars.data.ext is not null %}
 		{% set img_host =  form.cover.vars.data.cdn == true  ? CDN_HOST : '' %}
-		{% set img_table = '/upload/' ~ constant('BaksDev\\Delivery\\Entity\\Cover\\DeliveryCover::TABLE') %}
+		{% set img_table = '/upload/' ~ constant('BaksDev\\Delivery\\Entity\\Cover\\DeliveryCover::TABLE')~'/' %}
 		{% set img_dir = form.cover.vars.data.name %}
 		{% set img_file = (img_host is empty ? '/image.' : '/small.') ~ form.cover.vars.data.ext %}
 		{% set image_path = img_host ~ img_table ~ img_dir ~ img_file %}
 	{% endif %}
-
-
 
 	<label class="icon rounded-3 bg-contain lazy position-relative image-input"
 			style="width: 150px; height: 150px;"
