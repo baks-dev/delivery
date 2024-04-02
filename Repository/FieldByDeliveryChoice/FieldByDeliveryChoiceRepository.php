@@ -32,7 +32,7 @@ use BaksDev\Delivery\Type\Id\DeliveryUid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class FieldByDeliveryChoice implements FieldByDeliveryChoiceInterface
+final class FieldByDeliveryChoiceRepository implements FieldByDeliveryChoiceInterface
 {
 	private EntityManagerInterface $entityManager;
 	

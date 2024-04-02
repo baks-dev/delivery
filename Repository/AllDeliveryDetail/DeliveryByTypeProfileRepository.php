@@ -33,7 +33,7 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class DeliveryByTypeProfile implements DeliveryByTypeProfileInterface
+final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInterface
 {
 
     private TranslatorInterface $translator;

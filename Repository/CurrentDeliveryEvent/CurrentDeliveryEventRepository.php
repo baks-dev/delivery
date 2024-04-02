@@ -30,7 +30,7 @@ use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 
-final class CurrentDeliveryEvent implements CurrentDeliveryEventInterface
+final class CurrentDeliveryEventRepository implements CurrentDeliveryEventInterface
 {
     private ORMQueryBuilder $ORMQueryBuilder;
 

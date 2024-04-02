@@ -30,7 +30,7 @@ use BaksDev\Core\Type\Locale\Locales\Ru;
 use BaksDev\Delivery\Controller\Admin\Tests\DeleteControllerTest;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
-use BaksDev\Delivery\Repository\CurrentDeliveryEvent\CurrentDeliveryEvent;
+use BaksDev\Delivery\Repository\CurrentDeliveryEvent\CurrentDeliveryEventRepository;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Delivery\UseCase\Admin\Delete\DeliveryDeleteDTO;
 use BaksDev\Delivery\UseCase\Admin\Delete\DeliveryDeleteHandler;
@@ -69,8 +69,8 @@ final class DeleteDeliveryHandleTest extends KernelTestCase
     public function testUseCase(): void
     {
         $container = self::getContainer();
-        /** @var CurrentDeliveryEvent $CurrentDeliveryEvent */
-        $CurrentDeliveryEvent = $container->get(CurrentDeliveryEvent::class);
+        /** @var CurrentDeliveryEventRepository $CurrentDeliveryEvent */
+        $CurrentDeliveryEvent = $container->get(CurrentDeliveryEventRepository::class);
 
 
         $DeliveryEvent = $CurrentDeliveryEvent->get(DeliveryUid::TEST);

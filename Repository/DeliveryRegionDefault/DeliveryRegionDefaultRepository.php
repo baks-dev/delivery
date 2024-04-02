@@ -29,7 +29,7 @@ use BaksDev\Core\Doctrine\ORMQueryBuilder;
 use BaksDev\Delivery\Entity as DeliveryEntity;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 
-final class DeliveryRegionDefault implements DeliveryRegionDefaultInterface
+final class DeliveryRegionDefaultRepository implements DeliveryRegionDefaultInterface
 {
     private ORMQueryBuilder $ORMQueryBuilder;
 

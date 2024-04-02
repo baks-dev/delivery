@@ -66,24 +66,24 @@ class DeliveryEvent extends EntityEvent
 	private ?DeliveryUid $main = null;
 	
 	/** Обложка способа доставки */
-	#[ORM\OneToOne(mappedBy: 'event', targetEntity: DeliveryCover::class, cascade: ['all'])]
+	#[ORM\OneToOne(targetEntity: DeliveryCover::class, mappedBy: 'event', cascade: ['all'])]
 	private ?DeliveryCover $cover = null;
 	
 	/** Модификатор */
-	#[ORM\OneToOne(mappedBy: 'event', targetEntity: DeliveryModify::class, cascade: ['all'])]
+	#[ORM\OneToOne(targetEntity: DeliveryModify::class, mappedBy: 'event', cascade: ['all'])]
 	private DeliveryModify $modify;
 
 	/** Перевод */
-	#[ORM\OneToMany(mappedBy: 'event', targetEntity: DeliveryTrans::class, cascade: ['all'])]
+	#[ORM\OneToMany(targetEntity: DeliveryTrans::class, mappedBy: 'event', cascade: ['all'])]
 	private Collection $translate;
 	
 	/** Поля для заполнения */
-	#[ORM\OneToMany(mappedBy: 'event', targetEntity: DeliveryField::class, cascade: ['all'])]
+	#[ORM\OneToMany(targetEntity: DeliveryField::class, mappedBy: 'event', cascade: ['all'])]
 	#[ORM\OrderBy(['sort' => 'ASC'])]
 	private Collection $field;
 	
 	/** Стоимость доставки (null - бесплатно) */
-	#[ORM\OneToOne(mappedBy: 'event', targetEntity: DeliveryPrice::class, cascade: ['all'])]
+	#[ORM\OneToOne(targetEntity: DeliveryPrice::class, mappedBy: 'event', cascade: ['all'])]
 	private ?DeliveryPrice $price = null;
 	
 	/** Сортировка */

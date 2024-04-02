@@ -32,7 +32,7 @@ use BaksDev\Delivery\Entity as DeliveryEntity;
 use BaksDev\Reference\Region\Entity as RegionEntity;
 use BaksDev\Users\Profile\TypeProfile\Entity as TypeProfileEntity;
 
-final class AllDelivery implements AllDeliveryInterface
+final class AllDeliveryRepository implements AllDeliveryInterface
 {
 
     private PaginatorInterface $paginator;

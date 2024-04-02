@@ -55,7 +55,7 @@ class DeliveryField extends EntityEvent
 	private DeliveryEvent $event;
 	
 	/** Перевод полей для заполнения */
-	#[ORM\OneToMany(mappedBy: 'field', targetEntity: DeliveryFieldTrans::class, cascade: ['all'])]
+	#[ORM\OneToMany(targetEntity: DeliveryFieldTrans::class, mappedBy: 'field', cascade: ['all'])]
 	private Collection $translate;
 	
 	/** Тип поля (input, select, textarea ....)  */
