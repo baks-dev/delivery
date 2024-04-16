@@ -159,6 +159,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
                 ->addSearchLike('region_trans.name');
         }
 
+
         $qb->addOrderBy('event.sort');
 
         return $this->paginator->fetchAllAssociative($qb);
