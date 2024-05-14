@@ -31,8 +31,12 @@ use BaksDev\Delivery\Entity\Fields\DeliveryFieldInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/** @see DeliveryField */
 final class DeliveryFieldDTO implements DeliveryFieldInterface
 {
+
+
+
 	/** Перевод (настройки локали) полей службы доставки */
 	#[Assert\Valid]
 	private ArrayCollection $translate;

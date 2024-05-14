@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Type\Id;
 
-use App\Kernel;
 use BaksDev\Core\Type\UidType\Uid;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
+use BaksDev\Delivery\Type\Id\Choice\Collection\TypeDeliveryInterface;
 use BaksDev\Reference\Money\Type\Money;
 use Symfony\Component\Uid\AbstractUid;
 
@@ -52,7 +52,7 @@ final class DeliveryUid extends Uid
 	
 	
 	public function __construct(
-		AbstractUid|self|string|null $value = null,
+		AbstractUid|TypeDeliveryInterface|self|string|null $value = null,
 		DeliveryEventUid $event = null,
 		mixed $attr = null,
 		mixed $option = null,
@@ -61,6 +61,16 @@ final class DeliveryUid extends Uid
 		string $currency = null,
 	)
 	{
+        if(is_string($value) && class_exists($value))
+        {
+            $value = new $value();
+        }
+
+        if($value instanceof TypeDeliveryInterface)
+        {
+            $value = $value->getValue();
+        }
+
         parent::__construct($value);
 
 		$this->event = $event;
@@ -102,5 +112,33 @@ final class DeliveryUid extends Uid
 		return $this->currency;
 	}
 
-	
+    public function getTypeDeliveryValue(): string
+    {
+        return (string) $this->getValue();
+    }
+
+    public function getTypeDelivery(): DeliveryUid|TypeDeliveryInterface
+    {
+        foreach(self::getDeclared() as $declared)
+        {
+            /** @var TypeDeliveryInterface $declared */
+            if($declared::equals($this->getValue()))
+            {
+                return new $declared;
+            }
+        }
+
+        return new self($this->getValue());
+    }
+
+
+    public static function getDeclared(): array
+    {
+        return array_filter(
+            get_declared_classes(),
+            static function($className) {
+                return in_array(TypeDeliveryInterface::class, class_implements($className), true);
+            }
+        );
+    }
 }

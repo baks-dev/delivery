@@ -28,13 +28,19 @@ namespace BaksDev\Delivery\UseCase\Admin\NewEdit;
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Delivery\Entity\Event\DeliveryEventInterface;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
+use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/** @see DeliveryEvent */
 final class DeliveryDTO implements DeliveryEventInterface
 {
+
+    /** Идентификатор события */
+    #[Assert\Uuid]
+    private ?DeliveryUid $delivery = null;
 	
 	/** Идентификатор события */
 	#[Assert\Uuid]
@@ -72,8 +78,13 @@ final class DeliveryDTO implements DeliveryEventInterface
 	private bool $active = true;
 	
 	
-	public function __construct()
+	public function __construct(?DeliveryUid $delivery = null)
 	{
+        if($delivery)
+        {
+            $this->delivery = $delivery;
+        }
+
 		$this->translate = new ArrayCollection();
 		$this->field = new ArrayCollection();
 		
@@ -86,8 +97,15 @@ final class DeliveryDTO implements DeliveryEventInterface
 	{
 		return $this->id;
 	}
-	
-	
+
+    /**
+     * Delivery
+     */
+    public function getDeliveryUid(): ?DeliveryUid
+    {
+        return $this->delivery;
+    }
+
 	/** Перевод */
 	
 	public function setTranslate(ArrayCollection $trans) : void

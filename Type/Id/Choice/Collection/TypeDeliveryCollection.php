@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2023.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,35 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Repository\CurrentDeliveryEvent;
+declare(strict_types=1);
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
-use BaksDev\Delivery\Type\Id\DeliveryUid;
+namespace BaksDev\Delivery\Type\Id\Choice\Collection;
 
-interface CurrentDeliveryEventInterface
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+
+final class TypeDeliveryCollection
 {
-    /**
-     * Метод возвращает активное событие доставки
-     */
-    public function get(DeliveryUid|string $delivery): ?DeliveryEvent;
+    private iterable $type;
+
+    public function __construct(
+        #[TaggedIterator('baks.delivery.type', defaultPriorityMethod: 'priority')] iterable $type
+    )
+    {
+        $this->type = $type;
+    }
+
+    public function cases(): array
+    {
+        $case = null;
+
+        foreach($this->type as $key => $type)
+        {
+            $case[$type::priority().$key] = new $type();
+        }
+
+        ksort($case);
+
+        return $case;
+    }
+
 }

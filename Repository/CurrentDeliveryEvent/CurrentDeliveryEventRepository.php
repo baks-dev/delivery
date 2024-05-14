@@ -42,24 +42,27 @@ final class CurrentDeliveryEventRepository implements CurrentDeliveryEventInterf
     /**
      * Метод возвращает активное событие доставки
      */
-    public function get(mixed $delivery): ?DeliveryEvent
+    public function get(DeliveryUid|string $delivery): ?DeliveryEvent
     {
-        $main = $delivery instanceof DeliveryUid ?: new DeliveryUid($delivery);
+        if(is_string($delivery))
+        {
+            $delivery = new DeliveryUid($delivery);
+        }
 
         $qb = $this->ORMQueryBuilder->createQueryBuilder(self::class);
 
         $qb
-            ->select('event')
-            ->from(Delivery::class, 'main')
-            ->where('main.id = :main')
-            ->setParameter('main', $main, DeliveryUid::TYPE);
+            ->from(Delivery::class, 'delivery')
+            ->where('delivery.id = :delivery')
+            ->setParameter('delivery', $delivery, DeliveryUid::TYPE);
 
         $qb
+            ->select('event')
             ->join(
                 DeliveryEvent::class,
                 'event',
                 'WITH',
-                'event.id = main.event'
+                'event.id = delivery.event'
             );
 
         return $qb->getOneOrNullResult();

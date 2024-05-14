@@ -21,15 +21,14 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Repository\CurrentDeliveryEvent;
+namespace BaksDev\Delivery\Repository\ExistTypeDelivery;
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 
-interface CurrentDeliveryEventInterface
+interface ExistTypeDeliveryInterface
 {
     /**
-     * Метод возвращает активное событие доставки
+     * Метод проверяет наличие способа доставки
      */
-    public function get(DeliveryUid|string $delivery): ?DeliveryEvent;
+    public function isExists(DeliveryUid|string $delivery): bool;
 }

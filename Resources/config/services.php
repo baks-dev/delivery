@@ -44,5 +44,6 @@ return static function(ContainerConfigurator $configurator)
             ])
         ;
 
+        $services->load($NAMESPACE.'Type\Id\Choice\\', $MODULE.'Type/Id/Choice');
 
     };

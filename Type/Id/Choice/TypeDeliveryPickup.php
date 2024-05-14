@@ -21,15 +21,39 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Repository\CurrentDeliveryEvent;
+declare(strict_types=1);
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
-use BaksDev\Delivery\Type\Id\DeliveryUid;
+namespace BaksDev\Delivery\Type\Id\Choice;
 
-interface CurrentDeliveryEventInterface
+use BaksDev\Delivery\Type\Id\Choice\Collection\TypeDeliveryInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+
+#[AutoconfigureTag('baks.delivery.type')]
+final class TypeDeliveryPickup implements TypeDeliveryInterface
 {
-    /**
-     * Метод возвращает активное событие доставки
-     */
-    public function get(DeliveryUid|string $delivery): ?DeliveryEvent;
+
+    /** Самовывоз (pickup) */
+    public const TYPE = 'e02b90c3-d6c5-7b89-ad12-9e8ba1f37017';
+
+    public function __toString(): string
+    {
+        return self::TYPE;
+    }
+
+    /** Возвращает значение (value) */
+    public function getValue(): string
+    {
+        return self::TYPE;
+    }
+
+    /** Сортировка */
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(mixed $uid): bool
+    {
+        return self::TYPE === (string) $uid;
+    }
 }

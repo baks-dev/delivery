@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2023.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,37 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Repository\CurrentDeliveryEvent;
+declare(strict_types=1);
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
-use BaksDev\Delivery\Type\Id\DeliveryUid;
+namespace BaksDev\Delivery\Listeners\Event;
 
-interface CurrentDeliveryEventInterface
+use BaksDev\Delivery\Type\Id\Choice\Collection\TypeDeliveryCollection;
+use BaksDev\Delivery\Type\Id\DeliveryType;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+
+#[AsEventListener(event: ControllerEvent::class)]
+#[AsEventListener(event: ConsoleEvents::COMMAND)]
+final class TypeDeliveryListener
 {
-    /**
-     * Метод возвращает активное событие доставки
-     */
-    public function get(DeliveryUid|string $delivery): ?DeliveryEvent;
+    private TypeDeliveryCollection $collection;
+
+    public function __construct(TypeDeliveryCollection $collection)
+    {
+        $this->collection = $collection;
+    }
+
+    public function onKernelController(ControllerEvent $event): void
+    {
+        if (in_array(DeliveryType::class, get_declared_classes(), true)) {
+            $this->collection->cases();
+        }
+    }
+
+    public function onConsoleCommand(ConsoleCommandEvent $event): void
+    {
+        $this->collection->cases();
+    }
 }

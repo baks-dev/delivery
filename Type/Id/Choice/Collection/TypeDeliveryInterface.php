@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2023.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,19 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Repository\CurrentDeliveryEvent;
+namespace BaksDev\Delivery\Type\Id\Choice\Collection;
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
-use BaksDev\Delivery\Type\Id\DeliveryUid;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-interface CurrentDeliveryEventInterface
+#[AutoconfigureTag('baks.delivery.type')]
+interface TypeDeliveryInterface
 {
-    /**
-     * Метод возвращает активное событие доставки
-     */
-    public function get(DeliveryUid|string $delivery): ?DeliveryEvent;
+    public function __toString(): string;
+
+    public function getValue(): string;
+
+    public static function priority(): int;
+
+    public static function equals(mixed $uid): bool;
+
 }

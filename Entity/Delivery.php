@@ -49,9 +49,9 @@ class Delivery
 	private DeliveryEventUid $event;
 	
 	
-	public function __construct()
+	public function __construct(?DeliveryUid $id = null)
 	{
-		$this->id = new DeliveryUid();
+		$this->id = new DeliveryUid($id);
 	}
 
     public function __toString(): string

@@ -44,7 +44,7 @@ final class DeliveryHandler extends AbstractHandler
         /* Валидация DTO  */
         $this->validatorCollection->add($command);
 
-        $this->main = new Delivery();
+        $this->main = new Delivery($command->getDeliveryUid());
         $this->event = new DeliveryEvent();
 
         try

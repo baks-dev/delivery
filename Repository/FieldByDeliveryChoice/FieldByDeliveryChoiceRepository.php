@@ -25,8 +25,12 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Repository\FieldByDeliveryChoice;
 
+use BaksDev\Core\Doctrine\ORMQueryBuilder;
 use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Delivery\Entity as DeliveryEntity;
+
+use BaksDev\Delivery\Entity\Delivery;
+use BaksDev\Delivery\Entity\Fields\DeliveryField;
+use BaksDev\Delivery\Entity\Fields\Trans\DeliveryFieldTrans;
 use BaksDev\Delivery\Type\Field\DeliveryFieldUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,43 +38,48 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FieldByDeliveryChoiceRepository implements FieldByDeliveryChoiceInterface
 {
-	private EntityManagerInterface $entityManager;
-	
-	private TranslatorInterface $translator;
-	
-	
-	public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
-	{
-		$this->entityManager = $entityManager;
-		$this->translator = $translator;
-	}
-	
-	
-	
-	public function fetchDeliveryFields(DeliveryUid $delivery) : ?array
-	{
-		$qb = $this->entityManager->createQueryBuilder();
-		
-		$select = sprintf('new %s(field.id, trans.name, trans.description, field.type, field.required)', DeliveryFieldUid::class);
-		
-		$qb->select($select);
-		
-		$qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
-		
-		$qb->join(DeliveryEntity\Event\DeliveryEvent::class, 'event', 'WITH', 'event.id = delivery.event');
-		
-		$qb->join(DeliveryEntity\Fields\DeliveryField::class, 'field', 'WITH', 'field.event = event.id');
-		
-		$qb->leftJoin(DeliveryEntity\Fields\Trans\DeliveryFieldTrans::class, 'trans', 'WITH', 'trans.field = field.id AND trans.local = :local');
-		
-		$qb->where('delivery.id = :delivery');
-		$qb->setParameter('delivery', $delivery, DeliveryUid::TYPE);
-		
-		$qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
-		
-		$qb->orderBy('field.sort');
-		
-		return $qb->getQuery()->getResult();
-	}
-	
+
+    private ORMQueryBuilder $ORMQueryBuilder;
+
+    public function __construct(ORMQueryBuilder $ORMQueryBuilder)
+    {
+        $this->ORMQueryBuilder = $ORMQueryBuilder;
+    }
+
+
+    public function fetchDeliveryFields(DeliveryUid $delivery): ?array
+    {
+        $qb = $this->ORMQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
+
+        $select = sprintf('new %s(field.id, trans.name, trans.description, field.type, field.required)', DeliveryFieldUid::class);
+
+        $qb->select($select);
+
+        $qb
+            ->from(Delivery::class, 'delivery', 'delivery.id')
+            ->where('delivery.id = :delivery')
+            ->setParameter('delivery', $delivery, DeliveryUid::TYPE);
+
+        $qb->join(
+            DeliveryField::class,
+            'field',
+            'WITH',
+            'field.event = delivery.event'
+        );
+
+        $qb->leftJoin(
+            DeliveryFieldTrans::class,
+            'trans',
+            'WITH',
+            'trans.field = field.id AND trans.local = :local'
+        );
+
+
+        $qb->orderBy('field.sort');
+
+        return $qb->enableCache('delivery', 86400)->getResult();
+    }
+
 }

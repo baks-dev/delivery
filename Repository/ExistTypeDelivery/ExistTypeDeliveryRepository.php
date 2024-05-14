@@ -21,15 +21,45 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Repository\CurrentDeliveryEvent;
+declare(strict_types=1);
 
-use BaksDev\Delivery\Entity\Event\DeliveryEvent;
+namespace BaksDev\Delivery\Repository\ExistTypeDelivery;
+
+use BaksDev\Core\Doctrine\DBALQueryBuilder;
+use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 
-interface CurrentDeliveryEventInterface
+
+final class ExistTypeDeliveryRepository implements ExistTypeDeliveryInterface
 {
+    private DBALQueryBuilder $DBALQueryBuilder;
+
+    public function __construct(
+        DBALQueryBuilder $DBALQueryBuilder,
+    )
+    {
+        $this->DBALQueryBuilder = $DBALQueryBuilder;
+    }
+
     /**
-     * Метод возвращает активное событие доставки
+     * Метод проверяет наличие способа доставки
      */
-    public function get(DeliveryUid|string $delivery): ?DeliveryEvent;
+    public function isExists(DeliveryUid|string $delivery): bool
+    {
+
+        if(is_string($delivery))
+        {
+            $delivery = new DeliveryUid($delivery);
+        }
+
+        $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+
+        $qb
+            ->from(Delivery::class, 'delivery')
+            ->where('delivery.id = :delivery')
+            ->setParameter('delivery', $delivery, DeliveryUid::TYPE)
+        ;
+
+        return $qb->fetchExist();
+    }
 }
