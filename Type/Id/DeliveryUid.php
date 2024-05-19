@@ -28,39 +28,39 @@ namespace BaksDev\Delivery\Type\Id;
 use BaksDev\Core\Type\UidType\Uid;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 use BaksDev\Delivery\Type\Id\Choice\Collection\TypeDeliveryInterface;
+use BaksDev\Reference\Currency\Type\Currency;
 use BaksDev\Reference\Money\Type\Money;
 use Symfony\Component\Uid\AbstractUid;
 
 final class DeliveryUid extends Uid
 {
     public const TEST = '0188a996-df3c-7446-ae07-5ba49bf3e4bd';
-    
-	public const TYPE = 'delivery';
-	
-	/** Идентифиактор события */
-	private ?DeliveryEventUid $event;
 
-	private mixed $attr;
+    public const TYPE = 'delivery';
 
-	private mixed $option;
-	
-	private ?Money $price;
-	
-	private ?Money $excess;
-	
-	private ?string $currency;
-	
-	
-	public function __construct(
-		AbstractUid|TypeDeliveryInterface|self|string|null $value = null,
-		DeliveryEventUid $event = null,
-		mixed $attr = null,
-		mixed $option = null,
-		?Money $price = null,
-		?Money $excess = null,
-		string $currency = null,
-	)
-	{
+    /** Идентификатор события */
+    private ?DeliveryEventUid $event;
+
+    private mixed $attr;
+
+    private mixed $option;
+
+    private ?Money $price;
+
+    private ?Money $excess;
+
+    private ?Currency $currency;
+
+    public function __construct(
+        AbstractUid|TypeDeliveryInterface|self|string|null $value = null,
+        DeliveryEventUid|string $event = null,
+        mixed $attr = null,
+        mixed $option = null,
+        mixed $price = null,
+        mixed $excess = null,
+        mixed $currency = null,
+    )
+    {
         if(is_string($value) && class_exists($value))
         {
             $value = new $value();
@@ -73,44 +73,66 @@ final class DeliveryUid extends Uid
 
         parent::__construct($value);
 
-		$this->event = $event;
-		$this->attr = $attr;
-		$this->option = $option;
-		$this->price = $price;
-		$this->excess = $excess;
-		$this->currency = $currency;
-	}
-	
+        if($event && is_string($event))
+        {
+            $event = new DeliveryEventUid($event);
+        }
 
-	public function getEvent() : DeliveryEventUid
-	{
-		return $this->event;
-	}
+        $this->event = $event;
 
-	public function getAttr(): mixed
-	{
-		return $this->attr;
-	}
+        $this->attr = $attr;
+        $this->option = $option;
 
-	public function getOption(): mixed
-	{
-		return $this->option;
-	}
-	
-	public function getPrice() : ?Money
-	{
-		return $this->price;
-	}
+        if($price !== null && !$price instanceof Money)
+        {
+            $price = new Money($price);
+        }
 
-	public function getExcess() : ?Money
-	{
-		return $this->excess;
-	}
-	
-	public function getCurrency() : ?string
-	{
-		return $this->currency;
-	}
+        if($excess !== null && !$excess instanceof Money)
+        {
+            $excess = new Money($excess);
+        }
+
+        if($currency !== null && !$currency instanceof Currency)
+        {
+            $currency = new Currency($currency);
+        }
+
+        $this->price = $price;
+        $this->excess = $excess;
+        $this->currency = $currency;
+    }
+
+
+    public function getEvent(): DeliveryEventUid
+    {
+        return $this->event;
+    }
+
+    public function getAttr(): mixed
+    {
+        return $this->attr;
+    }
+
+    public function getOption(): mixed
+    {
+        return $this->option;
+    }
+
+    public function getPrice(): ?Money
+    {
+        return $this->price;
+    }
+
+    public function getExcess(): ?Money
+    {
+        return $this->excess;
+    }
+
+    public function getCurrency(): ?Currency
+    {
+        return $this->currency;
+    }
 
     public function getTypeDeliveryValue(): string
     {
