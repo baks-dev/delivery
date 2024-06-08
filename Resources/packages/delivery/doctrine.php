@@ -23,11 +23,33 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Symfony\Config\FrameworkConfig;
 
-return static function(FrameworkConfig $config) {
-	$config->translator()->paths([__DIR__.'/../translations']);
+
+use BaksDev\Delivery\BaksDevDeliveryBundle;
+use BaksDev\Delivery\Type\Cover\DeliveryCoverType;
+use BaksDev\Delivery\Type\Cover\DeliveryCoverUid;
+use BaksDev\Delivery\Type\Event\DeliveryEventType;
+use BaksDev\Delivery\Type\Event\DeliveryEventUid;
+use BaksDev\Delivery\Type\Field\DeliveryFieldType;
+use BaksDev\Delivery\Type\Field\DeliveryFieldUid;
+use BaksDev\Delivery\Type\Id\DeliveryType;
+use BaksDev\Delivery\Type\Id\DeliveryUid;
+use Symfony\Config\DoctrineConfig;
+
+return static function(ContainerConfigurator $container, DoctrineConfig $doctrine) {
+	
+	$doctrine->dbal()->type(DeliveryUid::TYPE)->class(DeliveryType::class);
+	$doctrine->dbal()->type(DeliveryEventUid::TYPE)->class(DeliveryEventType::class);
+	$doctrine->dbal()->type(DeliveryFieldUid::TYPE)->class(DeliveryFieldType::class);
+	$doctrine->dbal()->type(DeliveryCoverUid::TYPE)->class(DeliveryCoverType::class);
+
+    $emDefault = $doctrine->orm()->entityManager('default')->autoMapping(true);
+
+	$emDefault->mapping('delivery')
+		->type('attribute')
+		->dir(BaksDevDeliveryBundle::PATH.'Entity')
+		->isBundle(false)
+		->prefix('BaksDev\Delivery\Entity')
+		->alias('delivery')
+	;
 };
-
-
-
