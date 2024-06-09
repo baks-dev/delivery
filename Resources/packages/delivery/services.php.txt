@@ -24,27 +24,33 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BaksDev\Delivery\BaksDevDeliveryBundle;
+use BaksDev\Delivery\Repository\DeliveryByTypeProfileChoice\DeliveryByTypeProfileChoiceRepository;
+use BaksDev\Orders\Order\Repository\DeliveryByTypeProfileChoice\DeliveryByTypeProfileChoiceInterface;
 
-return static function(ContainerConfigurator $configurator){
+return static function(ContainerConfigurator $configurator) {
 
-        $services = $configurator->services()
-            ->defaults()
-            ->autowire()
-            ->autoconfigure()
-            //->public()
-        ;
+    $services = $configurator->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure();
 
-        $NAMESPACE = BaksDevDeliveryBundle::NAMESPACE;
-        $PATH = BaksDevDeliveryBundle::PATH;
+    $NAMESPACE = BaksDevDeliveryBundle::NAMESPACE;
+    $PATH = BaksDevDeliveryBundle::PATH;
 
-        $services->load($NAMESPACE, $PATH)
-            ->exclude([
-                $PATH.'{Entity,Resources,Type}',
-                $PATH.'**/*Message.php',
-                $PATH.'**/*DTO.php',
-            ])
-        ;
+    $services->load($NAMESPACE, $PATH)
+        ->exclude([
+            $PATH.'{Entity,Resources,Type}',
+            $PATH.'**/*Message.php',
+            $PATH.'**/*DTO.php',
+        ]);
 
-        $services->load($NAMESPACE.'Type\Id\Choice\\', $PATH.'Type/Id/Choice');
+    $services->load($NAMESPACE.'Type\Id\Choice\\', $PATH.'Type/Id/Choice');
 
-    };
+    $services->alias(
+        DeliveryByTypeProfileChoiceInterface::class.' $deliveryChoice',
+        DeliveryByTypeProfileChoiceRepository::class);
+
+    $services->alias(
+        DeliveryByTypeProfileChoiceInterface::class.' $deliveryFields',
+        DeliveryByTypeProfileChoiceRepository::class);
+};

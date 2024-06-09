@@ -28,64 +28,65 @@ namespace BaksDev\Delivery\Repository\DeliveryByTypeProfileChoice;
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Delivery\Entity as DeliveryEntity;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
+use BaksDev\Orders\Order\Repository\DeliveryByTypeProfileChoice\DeliveryByTypeProfileChoiceInterface;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @see DeliveryByTypeProfileChoiceInterface
+ */
 final class DeliveryByTypeProfileChoiceRepository implements DeliveryByTypeProfileChoiceInterface
 {
-	private EntityManagerInterface $entityManager;
-	
-	private TranslatorInterface $translator;
-	
-	
-	public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
-	{
-		$this->entityManager = $entityManager;
-		$this->translator = $translator;
-	}
-	
-	
-	public function fetchDeliveryByProfile(TypeProfileUid $type) : ?array
-	{
-		$qb = $this->entityManager->createQueryBuilder();
+    private EntityManagerInterface $entityManager;
 
-		$select = sprintf('new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
-			DeliveryUid::class
-		);
-		
-		$qb->select($select);
-		
-		$qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
-		
-		$qb->join(DeliveryEntity\Event\DeliveryEvent::class,
-			'event',
-			'WITH',
-			'event.id = delivery.event AND event.active = true AND (event.type IS NULL OR event.type = :type)'
-		);
-		
-		$qb->leftJoin(DeliveryEntity\Trans\DeliveryTrans::class,
-			'trans',
-			'WITH',
-			'trans.event = delivery.event AND trans.local = :local'
-		);
-		
-		$qb->leftJoin(DeliveryEntity\Price\DeliveryPrice::class, 'price', 'WITH', 'price.event = delivery.event');
-		
-		$qb->setParameter('type', $type, TypeProfileUid::TYPE);
-		$qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
-		
-		$qb->orderBy('event.sort');
-		
-		
-		
-		
-		return $qb->getQuery()->getResult();
-	}
+    private TranslatorInterface $translator;
 
 
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
+    {
+        $this->entityManager = $entityManager;
+        $this->translator = $translator;
+    }
 
-    public function fetchAllDelivery() : ?array
+
+    public function fetchDeliveryByProfile(TypeProfileUid $type): ?array
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $select = sprintf('new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
+            DeliveryUid::class
+        );
+
+        $qb->select($select);
+
+        $qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
+
+        $qb->join(DeliveryEntity\Event\DeliveryEvent::class,
+            'event',
+            'WITH',
+            'event.id = delivery.event AND event.active = true AND (event.type IS NULL OR event.type = :type)'
+        );
+
+        $qb->leftJoin(DeliveryEntity\Trans\DeliveryTrans::class,
+            'trans',
+            'WITH',
+            'trans.event = delivery.event AND trans.local = :local'
+        );
+
+        $qb->leftJoin(DeliveryEntity\Price\DeliveryPrice::class, 'price', 'WITH', 'price.event = delivery.event');
+
+        $qb->setParameter('type', $type, TypeProfileUid::TYPE);
+        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
+
+        $qb->orderBy('event.sort');
+
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+    public function fetchAllDelivery(): ?array
     {
         $qb = $this->entityManager->createQueryBuilder();
 
@@ -116,9 +117,7 @@ final class DeliveryByTypeProfileChoiceRepository implements DeliveryByTypeProfi
         $qb->orderBy('event.sort');
 
 
-
-
         return $qb->getQuery()->getResult();
     }
-	
+
 }
