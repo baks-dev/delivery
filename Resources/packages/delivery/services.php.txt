@@ -24,8 +24,8 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BaksDev\Delivery\BaksDevDeliveryBundle;
-use BaksDev\Delivery\Repository\DeliveryByTypeProfileChoice\DeliveryByTypeProfileChoiceRepository;
-use BaksDev\Orders\Order\Repository\DeliveryByTypeProfileChoice\DeliveryByTypeProfileChoiceInterface;
+use BaksDev\Delivery\Repository\DeliveryByProfileChoice\DeliveryByTypeProfileChoiceRepository;
+use BaksDev\Orders\Order\Repository\DeliveryByProfileChoice\DeliveryByTypeProfileChoiceInterface;
 
 return static function(ContainerConfigurator $configurator) {
 

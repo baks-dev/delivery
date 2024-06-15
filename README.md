@@ -1,6 +1,6 @@
 # BaksDev Delivery
 
-[![Version](https://img.shields.io/badge/version-7.1.4-blue)](https://github.com/baks-dev/delivery/releases)
+[![Version](https://img.shields.io/badge/version-7.1.5-blue)](https://github.com/baks-dev/delivery/releases)
 ![php 8.3+](https://img.shields.io/badge/php-min%208.3-red.svg)
 
 Модуль доставки заказов
