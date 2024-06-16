@@ -26,20 +26,15 @@ declare(strict_types=1);
 namespace BaksDev\Delivery\Repository\FieldByDeliveryChoice;
 
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
-use BaksDev\Core\Type\Locale\Locale;
-
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Fields\DeliveryField;
 use BaksDev\Delivery\Entity\Fields\Trans\DeliveryFieldTrans;
 use BaksDev\Delivery\Type\Field\DeliveryFieldUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Orders\Order\Repository\FieldByDeliveryChoice\FieldByDeliveryChoiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FieldByDeliveryChoiceRepository implements FieldByDeliveryChoiceInterface
 {
-
     private ORMQueryBuilder $ORMQueryBuilder;
 
     public function __construct(ORMQueryBuilder $ORMQueryBuilder)

@@ -8,7 +8,9 @@
 ## Установка
 
 ``` bash
-$ composer require baks-dev/delivery
+$ composer require \
+baks-dev/delivery \
+baks-dev/delivery-transport
 ```
 
 ## Дополнительно
