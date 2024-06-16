@@ -26,64 +26,64 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class DeliveryPriceDTO implements DeliveryPriceInterface
 {
-	/** Стоимость */
-	#[Assert\NotBlank]
-	private ?Money $price = null;
-	
-	/** Стоимость 1 км свыше */
-	#[Assert\NotBlank]
-	private ?Money $excess = null;
-	
-	/** Валюта */
-	#[Assert\NotBlank]
-	private Currency $currency;
-	
-	
-	public function __construct()
-	{
-		$this->currency = new Currency(RUR::class);
-	}
-	
-	
-	/** Стоимость */
-	
-	public function getPrice() : ?Money
-	{
-		return $this->price;
-	}
-	
-	
-	public function setPrice(Money $price) : void
-	{
-		$this->price = $price;
-	}
-	
-	
-	/** Стоимость 1 км свыше */
-	
-	public function getExcess() : ?Money
-	{
-		return $this->excess;
-	}
-	
-	
-	public function setExcess(?Money $excess) : void
-	{
-		$this->excess = $excess;
-	}
-	
-	
-	/** Валюта */
-	
-	public function getCurrency() : Currency
-	{
-		return $this->currency;
-	}
-	
-	
-	public function setCurrency(Currency|string $currency) : void
-	{
-		$this->currency = $currency instanceof Currency ? $currency : new Currency($currency);
-	}
-	
+    /** Стоимость */
+    #[Assert\NotBlank]
+    private ?Money $price = null;
+
+    /** Стоимость 1 км свыше */
+    #[Assert\NotBlank]
+    private ?Money $excess = null;
+
+    /** Валюта */
+    #[Assert\NotBlank]
+    private Currency $currency;
+
+
+    public function __construct()
+    {
+        $this->currency = new Currency(RUR::class);
+    }
+
+
+    /** Стоимость */
+
+    public function getPrice(): ?Money
+    {
+        return $this->price;
+    }
+
+
+    public function setPrice(Money $price): void
+    {
+        $this->price = $price;
+    }
+
+
+    /** Стоимость 1 км свыше */
+
+    public function getExcess(): ?Money
+    {
+        return $this->excess;
+    }
+
+
+    public function setExcess(?Money $excess): void
+    {
+        $this->excess = $excess;
+    }
+
+
+    /** Валюта */
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
+    }
+
+
+    public function setCurrency(Currency|string $currency): void
+    {
+        $this->currency = $currency instanceof Currency ? $currency : new Currency($currency);
+    }
+
 }

@@ -55,14 +55,13 @@ final class EditController extends AbstractController
         $form = $this->createForm(DeliveryForm::class, $DeliveryDTO);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('delivery'))
+        if($form->isSubmitted() && $form->isValid() && $form->has('delivery'))
         {
             $this->refreshTokenForm($form);
 
             $handle = $deliveryHandler->handle($DeliveryDTO);
 
-            $this->addFlash
-            (
+            $this->addFlash(
                 'page.edit',
                 $handle instanceof Delivery ? 'success.edit' : 'danger.edit',
                 'delivery.admin',

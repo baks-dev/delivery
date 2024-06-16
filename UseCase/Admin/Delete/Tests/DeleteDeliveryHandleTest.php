@@ -57,7 +57,6 @@ use BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\EditDeliveryHandleTest;
 #[When(env: 'test')]
 final class DeleteDeliveryHandleTest extends KernelTestCase
 {
-
     public static function setUpBeforeClass(): void
     {
         /** @var CurrencyCollection $CurrencyCollection */

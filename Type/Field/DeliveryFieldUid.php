@@ -32,56 +32,54 @@ use Symfony\Component\Uid\AbstractUid;
 final class DeliveryFieldUid extends Uid
 {
     public const TEST = '0188a996-b402-7069-a0af-ab5f391e865c';
-    
-	public const TYPE = 'delivery_field';
-	
-	private mixed $attr;
 
-	private mixed $option;
+    public const TYPE = 'delivery_field';
 
-	private mixed $type;
-	
-	private ?bool $required;
-	
-	public function __construct(
+    private mixed $attr;
+
+    private mixed $option;
+
+    private mixed $type;
+
+    private ?bool $required;
+
+    public function __construct(
         AbstractUid|self|string|null $value = null,
-		mixed $attr = null,
-		mixed $option = null,
-		mixed $type = null,
-		?bool $required = true,
-	)
-	{
+        mixed $attr = null,
+        mixed $option = null,
+        mixed $type = null,
+        ?bool $required = true,
+    ) {
         parent::__construct($value);
 
-		$this->attr = $attr;
-		$this->option = $option;
-		$this->type = $type;
-		$this->required = $required;
-	}
-	
-	
-	
-	public function getAttr(): mixed
-	{
-		return $this->attr;
-	}
-	
-	
-	public function getOption(): mixed
-	{
-		return $this->option;
-	}
-	
-	
-	public function getType(): mixed
-	{
-		return $this->type;
-	}
-	
-	
-	public function getRequired() : ?bool
-	{
-		return $this->required;
-	}
-	
+        $this->attr = $attr;
+        $this->option = $option;
+        $this->type = $type;
+        $this->required = $required;
+    }
+
+
+    public function getAttr(): mixed
+    {
+        return $this->attr;
+    }
+
+
+    public function getOption(): mixed
+    {
+        return $this->option;
+    }
+
+
+    public function getType(): mixed
+    {
+        return $this->type;
+    }
+
+
+    public function getRequired(): ?bool
+    {
+        return $this->required;
+    }
+
 }

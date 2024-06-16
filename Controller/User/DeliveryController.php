@@ -42,8 +42,7 @@ final class DeliveryController extends AbstractController
         DeliveryByTypeProfileInterface $delivery,
         DeliveryRegionDefaultInterface $defaultRegion,
         ContactCallByRegionInterface $callRegion,
-    ): Response
-    {
+    ): Response {
 
         $profiles = $allTypeProfile->getTypeProfile();
 

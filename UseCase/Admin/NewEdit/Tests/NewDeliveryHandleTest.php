@@ -55,7 +55,6 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class NewDeliveryHandleTest extends KernelTestCase
 {
-
     public static function setUpBeforeClass(): void
     {
         /** @var CurrencyCollection $CurrencyCollection */
@@ -148,7 +147,6 @@ final class NewDeliveryHandleTest extends KernelTestCase
         self::assertSame($InputField, $DeliveryFieldDTO->getType());
 
 
-
         $DeliveryFieldTransDTO = new DeliveryFieldTransDTO();
 
         $DeliveryFieldTransDTO->setName('Name');
@@ -180,7 +178,6 @@ final class NewDeliveryHandleTest extends KernelTestCase
         self::assertSame($MoneyPrice, $DeliveryPriceDTO->getPrice());
 
 
-
         $DeliveryPriceDTO->setCurrency($Currency = new Currency(new RUR()));
         self::assertSame($Currency, $DeliveryPriceDTO->getCurrency());
 
@@ -210,8 +207,7 @@ final class NewDeliveryHandleTest extends KernelTestCase
         $dbal
             ->from(Delivery::class, 'main')
             ->where('main.id = :id')
-            ->setParameter('id', DeliveryUid::TEST)
-        ;
+            ->setParameter('id', DeliveryUid::TEST);
 
         self::assertTrue($dbal->fetchExist());
     }

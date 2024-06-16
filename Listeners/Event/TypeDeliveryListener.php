@@ -45,7 +45,8 @@ final class TypeDeliveryListener
 
     public function onKernelController(ControllerEvent $event): void
     {
-        if (in_array(DeliveryType::class, get_declared_classes(), true)) {
+        if(in_array(DeliveryType::class, get_declared_classes(), true))
+        {
             $this->collection->cases();
         }
     }

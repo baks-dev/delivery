@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Controller\Admin;
 
-
 use BaksDev\Core\Controller\AbstractController;
 use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use BaksDev\Delivery\Entity\Delivery;
@@ -48,8 +47,7 @@ final class DeleteController extends AbstractController
         Request $request,
         #[MapEntity] DeliveryEvent $DeliveryEvent,
         DeliveryDeleteHandler $DeliveryDeleteHandler,
-    ): Response
-    {
+    ): Response {
         $DeliveryDeleteDTO = new DeliveryDeleteDTO();
         $DeliveryEvent->getDto($DeliveryDeleteDTO);
         $form = $this->createForm(DeliveryDeleteForm::class, $DeliveryDeleteDTO, [
@@ -63,8 +61,7 @@ final class DeleteController extends AbstractController
 
             $handle = $DeliveryDeleteHandler->handle($DeliveryDeleteDTO);
 
-            $this->addFlash
-            (
+            $this->addFlash(
                 'page.delete',
                 $handle instanceof Delivery ? 'success.delete' : 'danger.delete',
                 'delivery.admin',

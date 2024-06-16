@@ -28,6 +28,6 @@ use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 
 interface DeliveryByTypeProfileInterface
 {
-	public function fetchAllDeliveryAssociative(TypeProfileUid $profile, ?RegionUid $region) : ?array;
-	
+    public function fetchAllDeliveryAssociative(TypeProfileUid $profile, ?RegionUid $region): ?array;
+
 }

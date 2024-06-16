@@ -30,15 +30,15 @@ use Doctrine\DBAL\Types\Types;
 
 final class DeliveryFieldType extends UidType
 {
-	public function getClassType(): string
-	{
-		return DeliveryFieldUid::class;
-	}
-	
-	
-	public function getName(): string
-	{
+    public function getClassType(): string
+    {
+        return DeliveryFieldUid::class;
+    }
+
+
+    public function getName(): string
+    {
         return DeliveryFieldUid::TYPE;
-	}
-	
+    }
+
 }

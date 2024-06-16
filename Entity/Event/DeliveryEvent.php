@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Entity\Event;
 
-
 use BaksDev\Core\Entity\EntityEvent;
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Delivery\Entity\Cover\DeliveryCover;
@@ -54,128 +53,128 @@ use InvalidArgumentException;
 #[ORM\Index(columns: ['region'])]
 class DeliveryEvent extends EntityEvent
 {
-	public const TABLE = 'delivery_event';
-	
-	/** ID */
-	#[ORM\Id]
-	#[ORM\Column(type: DeliveryEventUid::TYPE)]
-	private DeliveryEventUid $id;
-	
-	/** ID Delivery */
-	#[ORM\Column(type: DeliveryUid::TYPE, nullable: false)]
-	private ?DeliveryUid $main = null;
-	
-	/** Обложка способа доставки */
-	#[ORM\OneToOne(targetEntity: DeliveryCover::class, mappedBy: 'event', cascade: ['all'])]
-	private ?DeliveryCover $cover = null;
-	
-	/** Модификатор */
-	#[ORM\OneToOne(targetEntity: DeliveryModify::class, mappedBy: 'event', cascade: ['all'])]
-	private DeliveryModify $modify;
+    public const TABLE = 'delivery_event';
 
-	/** Перевод */
-	#[ORM\OneToMany(targetEntity: DeliveryTrans::class, mappedBy: 'event', cascade: ['all'])]
-	private Collection $translate;
-	
-	/** Поля для заполнения */
-	#[ORM\OneToMany(targetEntity: DeliveryField::class, mappedBy: 'event', cascade: ['all'])]
-	#[ORM\OrderBy(['sort' => 'ASC'])]
-	private Collection $field;
-	
-	/** Стоимость доставки (null - бесплатно) */
-	#[ORM\OneToOne(targetEntity: DeliveryPrice::class, mappedBy: 'event', cascade: ['all'])]
-	private ?DeliveryPrice $price = null;
-	
-	/** Сортировка */
-	#[ORM\Column(type: Types::SMALLINT, length: 3, options: ['default' => 500])]
-	private int $sort = 500;
-	
-	/** Флаг активности */
-	#[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
-	private bool $active = true;
-	
-	
-	/** Профиль пользователя, которому доступна доставка  (null - всем) */
-	#[ORM\Column(type: TypeProfileUid::TYPE, nullable: true)]
-	private ?TypeProfileUid $type = null;
-	
-	/** Регион, которому доступна доставка (null - всем) */
-	#[ORM\Column(type: RegionUid::TYPE, nullable: true)]
-	private ?RegionUid $region = null;
-	
+    /** ID */
+    #[ORM\Id]
+    #[ORM\Column(type: DeliveryEventUid::TYPE)]
+    private DeliveryEventUid $id;
 
-	public function __construct()
-	{
-		$this->id = new DeliveryEventUid();
-		$this->modify = new DeliveryModify($this);
-	}
+    /** ID Delivery */
+    #[ORM\Column(type: DeliveryUid::TYPE, nullable: false)]
+    private ?DeliveryUid $main = null;
 
-	public function __clone()
-	{
+    /** Обложка способа доставки */
+    #[ORM\OneToOne(targetEntity: DeliveryCover::class, mappedBy: 'event', cascade: ['all'])]
+    private ?DeliveryCover $cover = null;
+
+    /** Модификатор */
+    #[ORM\OneToOne(targetEntity: DeliveryModify::class, mappedBy: 'event', cascade: ['all'])]
+    private DeliveryModify $modify;
+
+    /** Перевод */
+    #[ORM\OneToMany(targetEntity: DeliveryTrans::class, mappedBy: 'event', cascade: ['all'])]
+    private Collection $translate;
+
+    /** Поля для заполнения */
+    #[ORM\OneToMany(targetEntity: DeliveryField::class, mappedBy: 'event', cascade: ['all'])]
+    #[ORM\OrderBy(['sort' => 'ASC'])]
+    private Collection $field;
+
+    /** Стоимость доставки (null - бесплатно) */
+    #[ORM\OneToOne(targetEntity: DeliveryPrice::class, mappedBy: 'event', cascade: ['all'])]
+    private ?DeliveryPrice $price = null;
+
+    /** Сортировка */
+    #[ORM\Column(type: Types::SMALLINT, length: 3, options: ['default' => 500])]
+    private int $sort = 500;
+
+    /** Флаг активности */
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $active = true;
+
+
+    /** Профиль пользователя, которому доступна доставка  (null - всем) */
+    #[ORM\Column(type: TypeProfileUid::TYPE, nullable: true)]
+    private ?TypeProfileUid $type = null;
+
+    /** Регион, которому доступна доставка (null - всем) */
+    #[ORM\Column(type: RegionUid::TYPE, nullable: true)]
+    private ?RegionUid $region = null;
+
+
+    public function __construct()
+    {
+        $this->id = new DeliveryEventUid();
+        $this->modify = new DeliveryModify($this);
+    }
+
+    public function __clone()
+    {
         $this->id = clone $this->id;
-	}
+    }
 
     public function __toString(): string
     {
         return (string) $this->id;
     }
-	
-	public function getId() : DeliveryEventUid
-	{
-		return $this->id;
-	}
-	
-	
-	public function setMain(DeliveryUid|Delivery $main) : void
-	{
-		$this->main = $main instanceof Delivery ? $main->getId() : $main;
-	}
-	
-	
-	public function getMain() : ?DeliveryUid
-	{
-		return $this->main;
-	}
-	
-	
-	public function getDto($dto): mixed
-	{
+
+    public function getId(): DeliveryEventUid
+    {
+        return $this->id;
+    }
+
+
+    public function setMain(DeliveryUid|Delivery $main): void
+    {
+        $this->main = $main instanceof Delivery ? $main->getId() : $main;
+    }
+
+
+    public function getMain(): ?DeliveryUid
+    {
+        return $this->main;
+    }
+
+
+    public function getDto($dto): mixed
+    {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-		if($dto instanceof DeliveryEventInterface)
-		{
-			return parent::getDto($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function setEntity($dto): mixed
-	{
-		if($dto instanceof DeliveryEventInterface || $dto instanceof self)
-		{
-			return parent::setEntity($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
+        if($dto instanceof DeliveryEventInterface)
+        {
+            return parent::getDto($dto);
+        }
 
-	public function getNameByLocale(Locale $locale) : ?string
-	{
-		$name = null;
-		
-		/** @var DeliveryTrans $trans */
-		foreach($this->translate as $trans)
-		{
-			if($name = $trans->name($locale))
-			{
-				break;
-			}
-		}
-		
-		return $name;
-	}
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function setEntity($dto): mixed
+    {
+        if($dto instanceof DeliveryEventInterface || $dto instanceof self)
+        {
+            return parent::setEntity($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+    public function getNameByLocale(Locale $locale): ?string
+    {
+        $name = null;
+
+        /** @var DeliveryTrans $trans */
+        foreach($this->translate as $trans)
+        {
+            if($name = $trans->name($locale))
+            {
+                break;
+            }
+        }
+
+        return $name;
+    }
 
 
     public function getUploadCover(): DeliveryCover

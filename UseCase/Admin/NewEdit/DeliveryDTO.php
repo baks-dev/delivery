@@ -37,66 +37,65 @@ use Symfony\Component\Validator\Constraints as Assert;
 /** @see DeliveryEvent */
 final class DeliveryDTO implements DeliveryEventInterface
 {
-
     /** Идентификатор события */
     #[Assert\Uuid]
     private ?DeliveryUid $delivery = null;
-	
-	/** Идентификатор события */
-	#[Assert\Uuid]
-	private ?DeliveryEventUid $id = null;
-	
-	/** Профиль пользователя, которому доступна доставка (null - все) */
-	#[Assert\Uuid]
-	private ?TypeProfileUid $type = null;
-	
-	/** Регион, которому доступна доставка (null - все) */
-	#[Assert\Uuid]
-	private ?RegionUid $region = null;
-	
-	/** Стомиость доставки */
-	#[Assert\Valid]
-	private Price\DeliveryPriceDTO $price;
-	
-	/** Перевод (настройки локали) доставки */
-	#[Assert\Valid]
-	private ArrayCollection $translate;
-	
-	/** Поля для заполнения */
-	#[Assert\Valid]
-	private ArrayCollection $field;
-	
-	/** Обложка способа доставки */
-	#[Assert\Valid]
-	private Cover\DeliveryCoverDTO $cover;
-	
-	/** Сортировка */
-	#[Assert\NotBlank]
-	private int $sort = 500;
-	
-	/** Флаг активности */
-	private bool $active = true;
-	
-	
-	public function __construct(?DeliveryUid $delivery = null)
-	{
+
+    /** Идентификатор события */
+    #[Assert\Uuid]
+    private ?DeliveryEventUid $id = null;
+
+    /** Профиль пользователя, которому доступна доставка (null - все) */
+    #[Assert\Uuid]
+    private ?TypeProfileUid $type = null;
+
+    /** Регион, которому доступна доставка (null - все) */
+    #[Assert\Uuid]
+    private ?RegionUid $region = null;
+
+    /** Стомиость доставки */
+    #[Assert\Valid]
+    private Price\DeliveryPriceDTO $price;
+
+    /** Перевод (настройки локали) доставки */
+    #[Assert\Valid]
+    private ArrayCollection $translate;
+
+    /** Поля для заполнения */
+    #[Assert\Valid]
+    private ArrayCollection $field;
+
+    /** Обложка способа доставки */
+    #[Assert\Valid]
+    private Cover\DeliveryCoverDTO $cover;
+
+    /** Сортировка */
+    #[Assert\NotBlank]
+    private int $sort = 500;
+
+    /** Флаг активности */
+    private bool $active = true;
+
+
+    public function __construct(?DeliveryUid $delivery = null)
+    {
         if($delivery)
         {
             $this->delivery = $delivery;
         }
 
-		$this->translate = new ArrayCollection();
-		$this->field = new ArrayCollection();
-		
-		$this->cover = new Cover\DeliveryCoverDTO();
-		$this->price = new Price\DeliveryPriceDTO();
-	}
-	
-	
-	public function getEvent() : ?DeliveryEventUid
-	{
-		return $this->id;
-	}
+        $this->translate = new ArrayCollection();
+        $this->field = new ArrayCollection();
+
+        $this->cover = new Cover\DeliveryCoverDTO();
+        $this->price = new Price\DeliveryPriceDTO();
+    }
+
+
+    public function getEvent(): ?DeliveryEventUid
+    {
+        return $this->id;
+    }
 
     /**
      * Delivery
@@ -106,158 +105,158 @@ final class DeliveryDTO implements DeliveryEventInterface
         return $this->delivery;
     }
 
-	/** Перевод */
-	
-	public function setTranslate(ArrayCollection $trans) : void
-	{
-		$this->translate = $trans;
-	}
-	
-	
-	public function getTranslate() : ArrayCollection
-	{
-		/* Вычисляем расхождение и добавляем неопределенные локали */
-		foreach(Locale::diffLocale($this->translate) as $locale)
-		{
-			$DeliveryTransDTO = new Trans\DeliveryTransDTO;
-			$DeliveryTransDTO->setLocal($locale);
-			$this->addTranslate($DeliveryTransDTO);
-		}
-		
-		return $this->translate;
-	}
-	
-	
-	public function addTranslate(Trans\DeliveryTransDTO $trans) : void
-	{
+    /** Перевод */
+
+    public function setTranslate(ArrayCollection $trans): void
+    {
+        $this->translate = $trans;
+    }
+
+
+    public function getTranslate(): ArrayCollection
+    {
+        /* Вычисляем расхождение и добавляем неопределенные локали */
+        foreach(Locale::diffLocale($this->translate) as $locale)
+        {
+            $DeliveryTransDTO = new Trans\DeliveryTransDTO();
+            $DeliveryTransDTO->setLocal($locale);
+            $this->addTranslate($DeliveryTransDTO);
+        }
+
+        return $this->translate;
+    }
+
+
+    public function addTranslate(Trans\DeliveryTransDTO $trans): void
+    {
         if(empty($trans->getLocal()->getLocalValue()))
         {
             return;
         }
 
-		if(!$this->translate->contains($trans))
-		{
-			$this->translate->add($trans);
-		}
-	}
-	
-	
-	public function removeTranslate(Trans\DeliveryTransDTO $trans) : void
-	{
-		$this->translate->removeElement($trans);
-	}
-	
-	
-	/** Поля для заполнения */
-	
-	public function getField() : ArrayCollection
-	{
-		return $this->field;
-	}
-	
-	
-	public function setField(ArrayCollection $field) : void
-	{
-		$this->field = $field;
-	}
-	
-	
-	public function addField(Fields\DeliveryFieldDTO $field) : void
-	{
-		if(!$this->translate->contains($field))
-		{
-			$this->field->add($field);
-		}
-	}
-	
-	
-	public function removeField(Fields\DeliveryFieldDTO $field) : void
-	{
-		$this->field->removeElement($field);
-	}
-	
-	
-	/** Обложка способа доставки */
-	
-	public function getCover() : Cover\DeliveryCoverDTO
-	{
-		return $this->cover;
-	}
-	
-	
-	public function setCover(Cover\DeliveryCoverDTO $cover) : void
-	{
-		$this->cover = $cover;
-	}
-	
-	
-	/** Сортировка */
-	
-	public function getSort() : int
-	{
-		return $this->sort;
-	}
-	
-	
-	public function setSort(int $sort) : void
-	{
-		$this->sort = $sort;
-	}
-	
-	
-	/** Флаг активности */
-	
-	public function getActive() : bool
-	{
-		return $this->active;
-	}
-	
-	
-	public function setActive(bool $active) : void
-	{
-		$this->active = $active;
-	}
-	
-	
-	/** Профиль пользователя, которому доступна доставка (null - все) */
-	
-	public function getType() : ?TypeProfileUid
-	{
-		return $this->type;
-	}
-	
-	
-	public function setType(?TypeProfileUid $type) : void
-	{
-		$this->type = $type;
-	}
-	
-	
-	/** Регион, которому доступна доставка (null - все) */
-	
-	public function getRegion() : ?RegionUid
-	{
-		return $this->region;
-	}
-	
-	
-	public function setRegion(?RegionUid $region) : void
-	{
-		$this->region = $region;
-	}
-	
-	
-	/** Стомиость доставки */
-	
-	public function getPrice() : Price\DeliveryPriceDTO
-	{
-		return $this->price;
-	}
-	
-	
-	public function setPrice(Price\DeliveryPriceDTO $price) : void
-	{
-		$this->price = $price;
-	}
-	
+        if(!$this->translate->contains($trans))
+        {
+            $this->translate->add($trans);
+        }
+    }
+
+
+    public function removeTranslate(Trans\DeliveryTransDTO $trans): void
+    {
+        $this->translate->removeElement($trans);
+    }
+
+
+    /** Поля для заполнения */
+
+    public function getField(): ArrayCollection
+    {
+        return $this->field;
+    }
+
+
+    public function setField(ArrayCollection $field): void
+    {
+        $this->field = $field;
+    }
+
+
+    public function addField(Fields\DeliveryFieldDTO $field): void
+    {
+        if(!$this->translate->contains($field))
+        {
+            $this->field->add($field);
+        }
+    }
+
+
+    public function removeField(Fields\DeliveryFieldDTO $field): void
+    {
+        $this->field->removeElement($field);
+    }
+
+
+    /** Обложка способа доставки */
+
+    public function getCover(): Cover\DeliveryCoverDTO
+    {
+        return $this->cover;
+    }
+
+
+    public function setCover(Cover\DeliveryCoverDTO $cover): void
+    {
+        $this->cover = $cover;
+    }
+
+
+    /** Сортировка */
+
+    public function getSort(): int
+    {
+        return $this->sort;
+    }
+
+
+    public function setSort(int $sort): void
+    {
+        $this->sort = $sort;
+    }
+
+
+    /** Флаг активности */
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+
+    /** Профиль пользователя, которому доступна доставка (null - все) */
+
+    public function getType(): ?TypeProfileUid
+    {
+        return $this->type;
+    }
+
+
+    public function setType(?TypeProfileUid $type): void
+    {
+        $this->type = $type;
+    }
+
+
+    /** Регион, которому доступна доставка (null - все) */
+
+    public function getRegion(): ?RegionUid
+    {
+        return $this->region;
+    }
+
+
+    public function setRegion(?RegionUid $region): void
+    {
+        $this->region = $region;
+    }
+
+
+    /** Стомиость доставки */
+
+    public function getPrice(): Price\DeliveryPriceDTO
+    {
+        return $this->price;
+    }
+
+
+    public function setPrice(Price\DeliveryPriceDTO $price): void
+    {
+        $this->price = $price;
+    }
+
 }

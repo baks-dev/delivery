@@ -25,5 +25,4 @@ namespace BaksDev\Delivery\Entity\Fields;
 
 interface DeliveryFieldInterface
 {
-	
 }

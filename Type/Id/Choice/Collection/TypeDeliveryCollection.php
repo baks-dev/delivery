@@ -33,8 +33,7 @@ final class TypeDeliveryCollection
 
     public function __construct(
         #[TaggedIterator('baks.delivery.type', defaultPriorityMethod: 'priority')] iterable $type
-    )
-    {
+    ) {
         $this->type = $type;
     }
 

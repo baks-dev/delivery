@@ -18,7 +18,6 @@
 
 namespace BaksDev\Delivery\UseCase\Admin\Delete\Modify;
 
-
 use BaksDev\Core\Type\Modify\Modify\ModifyActionDelete;
 use BaksDev\Core\Type\Modify\ModifyAction;
 use BaksDev\Core\Type\Modify\Modify\ModifyActionNew;
@@ -47,4 +46,3 @@ final class ModifyDTO implements DeliveryModifyInterface
     }
 
 }
-

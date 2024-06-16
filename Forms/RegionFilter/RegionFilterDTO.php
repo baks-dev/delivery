@@ -28,19 +28,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class RegionFilterDTO
 {
+    /** Идентификатор региона */
+    #[Assert\Uuid]
+    private ?RegionUid $region = null;
 
-	/** Идентификатор региона */
-	#[Assert\Uuid]
-	private ?RegionUid $region = null;
-	
-	public function getRegion() : ?RegionUid
-	{
-		return $this->region;
-	}
-	
-	public function setRegion(?RegionUid $region) : void
-	{
-		$this->region = $region;
-	}
+    public function getRegion(): ?RegionUid
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?RegionUid $region): void
+    {
+        $this->region = $region;
+    }
 }
-

@@ -62,7 +62,6 @@ use BaksDev\Delivery\Controller\Admin\Tests\EditControllerTest;
 #[When(env: 'test')]
 final class EditDeliveryHandleTest extends KernelTestCase
 {
-
     public static function setUpBeforeClass(): void
     {
         /** @var CurrencyCollection $CurrencyCollection */
@@ -79,7 +78,6 @@ final class EditDeliveryHandleTest extends KernelTestCase
 
         $DeliveryEvent = $em->getRepository(DeliveryEvent::class)->find(DeliveryEventUid::TEST);
         self::assertNotNull($DeliveryEvent);
-
 
 
         /**
@@ -140,7 +138,6 @@ final class EditDeliveryHandleTest extends KernelTestCase
         $DeliveryFieldDTO->setRequired(false);
 
         self::assertEquals('input', $DeliveryFieldDTO->getType()->getType());
-
 
 
         /** @var DeliveryFieldTransDTO $DeliveryFieldTransDTO */

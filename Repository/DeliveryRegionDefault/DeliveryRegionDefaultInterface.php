@@ -27,5 +27,5 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 interface DeliveryRegionDefaultInterface
 {
-	public function getDefaultDeliveryRegion() : ?RegionUid;
+    public function getDefaultDeliveryRegion(): ?RegionUid;
 }

@@ -37,43 +37,43 @@ use Doctrine\DBAL\Types\Types;
 #[ORM\Table(name: 'delivery')]
 class Delivery
 {
-	public const TABLE = 'delivery';
-	
-	/** ID */
-	#[ORM\Id]
-	#[ORM\Column(type: DeliveryUid::TYPE)]
-	private DeliveryUid $id;
-	
-	/** ID События */
-	#[ORM\Column(type: DeliveryEventUid::TYPE, unique: true)]
-	private DeliveryEventUid $event;
-	
-	
-	public function __construct(?DeliveryUid $id = null)
-	{
-		$this->id = new DeliveryUid($id);
-	}
+    public const TABLE = 'delivery';
+
+    /** ID */
+    #[ORM\Id]
+    #[ORM\Column(type: DeliveryUid::TYPE)]
+    private DeliveryUid $id;
+
+    /** ID События */
+    #[ORM\Column(type: DeliveryEventUid::TYPE, unique: true)]
+    private DeliveryEventUid $event;
+
+
+    public function __construct(?DeliveryUid $id = null)
+    {
+        $this->id = new DeliveryUid($id);
+    }
 
     public function __toString(): string
     {
         return (string) $this->id;
     }
-	
-	public function getId() : DeliveryUid
-	{
-		return $this->id;
-	}
-	
-	
-	public function getEvent() : DeliveryEventUid
-	{
-		return $this->event;
-	}
-	
-	
-	public function setEvent(DeliveryEventUid|DeliveryEvent $event) : void
-	{
-		$this->event = $event instanceof DeliveryEvent ? $event->getId() : $event;
-	}
-	
+
+    public function getId(): DeliveryUid
+    {
+        return $this->id;
+    }
+
+
+    public function getEvent(): DeliveryEventUid
+    {
+        return $this->event;
+    }
+
+
+    public function setEvent(DeliveryEventUid|DeliveryEvent $event): void
+    {
+        $this->event = $event instanceof DeliveryEvent ? $event->getId() : $event;
+    }
+
 }

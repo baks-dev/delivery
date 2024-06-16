@@ -32,77 +32,77 @@ use BaksDev\Core\Type\Locale\Locale;
 
 final class DeliveryTransDTO implements DeliveryTransInterface
 {
-	/** Локаль */
-	#[Assert\NotBlank]
-	private readonly Locale $local;
-	
-	/** Название  */
-	#[Assert\NotBlank]
-	private ?string $name;
-	
-	/** Краткое описание */
-	private ?string $description = null;
-	
-	/** Пользовательское соглашение */
-	private ?string $agreement;
-	
-	
-	/** Локаль */
-	
-	public function getLocal() : Locale
-	{
-		return $this->local;
-	}
-	
-	
-	public function setLocal(Locale $local) : void
-	{
-		if(!(new ReflectionProperty(self::class, 'local'))->isInitialized($this))
-		{
-			$this->local = $local;
-		}
-	}
-	
-	
-	/** Название продукта  */
-	
-	public function getName(): string
-	{
-		return $this->name;
-	}
-	
-	
-	public function setName(?string $name) : void
-	{
-		$this->name = $name;
-	}
-	
-	
-	/** Краткое описание */
-	
-	public function getDescription() : ?string
-	{
-		return $this->description;
-	}
-	
-	
-	public function setDescription(?string $description) : void
-	{
-		$this->description = $description;
-	}
-	
-	
-	/** Пользовательское соглашение */
-	
-	public function getAgreement() : ?string
-	{
-		return $this->agreement;
-	}
-	
-	
-	public function setAgreement(?string $agreement) : void
-	{
-		$this->agreement = $agreement;
-	}
-	
+    /** Локаль */
+    #[Assert\NotBlank]
+    private readonly Locale $local;
+
+    /** Название  */
+    #[Assert\NotBlank]
+    private ?string $name;
+
+    /** Краткое описание */
+    private ?string $description = null;
+
+    /** Пользовательское соглашение */
+    private ?string $agreement;
+
+
+    /** Локаль */
+
+    public function getLocal(): Locale
+    {
+        return $this->local;
+    }
+
+
+    public function setLocal(Locale $local): void
+    {
+        if(!(new ReflectionProperty(self::class, 'local'))->isInitialized($this))
+        {
+            $this->local = $local;
+        }
+    }
+
+
+    /** Название продукта  */
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+
+    /** Краткое описание */
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+
+    /** Пользовательское соглашение */
+
+    public function getAgreement(): ?string
+    {
+        return $this->agreement;
+    }
+
+
+    public function setAgreement(?string $agreement): void
+    {
+        $this->agreement = $agreement;
+    }
+
 }

@@ -28,5 +28,5 @@ use BaksDev\Core\Services\Paginator\PaginatorInterface;
 
 interface AllDeliveryInterface
 {
-	public function fetchAllDeliveryAssociative(SearchDTO $search) : PaginatorInterface;
+    public function fetchAllDeliveryAssociative(SearchDTO $search): PaginatorInterface;
 }

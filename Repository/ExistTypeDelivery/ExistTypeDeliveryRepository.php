@@ -29,15 +29,13 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 
-
 final class ExistTypeDeliveryRepository implements ExistTypeDeliveryInterface
 {
     private DBALQueryBuilder $DBALQueryBuilder;
 
     public function __construct(
         DBALQueryBuilder $DBALQueryBuilder,
-    )
-    {
+    ) {
         $this->DBALQueryBuilder = $DBALQueryBuilder;
     }
 
@@ -57,8 +55,7 @@ final class ExistTypeDeliveryRepository implements ExistTypeDeliveryInterface
         $qb
             ->from(Delivery::class, 'delivery')
             ->where('delivery.id = :delivery')
-            ->setParameter('delivery', $delivery, DeliveryUid::TYPE)
-        ;
+            ->setParameter('delivery', $delivery, DeliveryUid::TYPE);
 
         return $qb->fetchExist();
     }

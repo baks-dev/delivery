@@ -36,38 +36,37 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DeliveryFieldTransForm extends AbstractType
 {
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		/** Локаль */
-		$builder->add('local', HiddenType::class);
-		
-		$builder->get('local')->addModelTransformer(
-			new CallbackTransformer(
-				function($local){
-					return $local instanceof Locale ? $local->getLocalValue() : $local;
-				},
-				function($local){
-					
-					return new Locale($local);
-				}
-			)
-		);
-		
-		/** Название поля для заполнения */
-		$builder->add('name', TextType::class);
-		
-		/** Краткое описание */
-		$builder->add('description', TextType::class, ['required' => false]);
-		
-	}
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => DeliveryFieldTransDTO::class,
-		]);
-	}
-	
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        /** Локаль */
+        $builder->add('local', HiddenType::class);
+
+        $builder->get('local')->addModelTransformer(
+            new CallbackTransformer(
+                function ($local) {
+                    return $local instanceof Locale ? $local->getLocalValue() : $local;
+                },
+                function ($local) {
+
+                    return new Locale($local);
+                }
+            )
+        );
+
+        /** Название поля для заполнения */
+        $builder->add('name', TextType::class);
+
+        /** Краткое описание */
+        $builder->add('description', TextType::class, ['required' => false]);
+
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => DeliveryFieldTransDTO::class,
+        ]);
+    }
+
 }

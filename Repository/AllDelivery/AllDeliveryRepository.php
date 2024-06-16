@@ -34,7 +34,6 @@ use BaksDev\Users\Profile\TypeProfile\Entity as TypeProfileEntity;
 
 final class AllDeliveryRepository implements AllDeliveryInterface
 {
-
     private PaginatorInterface $paginator;
 
     private DBALQueryBuilder $DBALQueryBuilder;
@@ -43,8 +42,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
     public function __construct(
         DBALQueryBuilder $DBALQueryBuilder,
         PaginatorInterface $paginator,
-    )
-    {
+    ) {
 
         $this->paginator = $paginator;
         $this->DBALQueryBuilder = $DBALQueryBuilder;
@@ -54,7 +52,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
     public function fetchAllDeliveryAssociative(SearchDTO $search): PaginatorInterface
     {
         $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class)
-        ->bindLocal();
+            ->bindLocal();
 
 
         $qb->select('delivery.id');
@@ -68,7 +66,8 @@ final class AllDeliveryRepository implements AllDeliveryInterface
         $qb->addSelect('trans.name AS delivery_name');
         $qb->addSelect('trans.description AS delivery_description');
 
-        $qb->leftJoin('event',
+        $qb->leftJoin(
+            'event',
             DeliveryEntity\Trans\DeliveryTrans::TABLE,
             'trans',
             'trans.event = event.id AND trans.local = :local'
@@ -79,7 +78,8 @@ final class AllDeliveryRepository implements AllDeliveryInterface
         $qb->addSelect('price.currency AS delivery_currency');
         $qb->addSelect('price.excess AS delivery_excess');
 
-        $qb->leftJoin('event',
+        $qb->leftJoin(
+            'event',
             DeliveryEntity\Price\DeliveryPrice::TABLE,
             'price',
             'price.event = event.id'
@@ -90,7 +90,8 @@ final class AllDeliveryRepository implements AllDeliveryInterface
         $qb->addSelect('cover.ext AS delivery_cover_ext');
         $qb->addSelect('cover.cdn AS delivery_cover_cdn');
 
-        $qb->addSelect("
+        $qb->addSelect(
+            "
 			CASE
 			   WHEN cover.name IS NOT NULL THEN
 					CONCAT ( '/upload/".DeliveryEntity\Cover\DeliveryCover::TABLE."' , '/', cover.name)
@@ -99,7 +100,8 @@ final class AllDeliveryRepository implements AllDeliveryInterface
 		"
         );
 
-        $qb->leftJoin('event',
+        $qb->leftJoin(
+            'event',
             DeliveryEntity\Cover\DeliveryCover::TABLE,
             'cover',
             'cover.event = event.id'
@@ -107,13 +109,15 @@ final class AllDeliveryRepository implements AllDeliveryInterface
 
         /** Ограничение профилем */
 
-        $qb->leftJoin('event',
+        $qb->leftJoin(
+            'event',
             TypeProfileEntity\TypeProfile::TABLE,
             'type_profile',
             'event.type IS NOT NULL AND type_profile.id = event.type'
         );
 
-        $qb->leftJoin('type_profile',
+        $qb->leftJoin(
+            'type_profile',
             TypeProfileEntity\Event\TypeProfileEvent::TABLE,
             'type_profile_event',
             'type_profile_event.id = type_profile.event'
@@ -121,20 +125,23 @@ final class AllDeliveryRepository implements AllDeliveryInterface
 
         $qb->addSelect('type_profile_trans.name AS type_profile_name');
 
-        $qb->leftJoin('type_profile_event',
+        $qb->leftJoin(
+            'type_profile_event',
             TypeProfileEntity\Trans\TypeProfileTrans::TABLE,
             'type_profile_trans',
             'type_profile_trans.event = type_profile_event.id AND type_profile_trans.local = :local'
         );
 
         /** Ограничение регионом */
-        $qb->leftJoin('event',
+        $qb->leftJoin(
+            'event',
             RegionEntity\Region::TABLE,
             'region',
             'event.region IS NOT NULL AND region.id = event.region'
         );
 
-        $qb->leftJoin('region',
+        $qb->leftJoin(
+            'region',
             RegionEntity\Event\RegionEvent::TABLE,
             'region_event',
             'region_event.id = region.event'
@@ -142,7 +149,8 @@ final class AllDeliveryRepository implements AllDeliveryInterface
 
         $qb->addSelect('region_trans.name AS region_name');
 
-        $qb->leftJoin('region_event',
+        $qb->leftJoin(
+            'region_event',
             RegionEntity\Trans\RegionTrans::TABLE,
             'region_trans',
             'region_trans.event = region_event.id AND region_trans.local = :local'

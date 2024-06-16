@@ -35,7 +35,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInterface
 {
-
     private TranslatorInterface $translator;
     private DBALQueryBuilder $DBALQueryBuilder;
 
@@ -43,8 +42,7 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
     public function __construct(
         DBALQueryBuilder $DBALQueryBuilder,
         TranslatorInterface $translator,
-    )
-    {
+    ) {
 
         $this->translator = $translator;
         $this->DBALQueryBuilder = $DBALQueryBuilder;
@@ -70,7 +68,8 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
 
         }
 
-        $qb->join('delivery',
+        $qb->join(
+            'delivery',
             DeliveryEntity\Event\DeliveryEvent::TABLE,
             'delivery_event',
             '
@@ -83,7 +82,8 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
         $qb->addSelect('delivery_trans.name AS delivery_name');
         $qb->addSelect('delivery_trans.description AS delivery_description');
         $qb->addSelect('delivery_trans.agreement AS delivery_agreement');
-        $qb->leftJoin('delivery_event',
+        $qb->leftJoin(
+            'delivery_event',
             DeliveryEntity\Trans\DeliveryTrans::TABLE,
             'delivery_trans',
             'delivery_trans.event = delivery_event.id AND delivery_trans.local = :local'
@@ -93,7 +93,8 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
         $qb->addSelect('delivery_cover.ext AS delivery_cover_ext');
         $qb->addSelect('delivery_cover.cdn AS delivery_cover_cdn');
 
-        $qb->addSelect("
+        $qb->addSelect(
+            "
 			CASE
 			 WHEN delivery_cover.name IS NOT NULL THEN
 					CONCAT ( '/upload/".DeliveryEntity\Cover\DeliveryCover::TABLE."' , '/', delivery_cover.name)
@@ -102,7 +103,8 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
 		"
         );
 
-        $qb->leftJoin('delivery_event',
+        $qb->leftJoin(
+            'delivery_event',
             DeliveryEntity\Cover\DeliveryCover::TABLE,
             'delivery_cover',
             'delivery_cover.event = delivery_event.id'
@@ -111,7 +113,8 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
         $qb->addSelect('delivery_price.price AS delivery_price');
         $qb->addSelect('delivery_price.excess AS delivery_excess');
         $qb->addSelect('delivery_price.currency AS delivery_currency');
-        $qb->leftJoin('delivery_event',
+        $qb->leftJoin(
+            'delivery_event',
             DeliveryEntity\Price\DeliveryPrice::TABLE,
             'delivery_price',
             'delivery_price.event = delivery_event.id'
@@ -121,13 +124,15 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
         /** Регион */
         $qb->addSelect('region.id AS region_id');
         $qb->addSelect('region.event AS region_event');
-        $qb->leftJoin('delivery_event',
+        $qb->leftJoin(
+            'delivery_event',
             RegionEntity\Region::TABLE,
             'region',
             'region.id = delivery_event.region'
         );
 
-        $qb->leftJoin('region',
+        $qb->leftJoin(
+            'region',
             RegionEntity\Event\RegionEvent::TABLE,
             'region_event',
             'region_event.id = region.event'
@@ -136,7 +141,8 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
         $qb->addSelect('region_trans.name AS region_name');
         $qb->addSelect('region_trans.description AS region_description');
 
-        $qb->leftJoin('region_event',
+        $qb->leftJoin(
+            'region_event',
             RegionEntity\Trans\RegionTrans::TABLE,
             'region_trans',
             'region_trans.event = region_event.id AND region_trans.local = :local'

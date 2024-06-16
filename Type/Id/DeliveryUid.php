@@ -59,8 +59,7 @@ final class DeliveryUid extends Uid
         mixed $price = null,
         mixed $excess = null,
         mixed $currency = null,
-    )
-    {
+    ) {
         if(is_string($value) && class_exists($value))
         {
             $value = new $value();
@@ -146,7 +145,7 @@ final class DeliveryUid extends Uid
             /** @var TypeDeliveryInterface $declared */
             if($declared::equals($this->getValue()))
             {
-                return new $declared;
+                return new $declared();
             }
         }
 
@@ -158,7 +157,7 @@ final class DeliveryUid extends Uid
     {
         return array_filter(
             get_declared_classes(),
-            static function($className) {
+            static function ($className) {
                 return in_array(TypeDeliveryInterface::class, class_implements($className), true);
             }
         );

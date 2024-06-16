@@ -25,12 +25,12 @@ namespace BaksDev\Delivery\Entity\Cover;
 
 interface DeliveryCoverInterface
 {
-	public function getName() : ?string;
-	
-	
-	public function getExt() : ?string;
-	
-	
-	public function getCdn() : bool;
-	
+    public function getName(): ?string;
+
+
+    public function getExt(): ?string;
+
+
+    public function getCdn(): bool;
+
 }

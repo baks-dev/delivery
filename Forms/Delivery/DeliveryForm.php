@@ -37,8 +37,7 @@ final class DeliveryForm extends AbstractType
 
     public function __construct(
         DeliveryChoiceInterface $deliveryChoice
-    )
-    {
+    ) {
         $this->deliveryChoice = $deliveryChoice;
     }
 
@@ -47,15 +46,15 @@ final class DeliveryForm extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => $this->deliveryChoice->findAll(),
-            'choice_value' => function(?DeliveryUid $choice) {
+            'choice_value' => function (?DeliveryUid $choice) {
                 return $choice?->getValue();
             },
 
-            'choice_label' => function(?DeliveryUid $choice) {
+            'choice_label' => function (?DeliveryUid $choice) {
                 return $choice?->getAttr();
             },
 
-            'choice_attr' => function(DeliveryUid $choice) {
+            'choice_attr' => function (DeliveryUid $choice) {
                 return [
                     'data-price' => $choice->getPrice()?->getValue(),
                     'data-excess' => $choice->getExcess()?->getValue(),

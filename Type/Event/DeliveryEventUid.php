@@ -32,7 +32,7 @@ use Symfony\Component\Uid\AbstractUid;
 final class DeliveryEventUid extends Uid
 {
     public const TEST = '0188a996-65ba-77f8-b24d-93b6dba3199a';
-    
-	public const TYPE = 'delivery_event';
+
+    public const TYPE = 'delivery_event';
 
 }

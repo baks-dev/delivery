@@ -34,111 +34,107 @@ use Symfony\Component\Validator\Constraints as Assert;
 /** @see DeliveryField */
 final class DeliveryFieldDTO implements DeliveryFieldInterface
 {
+    /** Перевод (настройки локали) полей службы доставки */
+    #[Assert\Valid]
+    private ArrayCollection $translate;
+
+    /** Тип поля (input, select, textarea ....)  */
+    #[Assert\NotBlank]
+    private InputField $type;
+
+    /** Обязательное к заполнению */
+    private bool $required = true;
+
+    /** Сортировка */
+    #[Assert\NotBlank]
+    private int $sort = 100;
 
 
+    public function __construct()
+    {
+        $this->translate = new ArrayCollection();
+    }
 
-	/** Перевод (настройки локали) полей службы доставки */
-	#[Assert\Valid]
-	private ArrayCollection $translate;
-	
-	/** Тип поля (input, select, textarea ....)  */
-	#[Assert\NotBlank]
-	private InputField $type;
-	
-	/** Обязательное к заполнению */
-	private bool $required = true;
-	
-	/** Сортировка */
-	#[Assert\NotBlank]
-	private int $sort = 100;
-	
-	
-	public function __construct()
-	{
-		$this->translate = new ArrayCollection();
-	}
-	
-	
-	/** Перевод */
-	
-	public function setTranslate(ArrayCollection $trans) : void
-	{
-		$this->translate = $trans;
-	}
-	
-	
-	public function getTranslate() : ArrayCollection
-	{
-		/* Вычисляем расхождение и добавляем неопределенные локали */
-		foreach(Locale::diffLocale($this->translate) as $locale)
-		{
-			$DeliveryFieldTrans = new Trans\DeliveryFieldTransDTO();
-			$DeliveryFieldTrans->setLocal($locale);
-			$this->addTranslate($DeliveryFieldTrans);
-		}
-		
-		return $this->translate;
-	}
-	
-	
-	public function addTranslate(Trans\DeliveryFieldTransDTO $trans) : void
-	{
+
+    /** Перевод */
+
+    public function setTranslate(ArrayCollection $trans): void
+    {
+        $this->translate = $trans;
+    }
+
+
+    public function getTranslate(): ArrayCollection
+    {
+        /* Вычисляем расхождение и добавляем неопределенные локали */
+        foreach(Locale::diffLocale($this->translate) as $locale)
+        {
+            $DeliveryFieldTrans = new Trans\DeliveryFieldTransDTO();
+            $DeliveryFieldTrans->setLocal($locale);
+            $this->addTranslate($DeliveryFieldTrans);
+        }
+
+        return $this->translate;
+    }
+
+
+    public function addTranslate(Trans\DeliveryFieldTransDTO $trans): void
+    {
         if(empty($trans->getLocal()->getLocalValue()))
         {
             return;
         }
 
-		if(!$this->translate->contains($trans))
-		{
-			$this->translate->add($trans);
-		}
-	}
-	
-	
-	public function removeTranslate(Trans\DeliveryFieldTransDTO $trans) : void
-	{
-		$this->translate->removeElement($trans);
-	}
-	
-	
-	/** Тип поля (input, select, textarea ....)  */
-	
-	public function getType() : InputField
-	{
-		return $this->type;
-	}
+        if(!$this->translate->contains($trans))
+        {
+            $this->translate->add($trans);
+        }
+    }
 
-	public function setType(InputField $type) : void
-	{
-		$this->type = $type;
-	}
-	
-	
-	/** Обязательное к заполнению */
-	
-	public function getRequired() : bool
-	{
-		return $this->required;
-	}
 
-	public function setRequired(bool $required) : void
-	{
-		$this->required = $required;
-	}
-	
-	
-	/** Сортировка */
-	
-	public function getSort() : int
-	{
-		return $this->sort;
-	}
+    public function removeTranslate(Trans\DeliveryFieldTransDTO $trans): void
+    {
+        $this->translate->removeElement($trans);
+    }
 
-	public function setSort(int $sort) : void
-	{
-		$this->sort = $sort;
-	}
-	
-	
-	
+
+    /** Тип поля (input, select, textarea ....)  */
+
+    public function getType(): InputField
+    {
+        return $this->type;
+    }
+
+    public function setType(InputField $type): void
+    {
+        $this->type = $type;
+    }
+
+
+    /** Обязательное к заполнению */
+
+    public function getRequired(): bool
+    {
+        return $this->required;
+    }
+
+    public function setRequired(bool $required): void
+    {
+        $this->required = $required;
+    }
+
+
+    /** Сортировка */
+
+    public function getSort(): int
+    {
+        return $this->sort;
+    }
+
+    public function setSort(int $sort): void
+    {
+        $this->sort = $sort;
+    }
+
+
 }

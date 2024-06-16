@@ -22,5 +22,5 @@ use BaksDev\Reference\Money\Type\Money;
 
 interface DeliveryPriceInterface
 {
-	public function getPrice() : ?Money;
+    public function getPrice(): ?Money;
 }

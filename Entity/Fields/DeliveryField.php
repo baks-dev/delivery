@@ -42,75 +42,74 @@ use InvalidArgumentException;
 #[ORM\Table(name: 'delivery_field')]
 class DeliveryField extends EntityEvent
 {
-	public const TABLE = 'delivery_field';
-	
-	/** ID */
-	#[ORM\Id]
-	#[ORM\Column(type: DeliveryFieldUid::TYPE)]
-	private DeliveryFieldUid $id;
-	
-	/** Связь на поле */
-	#[ORM\ManyToOne(targetEntity: DeliveryEvent::class, inversedBy: "field")]
-	#[ORM\JoinColumn(name: 'event', referencedColumnName: "id")]
-	private DeliveryEvent $event;
-	
-	/** Перевод полей для заполнения */
-	#[ORM\OneToMany(targetEntity: DeliveryFieldTrans::class, mappedBy: 'field', cascade: ['all'])]
-	private Collection $translate;
-	
-	/** Тип поля (input, select, textarea ....)  */
-	#[ORM\Column(type: InputField::TYPE, length: 32, options: ['default' => 'input_field'])]
-	private InputField $type;
-	
-	/** Обязательное к заполнению */
-	#[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
-	private bool $required = true;
-	
-	/** Сортировка */
-	#[ORM\Column(type: Types::SMALLINT, length: 3, options: ['default' => 100])]
-	private int $sort = 100;
-	
+    public const TABLE = 'delivery_field';
 
-	public function __construct(DeliveryEvent $event)
-	{
-		$this->id = new DeliveryFieldUid();
-		$this->event = $event;
-	}
-	
-	public function __clone() : void
-	{
+    /** ID */
+    #[ORM\Id]
+    #[ORM\Column(type: DeliveryFieldUid::TYPE)]
+    private DeliveryFieldUid $id;
+
+    /** Связь на поле */
+    #[ORM\ManyToOne(targetEntity: DeliveryEvent::class, inversedBy: "field")]
+    #[ORM\JoinColumn(name: 'event', referencedColumnName: "id")]
+    private DeliveryEvent $event;
+
+    /** Перевод полей для заполнения */
+    #[ORM\OneToMany(targetEntity: DeliveryFieldTrans::class, mappedBy: 'field', cascade: ['all'])]
+    private Collection $translate;
+
+    /** Тип поля (input, select, textarea ....)  */
+    #[ORM\Column(type: InputField::TYPE, length: 32, options: ['default' => 'input_field'])]
+    private InputField $type;
+
+    /** Обязательное к заполнению */
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $required = true;
+
+    /** Сортировка */
+    #[ORM\Column(type: Types::SMALLINT, length: 3, options: ['default' => 100])]
+    private int $sort = 100;
+
+
+    public function __construct(DeliveryEvent $event)
+    {
+        $this->id = new DeliveryFieldUid();
+        $this->event = $event;
+    }
+
+    public function __clone(): void
+    {
         $this->id = clone $this->id;
-	}
+    }
 
     public function __toString(): string
     {
         return (string) $this->id;
     }
-	
-	public function getDto($dto): mixed
-	{
+
+    public function getDto($dto): mixed
+    {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-		if($dto instanceof DeliveryFieldInterface)
-		{
-			return parent::getDto($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function setEntity($dto): mixed
-	{
-		
-		if($dto instanceof DeliveryFieldInterface || $dto instanceof self)
-		{
-			return parent::setEntity($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	
+        if($dto instanceof DeliveryFieldInterface)
+        {
+            return parent::getDto($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function setEntity($dto): mixed
+    {
+
+        if($dto instanceof DeliveryFieldInterface || $dto instanceof self)
+        {
+            return parent::setEntity($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
 }

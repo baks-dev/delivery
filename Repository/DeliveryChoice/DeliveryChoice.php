@@ -34,7 +34,6 @@ use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Generator;
 
-
 final class DeliveryChoice implements DeliveryChoiceInterface
 {
     private bool $active = false;

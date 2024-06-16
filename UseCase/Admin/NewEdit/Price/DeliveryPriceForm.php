@@ -32,75 +32,70 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DeliveryPriceForm extends AbstractType
 {
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		
-		$builder->add
-		(
-			'price',
-			MoneyType::class,
-			['currency' => false, 'required' => false]
-		);
-		
-		$builder->get('price')->addModelTransformer(
-			new CallbackTransformer(
-				function($price) {
-					return $price instanceof Money ? $price->getValue() : $price;
-				},
-				function($price) {
-					
-					return new Money($price);
-				}
-			)
-		);
-		
-		
-		
-		$builder->add
-		(
-			'excess',
-			MoneyType::class,
-			['currency' => false, 'required' => false]
-		);
-		
-		$builder->get('excess')->addModelTransformer(
-			new CallbackTransformer(
-				function($excess) {
-					return $excess instanceof Money ? $excess->getValue() : $excess;
-				},
-				function($excess) {
-					
-					return new Money($excess);
-				}
-			)
-		);
-		
-		$builder->add
-		(
-			'currency',
-			ChoiceType::class,
-			[
-				'choices' => Currency::cases(),
-				'choice_value' => function(?Currency $currency) {
-					return $currency?->getCurrencyValue();
-				},
-				'choice_label' => function(?Currency $currency) {
-					return $currency?->getCurrencyValue();
-				},
-				'translation_domain' => 'reference.currency',
-				'label' => false,
-			]
-		);
-		
-	}
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => DeliveryPriceDTO::class,
-		]);
-	}
-	
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+
+        $builder->add(
+            'price',
+            MoneyType::class,
+            ['currency' => false, 'required' => false]
+        );
+
+        $builder->get('price')->addModelTransformer(
+            new CallbackTransformer(
+                function ($price) {
+                    return $price instanceof Money ? $price->getValue() : $price;
+                },
+                function ($price) {
+
+                    return new Money($price);
+                }
+            )
+        );
+
+
+        $builder->add(
+            'excess',
+            MoneyType::class,
+            ['currency' => false, 'required' => false]
+        );
+
+        $builder->get('excess')->addModelTransformer(
+            new CallbackTransformer(
+                function ($excess) {
+                    return $excess instanceof Money ? $excess->getValue() : $excess;
+                },
+                function ($excess) {
+
+                    return new Money($excess);
+                }
+            )
+        );
+
+        $builder->add(
+            'currency',
+            ChoiceType::class,
+            [
+                'choices' => Currency::cases(),
+                'choice_value' => function (?Currency $currency) {
+                    return $currency?->getCurrencyValue();
+                },
+                'choice_label' => function (?Currency $currency) {
+                    return $currency?->getCurrencyValue();
+                },
+                'translation_domain' => 'reference.currency',
+                'label' => false,
+            ]
+        );
+
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => DeliveryPriceDTO::class,
+        ]);
+    }
+
 }

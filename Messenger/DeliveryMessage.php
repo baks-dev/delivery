@@ -28,47 +28,46 @@ namespace BaksDev\Delivery\Messenger;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 
-
 final class DeliveryMessage
 {
-	/** Идентификатор  */
-	private DeliveryUid $id;
-	
-	/** Идентификатор события  */
-	private DeliveryEventUid $event;
-	
-	/** Идентификатор предыдущего события  */
-	private ?DeliveryEventUid $last;
-	
-	public function __construct(DeliveryUid $id, DeliveryEventUid $event, ?DeliveryEventUid $last = null)
-	{
-		$this->last = $last;
-		$this->id = $id;
-		$this->event = $event;
-	}
-	
-	
-	/** Идентификатор  */
-	
-	public function getId() : DeliveryUid
-	{
-		return $this->id;
-	}
-	
-	
-	/** Идентификатор события  */
-	
-	public function getEvent() : DeliveryEventUid
-	{
-		return $this->event;
-	}
-	
-	
-	/** Идентификатор предыдущего события */
-	
-	public function getLast() : ?DeliveryEventUid
-	{
-		return $this->last;
-	}
-	
+    /** Идентификатор  */
+    private DeliveryUid $id;
+
+    /** Идентификатор события  */
+    private DeliveryEventUid $event;
+
+    /** Идентификатор предыдущего события  */
+    private ?DeliveryEventUid $last;
+
+    public function __construct(DeliveryUid $id, DeliveryEventUid $event, ?DeliveryEventUid $last = null)
+    {
+        $this->last = $last;
+        $this->id = $id;
+        $this->event = $event;
+    }
+
+
+    /** Идентификатор  */
+
+    public function getId(): DeliveryUid
+    {
+        return $this->id;
+    }
+
+
+    /** Идентификатор события  */
+
+    public function getEvent(): DeliveryEventUid
+    {
+        return $this->event;
+    }
+
+
+    /** Идентификатор предыдущего события */
+
+    public function getLast(): ?DeliveryEventUid
+    {
+        return $this->last;
+    }
+
 }

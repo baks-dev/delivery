@@ -48,7 +48,8 @@ final class DeliveryRegionDefaultRepository implements DeliveryRegionDefaultInte
 
         $qb->from(DeliveryEntity\Delivery::class, 'delivery');
 
-        $qb->join(DeliveryEntity\Event\DeliveryEvent::class,
+        $qb->join(
+            DeliveryEntity\Event\DeliveryEvent::class,
             'delivery_event',
             'WITH',
             'delivery_event.id = delivery.event'

@@ -38,7 +38,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DeliveryHandler extends AbstractHandler
 {
-
     public function handle(DeliveryDTO $command): string|Delivery
     {
         /* Валидация DTO  */
@@ -57,7 +56,6 @@ final class DeliveryHandler extends AbstractHandler
         }
 
 
-
         /* Загружаем файл обложки */
         if(method_exists($command, 'getCover'))
         {
@@ -70,7 +68,6 @@ final class DeliveryHandler extends AbstractHandler
                 $this->imageUpload->upload($Cover->file, $DeliveryCover);
             }
         }
-
 
 
         /* Валидация всех объектов */
@@ -89,7 +86,6 @@ final class DeliveryHandler extends AbstractHandler
 
         return $this->main;
     }
-
 
 
 }

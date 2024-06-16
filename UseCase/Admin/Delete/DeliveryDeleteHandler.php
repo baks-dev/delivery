@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\UseCase\Admin\Delete;
 
-
 use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
@@ -36,8 +35,7 @@ final class DeliveryDeleteHandler extends AbstractHandler
 {
     public function handle(
         DeliveryDeleteDTO $command
-    ): string|Delivery
-    {
+    ): string|Delivery {
         /** Валидация DTO  */
         $this->validatorCollection->add($command);
 

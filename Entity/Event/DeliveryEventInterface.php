@@ -27,6 +27,6 @@ use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 
 interface DeliveryEventInterface
 {
-	public function getEvent() : ?DeliveryEventUid;
-	
+    public function getEvent(): ?DeliveryEventUid;
+
 }

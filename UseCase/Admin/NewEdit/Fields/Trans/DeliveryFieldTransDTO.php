@@ -32,62 +32,60 @@ use BaksDev\Core\Type\Locale\Locale;
 
 final class DeliveryFieldTransDTO implements DeliveryFieldTransInterface
 {
-	
-	/** Локаль */
-	#[Assert\NotBlank]
-	private readonly Locale $local;
-	
-	/** Название  */
-	#[Assert\NotBlank]
-	private ?string $name;
+    /** Локаль */
+    #[Assert\NotBlank]
+    private readonly Locale $local;
 
-	/** Детальное описание */
-	private ?string $description = null;
+    /** Название  */
+    #[Assert\NotBlank]
+    private ?string $name;
 
-	
-	/** Локаль */
-	
-	public function getLocal() : Locale
-	{
-		return $this->local;
-	}
-	
-	
-	public function setLocal(Locale $local) : void
-	{
-		if(!(new ReflectionProperty(self::class, 'local'))->isInitialized($this))
-		{
-			$this->local = $local;
-		}
-	}
-	
-	
-	/** Название продукта  */
-	
-	public function getName(): string
-	{
-		return $this->name;
-	}
-	
-	
-	public function setName(?string $name) : void
-	{
-		$this->name = $name;
-	}
-	
-	
-	
-	/** Детальное описание */
-	
-	public function getDescription() : ?string
-	{
-		return $this->description;
-	}
-	
-	
-	public function setDescription(?string $description) : void
-	{
-		$this->description = $description;
-	}
-	
+    /** Детальное описание */
+    private ?string $description = null;
+
+
+    /** Локаль */
+
+    public function getLocal(): Locale
+    {
+        return $this->local;
+    }
+
+
+    public function setLocal(Locale $local): void
+    {
+        if(!(new ReflectionProperty(self::class, 'local'))->isInitialized($this))
+        {
+            $this->local = $local;
+        }
+    }
+
+
+    /** Название продукта  */
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+
+    /** Детальное описание */
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
 }

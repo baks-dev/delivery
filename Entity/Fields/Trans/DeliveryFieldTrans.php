@@ -40,71 +40,71 @@ use InvalidArgumentException;
 #[ORM\Index(columns: ['name'])]
 class DeliveryFieldTrans extends EntityEvent
 {
-	public const TABLE = 'delivery_field_trans';
-	
-	/** Связь на событие */
-	#[ORM\Id]
-	#[ORM\ManyToOne(targetEntity: DeliveryField::class, inversedBy: "translate")]
-	#[ORM\JoinColumn(name: 'field', referencedColumnName: "id")]
-	private DeliveryField $field;
-	
-	/** Локаль */
-	#[ORM\Id]
-	#[ORM\Column(type: Locale::TYPE, length: 2)]
-	private Locale $local;
-	
-	/** Название */
-	#[ORM\Column(type: Types::STRING, length: 100)]
-	private string $name;
-	
-	/** Описание */
-	#[ORM\Column(type: Types::TEXT, nullable: true)]
-	private ?string $description;
-	
-	
-	public function __construct(DeliveryField $field)
-	{
-		$this->field = $field;
-	}
+    public const TABLE = 'delivery_field_trans';
+
+    /** Связь на событие */
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: DeliveryField::class, inversedBy: "translate")]
+    #[ORM\JoinColumn(name: 'field', referencedColumnName: "id")]
+    private DeliveryField $field;
+
+    /** Локаль */
+    #[ORM\Id]
+    #[ORM\Column(type: Locale::TYPE, length: 2)]
+    private Locale $local;
+
+    /** Название */
+    #[ORM\Column(type: Types::STRING, length: 100)]
+    private string $name;
+
+    /** Описание */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description;
+
+
+    public function __construct(DeliveryField $field)
+    {
+        $this->field = $field;
+    }
 
     public function __toString(): string
     {
         return (string) $this->field;
     }
-	
-	public function getDto($dto): mixed
-	{
+
+    public function getDto($dto): mixed
+    {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-		if($dto instanceof DeliveryFieldTransInterface)
-		{
-			return parent::getDto($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function setEntity($dto): mixed
-	{
-		
-		if($dto instanceof DeliveryFieldTransInterface || $dto instanceof self)
-		{
-			return parent::setEntity($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function name(Locale $locale) : ?string
-	{
-		if($this->local->getLocalValue() === $locale->getLocalValue())
-		{
-			return $this->name;
-		}
-		
-		return null;
-	}
-	
+        if($dto instanceof DeliveryFieldTransInterface)
+        {
+            return parent::getDto($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function setEntity($dto): mixed
+    {
+
+        if($dto instanceof DeliveryFieldTransInterface || $dto instanceof self)
+        {
+            return parent::setEntity($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function name(Locale $locale): ?string
+    {
+        if($this->local->getLocalValue() === $locale->getLocalValue())
+        {
+            return $this->name;
+        }
+
+        return null;
+    }
+
 }

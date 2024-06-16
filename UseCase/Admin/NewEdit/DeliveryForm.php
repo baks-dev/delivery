@@ -41,133 +41,129 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DeliveryForm extends AbstractType
 {
-	private TypeProfileChoiceInterface $profileChoice;
-	
-	private ReferenceRegionChoiceInterface $regionChoice;
-	
-	
-	public function __construct(TypeProfileChoiceInterface $profileChoice, ReferenceRegionChoiceInterface $regionChoice) {
-		$this->profileChoice = $profileChoice;
-		$this->regionChoice = $regionChoice;
-	}
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		/** Профиль пользователя, которому доступна доставка (null - все) */
-		
-		$profileChoice = $this->profileChoice->getAllTypeProfileChoice();
-		
-		$builder
-			->add('type', ChoiceType::class, [
-				'choices' => $profileChoice,
-				'choice_value' => function(?TypeProfileUid $type) {
-					return $type?->getValue();
-				},
-				'choice_label' => function(TypeProfileUid $type) {
-					return $type->getAttr();
-				},
-				'label' => false,
-				'expanded' => false,
-				'multiple' => false,
-				'required' => false
-			])
-		;
-		
-		
-		$regionChoice = $this->regionChoice->getRegionChoice();
-		
-		
-		$builder
-			->add('region', ChoiceType::class, [
-				'choices' => $regionChoice,
-				'choice_value' => function(?RegionUid $region) {
-					return $region?->getValue();
-				},
-				'choice_label' => function(RegionUid $region) {
-					return $region->getOption();
-				},
-				'label' => false,
-				'expanded' => false,
-				'multiple' => false,
-				'required' => false
-			])
-		;
-		
-		
-		/** Обложка способа оплаты */
-		
-		$builder->add('cover', Cover\DeliveryCoverForm::class);
-		
-		$builder->add('price', Price\DeliveryPriceForm::class);
-		
-		
-		/** Настройки локали службы доставки */
-		
-		$builder->add('translate', CollectionType::class, [
-			'entry_type' => Trans\DeliveryTransForm::class,
-			'entry_options' => ['label' => false],
-			'label' => false,
-			'by_reference' => false,
-			'allow_delete' => true,
-			'allow_add' => true,
-			'prototype_name' => '__delivery_translate__',
-		]);
-		
-		
-		
-		/** Настройки локали службы доставки */
-		
-		$builder->add('field', CollectionType::class, [
-			'entry_type' => Fields\DeliveryFieldForm::class,
-			'entry_options' => ['label' => false],
-			'label' => false,
-			'by_reference' => false,
-			'allow_delete' => true,
-			'allow_add' => true,
-			'prototype_name' => '__delivery_field__',
-		]);
-		
-		
-		/** Сортировка поля в секции */
-		
-		$builder->add
-		(
-			'sort',
-			IntegerType::class,
-			[
-				'label' => false,
-				'attr' => ['min' => 0, 'max' => 999],
-			]
-		);
-		
-		
-		/** Флаг активности */
-		
-		$builder->add
-		(
-			'active',
-			CheckboxType::class,
-			[
-				'label' => false,
-				'required' => false,
-			]
-		);
-		
-		/** Сохранить */
-		
-		$builder->add(
-			'delivery',
-			SubmitType::class,
-			['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']]
-		);
-	}
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => DeliveryDTO::class,
-		]);
-	}
-	
+    private TypeProfileChoiceInterface $profileChoice;
+
+    private ReferenceRegionChoiceInterface $regionChoice;
+
+
+    public function __construct(TypeProfileChoiceInterface $profileChoice, ReferenceRegionChoiceInterface $regionChoice)
+    {
+        $this->profileChoice = $profileChoice;
+        $this->regionChoice = $regionChoice;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        /** Профиль пользователя, которому доступна доставка (null - все) */
+
+        $profileChoice = $this->profileChoice->getAllTypeProfileChoice();
+
+        $builder
+            ->add('type', ChoiceType::class, [
+                'choices' => $profileChoice,
+                'choice_value' => function (?TypeProfileUid $type) {
+                    return $type?->getValue();
+                },
+                'choice_label' => function (TypeProfileUid $type) {
+                    return $type->getAttr();
+                },
+                'label' => false,
+                'expanded' => false,
+                'multiple' => false,
+                'required' => false
+            ]);
+
+
+        $regionChoice = $this->regionChoice->getRegionChoice();
+
+
+        $builder
+            ->add('region', ChoiceType::class, [
+                'choices' => $regionChoice,
+                'choice_value' => function (?RegionUid $region) {
+                    return $region?->getValue();
+                },
+                'choice_label' => function (RegionUid $region) {
+                    return $region->getOption();
+                },
+                'label' => false,
+                'expanded' => false,
+                'multiple' => false,
+                'required' => false
+            ]);
+
+
+        /** Обложка способа оплаты */
+
+        $builder->add('cover', Cover\DeliveryCoverForm::class);
+
+        $builder->add('price', Price\DeliveryPriceForm::class);
+
+
+        /** Настройки локали службы доставки */
+
+        $builder->add('translate', CollectionType::class, [
+            'entry_type' => Trans\DeliveryTransForm::class,
+            'entry_options' => ['label' => false],
+            'label' => false,
+            'by_reference' => false,
+            'allow_delete' => true,
+            'allow_add' => true,
+            'prototype_name' => '__delivery_translate__',
+        ]);
+
+
+        /** Настройки локали службы доставки */
+
+        $builder->add('field', CollectionType::class, [
+            'entry_type' => Fields\DeliveryFieldForm::class,
+            'entry_options' => ['label' => false],
+            'label' => false,
+            'by_reference' => false,
+            'allow_delete' => true,
+            'allow_add' => true,
+            'prototype_name' => '__delivery_field__',
+        ]);
+
+
+        /** Сортировка поля в секции */
+
+        $builder->add(
+            'sort',
+            IntegerType::class,
+            [
+                'label' => false,
+                'attr' => ['min' => 0, 'max' => 999],
+            ]
+        );
+
+
+        /** Флаг активности */
+
+        $builder->add(
+            'active',
+            CheckboxType::class,
+            [
+                'label' => false,
+                'required' => false,
+            ]
+        );
+
+        /** Сохранить */
+
+        $builder->add(
+            'delivery',
+            SubmitType::class,
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']]
+        );
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => DeliveryDTO::class,
+        ]);
+    }
+
 }
