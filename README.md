@@ -8,31 +8,31 @@
 ## Установка
 
 ``` bash
-$ composer require \
+composer require \
 baks-dev/delivery \
 baks-dev/delivery-transport
 ```
-
-## Дополнительно
+`
+## Дополнительно`
 
 Установка конфигурации и файловых ресурсов:
 
 ``` bash
-$ php bin/console baks:assets:install
+php bin/console baks:assets:install
 ```
 
 Изменения в схеме базы данных с помощью миграции
 
 ``` bash
-$ php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:diff
 
-$ php bin/console doctrine:migrations:migrate
+php bin/console doctrine:migrations:migrate
 ```
 
 ## Тестирование
 
 ``` bash
-$ php bin/phpunit --group=delivery
+php bin/phpunit --group=delivery
 ```
 
 ## Журнал изменений ![Changelog](https://img.shields.io/badge/changelog-yellow)
