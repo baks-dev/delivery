@@ -54,7 +54,8 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
     {
         $qb = $this->entityManager->createQueryBuilder();
 
-        $select = sprintf('new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
+        $select = sprintf(
+            'new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
             DeliveryUid::class
         );
 
@@ -62,13 +63,15 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
 
         $qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
 
-        $qb->join(DeliveryEntity\Event\DeliveryEvent::class,
+        $qb->join(
+            DeliveryEntity\Event\DeliveryEvent::class,
             'event',
             'WITH',
             'event.id = delivery.event AND event.active = true AND (event.type IS NULL OR event.type = :type)'
         );
 
-        $qb->leftJoin(DeliveryEntity\Trans\DeliveryTrans::class,
+        $qb->leftJoin(
+            DeliveryEntity\Trans\DeliveryTrans::class,
             'trans',
             'WITH',
             'trans.event = delivery.event AND trans.local = :local'
@@ -90,7 +93,8 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
     {
         $qb = $this->entityManager->createQueryBuilder();
 
-        $select = sprintf('new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
+        $select = sprintf(
+            'new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
             DeliveryUid::class
         );
 
@@ -98,13 +102,15 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
 
         $qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
 
-        $qb->join(DeliveryEntity\Event\DeliveryEvent::class,
+        $qb->join(
+            DeliveryEntity\Event\DeliveryEvent::class,
             'event',
             'WITH',
             'event.id = delivery.event AND event.active = true'
         );
 
-        $qb->leftJoin(DeliveryEntity\Trans\DeliveryTrans::class,
+        $qb->leftJoin(
+            DeliveryEntity\Trans\DeliveryTrans::class,
             'trans',
             'WITH',
             'trans.event = delivery.event AND trans.local = :local'

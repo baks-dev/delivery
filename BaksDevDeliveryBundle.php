@@ -12,9 +12,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery;
 
-use BaksDev\Delivery\Repository\DeliveryByProfileChoice\DeliveryByProfileChoiceRepository;
-use BaksDev\Orders\Order\Repository\DeliveryByProfileChoice\DeliveryByProfileChoiceInterface;
-use BaksDev\Orders\Order\Repository\DeliveryByProfileChoice\DeliveryChoiceRepository;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -43,18 +40,6 @@ class BaksDevDeliveryBundle extends AbstractBundle
             self::NAMESPACE.'Type\Id\Choice\\',
             self::PATH.'Type/Id/Choice'
         );
-
-        $services->alias(
-            DeliveryByProfileChoiceInterface::class.' $deliveryChoice',
-            DeliveryByProfileChoiceRepository::class
-        );
-
-        $services->alias(
-            DeliveryByProfileChoiceInterface::class.' $deliveryFields',
-            DeliveryByProfileChoiceRepository::class
-        );
-
-
 
     }
 
