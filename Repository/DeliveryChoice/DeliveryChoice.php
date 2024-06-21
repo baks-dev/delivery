@@ -40,21 +40,22 @@ final class DeliveryChoice implements DeliveryChoiceInterface
 
     private ?TypeProfileUid $type = null;
 
-    private DBALQueryBuilder $DBALQueryBuilder;
+    public function __construct(
+        private readonly DBALQueryBuilder $DBALQueryBuilder
+    ) {}
 
-    public function __construct(DBALQueryBuilder $DBALQueryBuilder)
-    {
-        $this->DBALQueryBuilder = $DBALQueryBuilder;
-    }
-
-    /** Фильтр "Только активные" */
+    /**
+     * Фильтр "Только активные"
+     */
     public function onlyActive(): self
     {
         $this->active = true;
         return $this;
     }
 
-    /** Фильтр "Только доступные всем либо указанному типу профиля" */
+    /**
+     * Фильтр "Только доступные всем либо указанному типу профиля"
+     */
     public function onlyProfileType(TypeProfileUid|string $type): self
     {
         if(is_string($type))
@@ -77,6 +78,13 @@ final class DeliveryChoice implements DeliveryChoiceInterface
             ->bindLocal();
 
         $dbal->from(Delivery::class, 'delivery');
+
+        $dbal->leftJoin(
+            'delivery',
+            DeliveryEvent::class,
+            'delivery_event',
+            'delivery_event.id = delivery.event'
+        );
 
         $dbal->leftJoin(
             'delivery',
@@ -114,6 +122,8 @@ final class DeliveryChoice implements DeliveryChoiceInterface
                 $condition
             );
         }
+
+        $dbal->orderBy('delivery_event.sort');
 
         /** Свойства конструктора объекта гидрации */
 

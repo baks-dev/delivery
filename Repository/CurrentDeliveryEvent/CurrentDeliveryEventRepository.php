@@ -32,12 +32,9 @@ use BaksDev\Delivery\Type\Id\DeliveryUid;
 
 final class CurrentDeliveryEventRepository implements CurrentDeliveryEventInterface
 {
-    private ORMQueryBuilder $ORMQueryBuilder;
-
-    public function __construct(ORMQueryBuilder $ORMQueryBuilder)
-    {
-        $this->ORMQueryBuilder = $ORMQueryBuilder;
-    }
+    public function __construct(
+        private readonly ORMQueryBuilder $ORMQueryBuilder
+    ) {}
 
     /**
      * Метод возвращает активное событие доставки

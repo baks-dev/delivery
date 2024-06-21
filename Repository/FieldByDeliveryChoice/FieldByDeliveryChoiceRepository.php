@@ -33,15 +33,9 @@ use BaksDev\Delivery\Type\Field\DeliveryFieldUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Orders\Order\Repository\FieldByDeliveryChoice\FieldByDeliveryChoiceInterface;
 
-final class FieldByDeliveryChoiceRepository implements FieldByDeliveryChoiceInterface
+final readonly class FieldByDeliveryChoiceRepository implements FieldByDeliveryChoiceInterface
 {
-    private ORMQueryBuilder $ORMQueryBuilder;
-
-    public function __construct(ORMQueryBuilder $ORMQueryBuilder)
-    {
-        $this->ORMQueryBuilder = $ORMQueryBuilder;
-    }
-
+    public function __construct(private ORMQueryBuilder $ORMQueryBuilder) {}
 
     public function fetchDeliveryFields(DeliveryUid $delivery): ?array
     {
@@ -56,7 +50,11 @@ final class FieldByDeliveryChoiceRepository implements FieldByDeliveryChoiceInte
         $qb
             ->from(Delivery::class, 'delivery', 'delivery.id')
             ->where('delivery.id = :delivery')
-            ->setParameter('delivery', $delivery, DeliveryUid::TYPE);
+            ->setParameter(
+                'delivery',
+                $delivery,
+                DeliveryUid::TYPE
+            );
 
         $qb->join(
             DeliveryField::class,

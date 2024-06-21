@@ -26,43 +26,37 @@ declare(strict_types=1);
 namespace BaksDev\Delivery\Repository\DeliveryRegionDefault;
 
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
-use BaksDev\Delivery\Entity as DeliveryEntity;
+use BaksDev\Delivery\Entity\Delivery;
+use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 
-final class DeliveryRegionDefaultRepository implements DeliveryRegionDefaultInterface
+final readonly class DeliveryRegionDefaultRepository implements DeliveryRegionDefaultInterface
 {
-    private ORMQueryBuilder $ORMQueryBuilder;
-
-    public function __construct(ORMQueryBuilder $ORMQueryBuilder)
-    {
-        $this->ORMQueryBuilder = $ORMQueryBuilder;
-    }
-
+    public function __construct(private ORMQueryBuilder $ORMQueryBuilder) {}
 
     public function getDefaultDeliveryRegion(): ?RegionUid
     {
-        $qb = $this->ORMQueryBuilder->createQueryBuilder(self::class);
+        $orm = $this->ORMQueryBuilder->createQueryBuilder(self::class);
 
         $select = sprintf('new %s(delivery_event.region)', RegionUid::class);
-        $qb->select($select);
+        $orm->select($select);
 
-        $qb->from(DeliveryEntity\Delivery::class, 'delivery');
+        $orm->from(Delivery::class, 'delivery');
 
-        $qb->join(
-            DeliveryEntity\Event\DeliveryEvent::class,
+        $orm->join(
+            DeliveryEvent::class,
             'delivery_event',
             'WITH',
             'delivery_event.id = delivery.event'
         );
 
-        $qb->where('delivery_event.region IS NOT NULL');
-        $qb->orderBy('delivery_event.sort');
+        $orm->where('delivery_event.region IS NOT NULL');
+        $orm->orderBy('delivery_event.sort');
 
-        $qb->setMaxResults(1);
-
+        $orm->setMaxResults(1);
 
         /* Кешируем результат ORM */
-        return $qb->enableCache('delivery', 86400)->getOneOrNullResult();
+        return $orm->enableCache('delivery', 86400)->getOneOrNullResult();
 
     }
 

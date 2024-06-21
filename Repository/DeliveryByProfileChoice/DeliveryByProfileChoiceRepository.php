@@ -25,105 +25,133 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Repository\DeliveryByProfileChoice;
 
-use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Delivery\Entity as DeliveryEntity;
+use BaksDev\Core\Doctrine\DBALQueryBuilder;
+use BaksDev\Delivery\Entity\Delivery;
+use BaksDev\Delivery\Entity\Event\DeliveryEvent;
+use BaksDev\Delivery\Entity\Price\DeliveryPrice;
+use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Orders\Order\Repository\DeliveryByProfileChoice\DeliveryByProfileChoiceInterface;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Generator;
 
 /**
  * @see DeliveryByProfileChoiceInterface
  */
-final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoiceInterface
+final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoiceInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    private TranslatorInterface $translator;
-
-
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
-    {
-        $this->entityManager = $entityManager;
-        $this->translator = $translator;
-    }
+    public function __construct(
+        private DBALQueryBuilder $DBALQueryBuilder
+    ) {}
 
 
     public function fetchDeliveryByProfile(TypeProfileUid $type): ?array
     {
-        $qb = $this->entityManager->createQueryBuilder();
+        $dbal = $this->DBALQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
-        $select = sprintf(
-            'new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
-            DeliveryUid::class
-        );
 
-        $qb->select($select);
+        $dbal->from(Delivery::class, 'delivery');
 
-        $qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
-
-        $qb->join(
-            DeliveryEntity\Event\DeliveryEvent::class,
+        $dbal->leftJoin(
+            'delivery',
+            DeliveryEvent::class,
             'event',
-            'WITH',
-            'event.id = delivery.event AND event.active = true AND (event.type IS NULL OR event.type = :type)'
-        );
+            '
+                event.id = delivery.event AND 
+                event.active = true AND 
+                (event.type IS NULL OR event.type = :type)
+            '
+        )
+            ->setParameter(
+                'type',
+                $type,
+                TypeProfileUid::TYPE
+            );
 
-        $qb->leftJoin(
-            DeliveryEntity\Trans\DeliveryTrans::class,
-            'trans',
-            'WITH',
-            'trans.event = delivery.event AND trans.local = :local'
-        );
+        $dbal
+            ->leftJoin(
+                'delivery',
+                DeliveryTrans::class,
+                'trans',
+                'trans.event = delivery.event AND trans.local = :local'
+            );
 
-        $qb->leftJoin(DeliveryEntity\Price\DeliveryPrice::class, 'price', 'WITH', 'price.event = delivery.event');
+        $dbal
+            ->leftJoin(
+                'delivery',
+                DeliveryPrice::class,
+                'price',
+                'price.event = delivery.event'
+            );
 
-        $qb->setParameter('type', $type, TypeProfileUid::TYPE);
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
 
-        $qb->orderBy('event.sort');
+        $dbal->orderBy('event.sort');
 
 
-        return $qb->getQuery()->getResult();
+        $dbal->addSelect('delivery.id AS value');
+        $dbal->addSelect('delivery.event AS event');
+        $dbal->addSelect('trans.name AS attr');
+        $dbal->addSelect('trans.description AS option');
+        $dbal->addSelect('price.price AS price');
+        $dbal->addSelect('price.excess AS excess');
+        $dbal->addSelect('price.currency AS currency');
+
+        $result = $dbal
+            ->enableCache('delivery')
+            ->fetchAllHydrate(DeliveryUid::class);
+
+        return $result->valid() ? iterator_to_array($result) : [];
     }
 
 
-    public function fetchAllDelivery(): ?array
+    public function fetchAllDelivery(): ?Generator
     {
-        $qb = $this->entityManager->createQueryBuilder();
+        $dbal = $this->DBALQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
-        $select = sprintf(
-            'new %s(delivery.id, delivery.event, trans.name, trans.description, price.price, price.excess, price.currency)',
-            DeliveryUid::class
-        );
 
-        $qb->select($select);
+        $dbal->from(Delivery::class, 'delivery');
 
-        $qb->from(DeliveryEntity\Delivery::class, 'delivery', 'delivery.id');
-
-        $qb->join(
-            DeliveryEntity\Event\DeliveryEvent::class,
+        $dbal->join(
+            'delivery',
+            DeliveryEvent::class,
             'event',
-            'WITH',
             'event.id = delivery.event AND event.active = true'
         );
 
-        $qb->leftJoin(
-            DeliveryEntity\Trans\DeliveryTrans::class,
+        $dbal->leftJoin(
+            'delivery',
+            DeliveryTrans::class,
             'trans',
-            'WITH',
             'trans.event = delivery.event AND trans.local = :local'
         );
 
-        $qb->leftJoin(DeliveryEntity\Price\DeliveryPrice::class, 'price', 'WITH', 'price.event = delivery.event');
+        $dbal->leftJoin(
+            'delivery',
+            DeliveryPrice::class,
+            'price',
+            'price.event = delivery.event'
+        );
 
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
 
-        $qb->orderBy('event.sort');
+        $dbal->orderBy('event.sort');
 
+        $dbal->addSelect('delivery.id AS value');
+        $dbal->addSelect('delivery.event AS event');
+        $dbal->addSelect('trans.name AS attr');
+        $dbal->addSelect('trans.description AS option');
+        $dbal->addSelect('price.price AS price');
+        $dbal->addSelect('price.excess AS excess');
+        $dbal->addSelect('price.currency AS currency');
 
-        return $qb->getQuery()->getResult();
+        $result = $dbal
+            ->enableCache('delivery')
+            ->fetchAllHydrate(DeliveryUid::class);
+
+        return $result->valid() ? $result : null;
+
     }
-
 }

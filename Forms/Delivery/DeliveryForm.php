@@ -33,13 +33,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DeliveryForm extends AbstractType
 {
-    private DeliveryChoiceInterface $deliveryChoice;
-
     public function __construct(
-        DeliveryChoiceInterface $deliveryChoice
-    ) {
-        $this->deliveryChoice = $deliveryChoice;
-    }
+        private readonly DeliveryChoiceInterface $deliveryChoice
+    ) {}
 
 
     public function configureOptions(OptionsResolver $resolver): void

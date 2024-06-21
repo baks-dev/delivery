@@ -26,137 +26,144 @@ declare(strict_types=1);
 namespace BaksDev\Delivery\Repository\AllDeliveryDetail;
 
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
-use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Delivery\Entity as DeliveryEntity;
-use BaksDev\Reference\Region\Entity as RegionEntity;
+use BaksDev\Delivery\Entity\Cover\DeliveryCover;
+use BaksDev\Delivery\Entity\Delivery;
+use BaksDev\Delivery\Entity\Event\DeliveryEvent;
+use BaksDev\Delivery\Entity\Price\DeliveryPrice;
+use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
+use BaksDev\Reference\Region\Entity\Event\RegionEvent;
+use BaksDev\Reference\Region\Entity\Region;
+use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInterface
 {
-    private TranslatorInterface $translator;
-    private DBALQueryBuilder $DBALQueryBuilder;
-
-
     public function __construct(
-        DBALQueryBuilder $DBALQueryBuilder,
-        TranslatorInterface $translator,
-    ) {
-
-        $this->translator = $translator;
-        $this->DBALQueryBuilder = $DBALQueryBuilder;
-    }
+        private readonly DBALQueryBuilder $DBALQueryBuilder,
+    ) {}
 
 
     public function fetchAllDeliveryAssociative(TypeProfileUid $profile, ?RegionUid $region): ?array
     {
-        $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+        $dbal = $this->DBALQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
-        //$qb->select('id');
-        $qb->addSelect('delivery.id AS delivery_id');
-        $qb->addSelect('delivery.event AS delivery_event');
-
-        $qb->from(DeliveryEntity\Delivery::TABLE, 'delivery');
+        $dbal
+            ->addSelect('delivery.id AS delivery_id')
+            ->addSelect('delivery.event AS delivery_event')
+            ->from(Delivery::class, 'delivery');
 
         $condition = '';
 
         if($region)
         {
             $condition = 'AND (delivery_event.region = :region OR delivery_event.region IS NULL)';
-            $qb->setParameter('region', $region, RegionUid::TYPE);
+            $dbal->setParameter(
+                'region',
+                $region,
+                RegionUid::TYPE
+            );
 
         }
 
-        $qb->join(
+        $dbal->join(
             'delivery',
-            DeliveryEntity\Event\DeliveryEvent::TABLE,
+            DeliveryEvent::class,
             'delivery_event',
             '
 			delivery_event.id = delivery.event AND
 			delivery_event.active = true AND
-			(delivery_event.type = :profile OR delivery_event.type IS NULL)
-	'.$condition
-        );
+			(delivery_event.type = :profile OR delivery_event.type IS NULL)'.$condition
+        )
+            ->setParameter(
+                'profile',
+                $profile,
+                TypeProfileUid::TYPE
+            );
 
-        $qb->addSelect('delivery_trans.name AS delivery_name');
-        $qb->addSelect('delivery_trans.description AS delivery_description');
-        $qb->addSelect('delivery_trans.agreement AS delivery_agreement');
-        $qb->leftJoin(
-            'delivery_event',
-            DeliveryEntity\Trans\DeliveryTrans::TABLE,
-            'delivery_trans',
-            'delivery_trans.event = delivery_event.id AND delivery_trans.local = :local'
-        );
+
+        $dbal
+            ->addSelect('delivery_trans.name AS delivery_name')
+            ->addSelect('delivery_trans.description AS delivery_description')
+            ->addSelect('delivery_trans.agreement AS delivery_agreement')
+            ->leftJoin(
+                'delivery_event',
+                DeliveryTrans::class,
+                'delivery_trans',
+                'delivery_trans.event = delivery_event.id AND delivery_trans.local = :local'
+            );
 
         /** Обложка */
-        $qb->addSelect('delivery_cover.ext AS delivery_cover_ext');
-        $qb->addSelect('delivery_cover.cdn AS delivery_cover_cdn');
-
-        $qb->addSelect(
-            "
+        $dbal
+            ->addSelect('delivery_cover.ext AS delivery_cover_ext')
+            ->addSelect('delivery_cover.cdn AS delivery_cover_cdn')
+            ->addSelect(
+                "
 			CASE
 			 WHEN delivery_cover.name IS NOT NULL THEN
-					CONCAT ( '/upload/".DeliveryEntity\Cover\DeliveryCover::TABLE."' , '/', delivery_cover.name)
+					CONCAT ( '/upload/".$dbal->table(DeliveryCover::class)."' , '/', delivery_cover.name)
 			   		ELSE NULL
 			END AS delivery_cover_name
 		"
-        );
+            );
 
-        $qb->leftJoin(
+        $dbal->leftJoin(
             'delivery_event',
-            DeliveryEntity\Cover\DeliveryCover::TABLE,
+            DeliveryCover::class,
             'delivery_cover',
             'delivery_cover.event = delivery_event.id'
         );
 
-        $qb->addSelect('delivery_price.price AS delivery_price');
-        $qb->addSelect('delivery_price.excess AS delivery_excess');
-        $qb->addSelect('delivery_price.currency AS delivery_currency');
-        $qb->leftJoin(
-            'delivery_event',
-            DeliveryEntity\Price\DeliveryPrice::TABLE,
-            'delivery_price',
-            'delivery_price.event = delivery_event.id'
-        );
+        $dbal
+            ->addSelect('delivery_price.price AS delivery_price')
+            ->addSelect('delivery_price.excess AS delivery_excess')
+            ->addSelect('delivery_price.currency AS delivery_currency')
+            ->leftJoin(
+                'delivery_event',
+                DeliveryPrice::class,
+                'delivery_price',
+                'delivery_price.event = delivery_event.id'
+            );
 
 
         /** Регион */
-        $qb->addSelect('region.id AS region_id');
-        $qb->addSelect('region.event AS region_event');
-        $qb->leftJoin(
-            'delivery_event',
-            RegionEntity\Region::TABLE,
-            'region',
-            'region.id = delivery_event.region'
-        );
+        $dbal
+            ->addSelect('region.id AS region_id')
+            ->addSelect('region.event AS region_event')
+            ->leftJoin(
+                'delivery_event',
+                Region::class,
+                'region',
+                'region.id = delivery_event.region'
+            );
 
-        $qb->leftJoin(
+        $dbal->leftJoin(
             'region',
-            RegionEntity\Event\RegionEvent::TABLE,
+            RegionEvent::class,
             'region_event',
             'region_event.id = region.event'
         );
 
-        $qb->addSelect('region_trans.name AS region_name');
-        $qb->addSelect('region_trans.description AS region_description');
-
-        $qb->leftJoin(
-            'region_event',
-            RegionEntity\Trans\RegionTrans::TABLE,
-            'region_trans',
-            'region_trans.event = region_event.id AND region_trans.local = :local'
-        );
-
-        $qb->setParameter('profile', $profile, TypeProfileUid::TYPE);
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
-
-        $qb->addOrderBy('delivery_event.sort');
-        $qb->addOrderBy('region_event.sort');
+        $dbal
+            ->addSelect('region_trans.name AS region_name')
+            ->addSelect('region_trans.description AS region_description')
+            ->leftJoin(
+                'region_event',
+                RegionTrans::class,
+                'region_trans',
+                'region_trans.event = region_event.id AND region_trans.local = :local'
+            );
 
 
-        /* Кешируем результат DBAL */
-        return $qb->enableCache('delivery', 3600)->fetchAllAssociative();
+        $dbal->addOrderBy('delivery_event.sort');
+        $dbal->addOrderBy('region_event.sort');
+
+
+        return $dbal
+            ->enableCache('delivery', 3600)
+            ->fetchAllAssociative();
 
     }
 }

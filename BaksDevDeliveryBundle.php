@@ -27,6 +27,7 @@ class BaksDevDeliveryBundle extends AbstractBundle
         $services = $container->services()
             ->defaults()
             ->autowire()
+            ->public()
             ->autoconfigure();
 
         $services->load(self::NAMESPACE, self::PATH)

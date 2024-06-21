@@ -29,15 +29,9 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 
-final class ExistTypeDeliveryRepository implements ExistTypeDeliveryInterface
+final readonly class ExistTypeDeliveryRepository implements ExistTypeDeliveryInterface
 {
-    private DBALQueryBuilder $DBALQueryBuilder;
-
-    public function __construct(
-        DBALQueryBuilder $DBALQueryBuilder,
-    ) {
-        $this->DBALQueryBuilder = $DBALQueryBuilder;
-    }
+    public function __construct(private DBALQueryBuilder $DBALQueryBuilder) {}
 
     /**
      * Метод проверяет наличие способа доставки
