@@ -54,7 +54,7 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
 
         $dbal->from(Delivery::class, 'delivery');
 
-        $dbal->leftJoin(
+        $dbal->join(
             'delivery',
             DeliveryEvent::class,
             'event',
@@ -94,8 +94,8 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
         $dbal->addSelect('delivery.event AS event');
         $dbal->addSelect('trans.name AS attr');
         $dbal->addSelect('trans.description AS option');
-        $dbal->addSelect('price.price AS price');
-        $dbal->addSelect('price.excess AS excess');
+        $dbal->addSelect('(price.price / 100) AS price');
+        $dbal->addSelect('(price.excess / 100) AS excess');
         $dbal->addSelect('price.currency AS currency');
 
         $result = $dbal
@@ -115,7 +115,7 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
 
         $dbal->from(Delivery::class, 'delivery');
 
-        $dbal->join(
+        $dbal->leftJoin(
             'delivery',
             DeliveryEvent::class,
             'event',
@@ -143,8 +143,8 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
         $dbal->addSelect('delivery.event AS event');
         $dbal->addSelect('trans.name AS attr');
         $dbal->addSelect('trans.description AS option');
-        $dbal->addSelect('price.price AS price');
-        $dbal->addSelect('price.excess AS excess');
+        $dbal->addSelect('(price.price / 100) AS price');
+        $dbal->addSelect('(price.excess / 100) AS excess');
         $dbal->addSelect('price.currency AS currency');
 
         $result = $dbal
