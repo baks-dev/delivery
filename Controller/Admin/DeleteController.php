@@ -48,6 +48,7 @@ final class DeleteController extends AbstractController
         #[MapEntity] DeliveryEvent $DeliveryEvent,
         DeliveryDeleteHandler $DeliveryDeleteHandler,
     ): Response {
+
         $DeliveryDeleteDTO = new DeliveryDeleteDTO();
         $DeliveryEvent->getDto($DeliveryDeleteDTO);
         $form = $this->createForm(DeliveryDeleteForm::class, $DeliveryDeleteDTO, [
