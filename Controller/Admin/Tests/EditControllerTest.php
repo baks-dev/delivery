@@ -62,7 +62,6 @@ final class EditControllerTest extends WebTestCase
     // доступ по роли ROLE_ADMIN
     public function testRoleAdminSuccessful(): void
     {
-
         self::ensureKernelShutdown();
         $client = static::createClient();
 
