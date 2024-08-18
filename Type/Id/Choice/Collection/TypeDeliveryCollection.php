@@ -25,14 +25,14 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\Type\Id\Choice\Collection;
 
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class TypeDeliveryCollection
 {
     private iterable $type;
 
     public function __construct(
-        #[TaggedIterator('baks.delivery.type', defaultPriorityMethod: 'priority')] iterable $type
+        #[AutowireIterator('baks.delivery.type', defaultPriorityMethod: 'priority')] iterable $type
     ) {
         $this->type = $type;
     }

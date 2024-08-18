@@ -30,7 +30,7 @@ use BaksDev\Users\Profile\TypeProfile\Repository\AllProfileType\AllProfileTypeIn
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
 final class DeliveryController extends AbstractController
