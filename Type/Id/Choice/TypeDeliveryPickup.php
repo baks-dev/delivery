@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 final class TypeDeliveryPickup implements TypeDeliveryInterface
 {
     /** Самовывоз (pickup) */
-    public const TYPE = 'e02b90c3-d6c5-7b89-ad12-9e8ba1f37017';
+    public const TYPE = '01876ba4-c3e3-7ff6-8faf-4f444199fa03';
 
     public function __toString(): string
     {
