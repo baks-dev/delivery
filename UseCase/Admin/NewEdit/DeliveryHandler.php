@@ -40,21 +40,9 @@ final class DeliveryHandler extends AbstractHandler
 {
     public function handle(DeliveryDTO $command): string|Delivery
     {
-        /* Валидация DTO  */
-        $this->validatorCollection->add($command);
-
-        $this->main = new Delivery($command->getDeliveryUid());
-        $this->event = new DeliveryEvent();
-
-        try
-        {
-            $command->getEvent() ? $this->preUpdate($command) : $this->prePersist($command);
-        }
-        catch(DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
-
+        $this->setCommand($command);
+        $Delivery = new Delivery($command->getDeliveryUid());
+        $this->preEventPersistOrUpdate($Delivery, DeliveryEvent::class);
 
         /* Загружаем файл обложки */
         if(method_exists($command, 'getCover'))
@@ -76,7 +64,7 @@ final class DeliveryHandler extends AbstractHandler
             return $this->validatorCollection->getErrorUniqid();
         }
 
-        $this->entityManager->flush();
+        $this->flush();
 
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(

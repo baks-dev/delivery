@@ -33,23 +33,10 @@ use DomainException;
 
 final class DeliveryDeleteHandler extends AbstractHandler
 {
-    public function handle(
-        DeliveryDeleteDTO $command
-    ): string|Delivery {
-        /** Валидация DTO  */
-        $this->validatorCollection->add($command);
-
-        $this->main = new Delivery();
-        $this->event = new DeliveryEvent();
-
-        try
-        {
-            $this->preRemove($command);
-        }
-        catch(DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
+    public function handle(DeliveryDeleteDTO $command): string|Delivery
+    {
+        $this->setCommand($command);
+        $this->preEventRemove(Delivery::class, DeliveryEvent::class);
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())
@@ -57,8 +44,7 @@ final class DeliveryDeleteHandler extends AbstractHandler
             return $this->validatorCollection->getErrorUniqid();
         }
 
-        $this->entityManager->flush();
-
+        $this->flush();
 
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(
