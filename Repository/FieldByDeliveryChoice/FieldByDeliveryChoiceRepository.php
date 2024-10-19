@@ -73,7 +73,7 @@ final readonly class FieldByDeliveryChoiceRepository implements FieldByDeliveryC
 
         $qb->orderBy('field.sort');
 
-        return $qb->enableCache('delivery', 86400)->getResult();
+        return $qb->getResult();
     }
 
 }
