@@ -1,16 +1,16 @@
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
- *
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,15 +25,16 @@
 
 let $addButtonField = document.getElementById('field_addCollection');
 
-if ($addButtonField)
+if($addButtonField)
 {
     /* Блок для новой коллекции */
     let $blockCollection = document.getElementById('field_collection');
 
-    if ($blockCollection) {
+    if($blockCollection)
+    {
 
         /* Добавляем новую коллекцию */
-        $addButtonField.addEventListener('click', function ()
+        $addButtonField.addEventListener('click', function()
         {
             /* получаем прототип коллекции  */
             let newForm = this.dataset.prototype;
@@ -41,7 +42,7 @@ if ($addButtonField)
 
 
             /* Замена '__name__' в HTML-коде прототипа на
-            вместо этого будет число, основанное на том, сколько коллекций */
+             вместо этого будет число, основанное на том, сколько коллекций */
             newForm = newForm.replace(/__delivery_field__/g, index);
 
             newForm = newForm.replace(/__FIELD_SORT__/g, index * 100 + 100);
@@ -80,7 +81,6 @@ if ($addButtonField)
             //deleteField(div);
 
 
-
             /* Увеличиваем data-index на 1 после вставки новой коллекции */
             this.dataset.index = (index + 1).toString();
 
@@ -91,10 +91,12 @@ if ($addButtonField)
 
 }
 
-document.querySelectorAll('.del-item-field').forEach(function (item) {
+document.querySelectorAll('.del-item-field').forEach(function(item)
+{
     item.addEventListener('click', deleteField);
 });
 
-function deleteField() {
+function deleteField()
+{
     document.getElementById(this.dataset.delete).remove();
 }

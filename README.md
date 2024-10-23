@@ -12,7 +12,9 @@ composer require \
 baks-dev/delivery \
 baks-dev/delivery-transport
 ```
+
 `
+
 ## Дополнительно`
 
 Установка конфигурации и файловых ресурсов:

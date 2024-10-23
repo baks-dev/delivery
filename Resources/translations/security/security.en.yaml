@@ -1,4 +1,3 @@
-
 ROLE_DELIVERY:
   name: 'Delivery methods'
   desc: 'Delivery methods for orders'
