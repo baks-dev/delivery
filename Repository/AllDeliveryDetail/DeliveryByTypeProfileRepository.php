@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Entity\Price\DeliveryPrice;
 use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
-use BaksDev\Reference\Region\Entity\Event\RegionEvent;
+use BaksDev\Reference\Region\Entity\Invariable\RegionInvariable;
 use BaksDev\Reference\Region\Entity\Region;
 use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
@@ -141,24 +141,23 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
 
         $dbal->leftJoin(
             'region',
-            RegionEvent::class,
-            'region_event',
-            'region_event.id = region.event'
+            RegionInvariable::class,
+            'region_invariable',
+            'region_invariable.main = region.id'
         );
 
         $dbal
             ->addSelect('region_trans.name AS region_name')
             ->addSelect('region_trans.description AS region_description')
             ->leftJoin(
-                'region_event',
+                'region',
                 RegionTrans::class,
                 'region_trans',
-                'region_trans.event = region_event.id AND region_trans.local = :local'
+                'region_trans.event = region.event AND region_trans.local = :local'
             );
 
-
         $dbal->addOrderBy('delivery_event.sort');
-        $dbal->addOrderBy('region_event.sort');
+        $dbal->addOrderBy('region_invariable.sort');
 
 
         return $dbal
