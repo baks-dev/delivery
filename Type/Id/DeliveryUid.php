@@ -34,9 +34,9 @@ use Symfony\Component\Uid\AbstractUid;
 
 final class DeliveryUid extends Uid
 {
-    public const TEST = '0188a996-df3c-7446-ae07-5ba49bf3e4bd';
+    public const string TEST = '0188a996-df3c-7446-ae07-5ba49bf3e4bd';
 
-    public const TYPE = 'delivery';
+    public const string TYPE = 'delivery';
 
     /** Идентификатор события */
     private ?DeliveryEventUid $event;

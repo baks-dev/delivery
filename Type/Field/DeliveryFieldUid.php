@@ -31,9 +31,9 @@ use Symfony\Component\Uid\AbstractUid;
 
 final class DeliveryFieldUid extends Uid
 {
-    public const TEST = '0188a996-b402-7069-a0af-ab5f391e865c';
+    public const string TEST = '0188a996-b402-7069-a0af-ab5f391e865c';
 
-    public const TYPE = 'delivery_field';
+    public const string TYPE = 'delivery_field';
 
     private mixed $attr;
 
