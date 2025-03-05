@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/version-7.2.3-blue)](https://github.com/baks-dev/delivery/releases)
 ![php 8.4+](https://img.shields.io/badge/php-min%208.4-red.svg)
-[![packagist](https://img.shields.io/badge/packagist-green)](https://packagist.org/packages/baks-dev/products-product)
+[![packagist](https://img.shields.io/badge/packagist-green)](https://packagist.org/packages/baks-dev/delivery)
 
 Модуль доставки заказов
 
