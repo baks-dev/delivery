@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 
 /** @group delivery */
 #[When(env: 'test')]
-final class NewControllerTest extends WebTestCase
+final class NewAdminControllerTest extends WebTestCase
 {
     private const string URL = '/admin/delivery/new';
     private const string ROLE = 'ROLE_DELIVERY_NEW';

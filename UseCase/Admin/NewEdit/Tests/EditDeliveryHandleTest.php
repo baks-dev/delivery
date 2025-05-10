@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Type\Field\InputField;
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Core\Type\Locale\Locales\Ru;
-use BaksDev\Delivery\Controller\Admin\Tests\DeleteControllerTest;
-use BaksDev\Delivery\Controller\Admin\Tests\EditControllerTest;
+use BaksDev\Delivery\Controller\Admin\Tests\DeleteAdminControllerTest;
+use BaksDev\Delivery\Controller\Admin\Tests\EditAdminControllerTest;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
@@ -54,8 +54,8 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @group delivery
  * @group delivery-handler
  *
- * @depends BaksDev\Delivery\Controller\Admin\Tests\DeleteControllerTest::class
- * @depends BaksDev\Delivery\Controller\Admin\Tests\EditControllerTest::class
+ * @depends BaksDev\Delivery\Controller\Admin\Tests\DeleteAdminControllerTest::class
+ * @depends BaksDev\Delivery\Controller\Admin\Tests\EditAdminControllerTest::class
  */
 #[When(env: 'test')]
 final class EditDeliveryHandleTest extends KernelTestCase

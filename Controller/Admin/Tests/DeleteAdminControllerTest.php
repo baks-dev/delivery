@@ -34,11 +34,11 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @depends BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest::class
  */
 #[When(env: 'test')]
-final class EditControllerTest extends WebTestCase
+final class DeleteAdminControllerTest extends WebTestCase
 {
-    private const string URL = '/admin/delivery/edit/%s';
+    private const string URL = '/admin/delivery/delete/%s';
 
-    private const string ROLE = 'ROLE_DELIVERY_EDIT';
+    private const string ROLE = 'ROLE_DELIVERY_DELETE';
 
 
     /** Доступ по роли */
@@ -60,13 +60,13 @@ final class EditControllerTest extends WebTestCase
             self::assertResponseIsSuccessful();
         }
 
-
         self::assertTrue(true);
     }
 
     // доступ по роли ROLE_ADMIN
     public function testRoleAdminSuccessful(): void
     {
+
         self::ensureKernelShutdown();
         $client = static::createClient();
 
@@ -102,7 +102,6 @@ final class EditControllerTest extends WebTestCase
 
             self::assertResponseStatusCodeSame(403);
         }
-
 
         self::assertTrue(true);
     }
