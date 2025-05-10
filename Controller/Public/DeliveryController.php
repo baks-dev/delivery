@@ -21,7 +21,7 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Controller\User;
+namespace BaksDev\Delivery\Controller\Public;
 
 use BaksDev\Contacts\Region\Repository\ContactCallByRegion\ContactCallByRegionInterface;
 use BaksDev\Core\Controller\AbstractController;
@@ -40,7 +40,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final class DeliveryController extends AbstractController
 {
-    #[Route('/delivery', name: 'user.delivery')]
+    #[Route('/delivery', name: 'public.delivery')]
     public function index(
         Request $request,
         AllProfileTypeInterface $allTypeProfile, // Типы профилей
@@ -81,7 +81,7 @@ final class DeliveryController extends AbstractController
         // Поиск по всему сайту
         $allSearch = new SearchDTO();
         $allSearchForm = $this->createForm(SearchForm::class, $allSearch, [
-            'action' => $this->generateUrl('delivery:user.delivery'),
+            'action' => $this->generateUrl('delivery:public.delivery'),
         ]);
 
         // 'all_search' => $allSearchForm->createView(),

@@ -21,7 +21,7 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Delivery\Controller\User\Tests;
+namespace BaksDev\Delivery\Controller\Public\Tests;
 
 use BaksDev\Users\User\Tests\TestUserAccount;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 
 /** @group delivery */
 #[When(env: 'test')]
-final class DeliveryControllerTest extends WebTestCase
+final class DeliveryPublicControllerTest extends WebTestCase
 {
     private const string URL = '/delivery';
 
