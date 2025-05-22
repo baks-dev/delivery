@@ -34,14 +34,14 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('baks.menu.admin')]
 final class Role implements RoleInterface, MenuAdminInterface
 {
-    public const ROLE = 'ROLE_DELIVERY';
+    public const string ROLE = 'ROLE_DELIVERY';
+
+    public const string KEY = 'pWpKVMEVG';
 
     public function getRole(): string
     {
         return self::ROLE;
     }
-
-
 
     /**
      * Добавляем раздел в меню администрирования.
@@ -52,6 +52,15 @@ final class Role implements RoleInterface, MenuAdminInterface
     {
         return 'delivery:admin.index';
     }
+
+    /**
+     * Метод возвращает ключ раздела (для меню телеграм)
+     */
+    public function getPathKey(): string
+    {
+        return self::KEY;
+    }
+
 
     /**
      * Метод возвращает секцию, в которую помещается ссылка на раздел.
