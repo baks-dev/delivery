@@ -51,6 +51,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 /**
  * @group delivery
  * @group delivery-handler
+ * @group orders-order-controller
  */
 #[When(env: 'test')]
 final class NewDeliveryHandleTest extends KernelTestCase
