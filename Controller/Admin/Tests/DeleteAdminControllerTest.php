@@ -26,6 +26,8 @@ namespace BaksDev\Delivery\Controller\Admin\Tests;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 use BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest;
 use BaksDev\Users\User\Tests\TestUserAccount;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -33,6 +35,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @group delivery
  * @depends BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\NewDeliveryHandleTest::class
  */
+#[Group('delivery')]
 #[When(env: 'test')]
 final class DeleteAdminControllerTest extends WebTestCase
 {
@@ -40,8 +43,8 @@ final class DeleteAdminControllerTest extends WebTestCase
 
     private const string ROLE = 'ROLE_DELIVERY_DELETE';
 
-
     /** Доступ по роли */
+    #[DependsOnClass(NewDeliveryHandleTest::class)]
     public function testRoleSuccessful(): void
     {
 

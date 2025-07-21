@@ -47,6 +47,8 @@ use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -57,6 +59,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @depends BaksDev\Delivery\Controller\Admin\Tests\DeleteAdminControllerTest::class
  * @depends BaksDev\Delivery\Controller\Admin\Tests\EditAdminControllerTest::class
  */
+#[Group('delivery')]
 #[When(env: 'test')]
 final class EditDeliveryHandleTest extends KernelTestCase
 {
@@ -67,7 +70,8 @@ final class EditDeliveryHandleTest extends KernelTestCase
         $CurrencyCollection->cases();
     }
 
-
+    #[DependsOnClass(DeleteAdminControllerTest::class)]
+    #[DependsOnClass(EditAdminControllerTest::class)]
     public function testUseCase(): void
     {
         $container = self::getContainer();

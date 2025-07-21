@@ -30,6 +30,7 @@ use BaksDev\Delivery\Messenger\DeliveryDispatch;
 use BaksDev\Delivery\Messenger\DeliveryMessage;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -37,6 +38,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @covers \BaksDev\Delivery\Messenger\DeliveryDispatch
  * @group delivery
  */
+#[Group('delivery')]
 final class DeliveryDispatchDebugTest extends KernelTestCase
 {
     public function testInvoke(): void

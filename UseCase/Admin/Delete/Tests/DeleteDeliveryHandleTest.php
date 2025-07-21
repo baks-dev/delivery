@@ -44,6 +44,8 @@ use BaksDev\Reference\Currency\Type\Currencies\RUR;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -53,9 +55,11 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  *
  * @depends BaksDev\Delivery\UseCase\Admin\NewEdit\Tests\EditDeliveryHandleTest::class
  */
+#[Group('delivery')]
 #[When(env: 'test')]
 final class DeleteDeliveryHandleTest extends KernelTestCase
 {
+
     public static function setUpBeforeClass(): void
     {
         /** @var CurrencyCollection $CurrencyCollection */
@@ -63,7 +67,7 @@ final class DeleteDeliveryHandleTest extends KernelTestCase
         $CurrencyCollection->cases();
     }
 
-
+    #[DependsOnClass(EditDeliveryHandleTest::class)]
     public function testUseCase(): void
     {
         $container = self::getContainer();
