@@ -1,0 +1,47 @@
+{% trans_default_domain 'delivery.admin' %}
+
+
+
+{% if form.translate.count > 1 %}
+
+    <ul class="nav nav-pills gap-3 mb-3" id="agree-{{ form.translate.vars.id }}" role="tablist">
+
+        {% for translate in form.translate %}
+            <li class="nav-item" role="presentation">
+
+                <button class="btn fw-bolder nav-link{{ app.request.locale == translate.vars.value.local? ' active' : '' }}"
+                        data-bs-toggle="tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+
+                        id="agree-{{ form.translate.vars.id }}-{{ translate.vars.value.local }}-tab"
+                        data-bs-target="#agree-{{ form.translate.vars.id }}-{{ translate.vars.value.local }}"
+                        aria-controls="agree-{{ form.translate.vars.id }}-{{ translate.vars.value.local }}"
+                >
+                    <small class="text-uppercase px-3">{{ translate.vars.value.local.value|trans({}, 'core') }}</small>
+                </button>
+
+            </li>
+
+        {% endfor %}
+    </ul>
+
+{% endif %}
+
+<div class="tab-content" id="agree-{{ form.translate.vars.id }}Content">
+
+    {% for translate in form.translate %}
+
+        <div class="tab-pane fade{{ app.request.locale == translate.vars.value.local? ' show active' : '' }}"
+             role="tabpanel"
+             id="agree-{{ form.translate.vars.id }}-{{ translate.vars.value.local }}"
+        >
+
+            {{ form_row(translate.agreement, { label : false, attr: { class: 'ckeditor h-50' } }) }}
+
+
+        </div>
+    {% endfor %}
+
+</div>
