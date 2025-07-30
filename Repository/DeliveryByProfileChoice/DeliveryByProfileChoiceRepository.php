@@ -32,19 +32,44 @@ use BaksDev\Delivery\Entity\Price\DeliveryPrice;
 use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Orders\Order\Repository\DeliveryByProfileChoice\DeliveryByProfileChoiceInterface;
+use BaksDev\Reference\Region\Entity\Region;
+use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Generator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @see DeliveryByProfileChoiceInterface
  */
-final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoiceInterface
+final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoiceInterface
 {
+    private RegionUid|false $region;
+
     public function __construct(
-        private DBALQueryBuilder $DBALQueryBuilder
-    ) {}
+        private readonly DBALQueryBuilder $DBALQueryBuilder,
+        #[Autowire(env: 'PROJECT_REGION')] string|null $region = null,
+    )
+    {
+        $this->region = $region ? new RegionUid($region) : false;
+    }
 
+    public function forRegion(RegionUid|Region $region): self
+    {
+        if($region instanceof Region)
+        {
+            $region = $region->getId();
+        }
 
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * @param TypeProfileUid|null $type
+     *
+     * @return array<int, DeliveryUid>|null
+     */
     public function fetchDeliveryByProfile(?TypeProfileUid $type): ?array
     {
         $dbal = $this->DBALQueryBuilder
@@ -54,28 +79,43 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
 
         $dbal->from(Delivery::class, 'delivery');
 
-        $dbal->join(
-            'delivery',
-            DeliveryEvent::class,
-            'event',
+        $dbal
+            ->join(
+                'delivery',
+                DeliveryEvent::class,
+                'event',
+                '
+                event.id = delivery.event 
+                AND event.active = true  
             '
-                event.id = delivery.event AND 
-                event.active = true AND 
-                (event.type IS NULL OR event.type = :type)
-            '
-        )
-            ->setParameter(
+                .($type instanceof TypeProfileUid ? ' AND (event.type IS NULL OR event.type = :type) ' : ' AND event.type IS NULL ')
+                .($this->region instanceof RegionUid ? ' AND (event.region IS NULL OR event.region = :region) ' : ' AND event.region IS NULL '),
+            );
+
+        if(true === ($type instanceof TypeProfileUid))
+        {
+            $dbal->setParameter(
                 'type',
                 $type,
-                TypeProfileUid::TYPE
+                TypeProfileUid::TYPE,
             );
+        }
+
+        if($this->region instanceof RegionUid)
+        {
+            $dbal->setParameter(
+                'region',
+                $this->region,
+                RegionUid::TYPE,
+            );
+        }
 
         $dbal
             ->leftJoin(
                 'delivery',
                 DeliveryTrans::class,
                 'trans',
-                'trans.event = delivery.event AND trans.local = :local'
+                'trans.event = delivery.event AND trans.local = :local',
             );
 
         $dbal
@@ -83,12 +123,11 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
                 'delivery',
                 DeliveryPrice::class,
                 'price',
-                'price.event = delivery.event'
+                'price.event = delivery.event',
             );
 
 
         $dbal->orderBy('event.sort');
-
 
         $dbal->addSelect('delivery.id AS value');
         $dbal->addSelect('delivery.event AS event');
@@ -115,25 +154,26 @@ final readonly class DeliveryByProfileChoiceRepository implements DeliveryByProf
 
         $dbal->from(Delivery::class, 'delivery');
 
-        $dbal->leftJoin(
-            'delivery',
-            DeliveryEvent::class,
-            'event',
-            'event.id = delivery.event AND event.active = true'
-        );
+        $dbal
+            ->leftJoin(
+                'delivery',
+                DeliveryEvent::class,
+                'event',
+                'event.id = delivery.event AND event.active = true',
+            );
 
         $dbal->leftJoin(
             'delivery',
             DeliveryTrans::class,
             'trans',
-            'trans.event = delivery.event AND trans.local = :local'
+            'trans.event = delivery.event AND trans.local = :local',
         );
 
         $dbal->leftJoin(
             'delivery',
             DeliveryPrice::class,
             'price',
-            'price.event = delivery.event'
+            'price.event = delivery.event',
         );
 
 
