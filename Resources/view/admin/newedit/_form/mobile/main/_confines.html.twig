@@ -1,0 +1,11 @@
+{% trans_default_domain 'delivery.admin' %}
+
+<div class="d-flex justify-content-between align-items-end  gap-3">
+
+    <div class='w-50'>
+        {{ form_row(form.region, { label : 'Регион'|trans, placeholder : 'form.placeholder.type'|trans, attr : { 'data-select' : 'select2' } }) }}
+    </div>
+    <div class='w-50'>
+        {{ form_row(form.type, { label : 'form.label.type'|trans, placeholder : 'form.placeholder.type'|trans }) }}
+    </div>
+</div>
