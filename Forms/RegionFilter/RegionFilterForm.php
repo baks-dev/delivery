@@ -25,24 +25,48 @@ namespace BaksDev\Delivery\Forms\RegionFilter;
 
 use BaksDev\Reference\Region\Repository\ReferenceRegionChoice\ReferenceRegionChoiceInterface;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Generator;
 
 final class RegionFilterForm extends AbstractType
 {
-    private ReferenceRegionChoiceInterface $regionChoice;
 
     public function __construct(
-        ReferenceRegionChoiceInterface $regionChoice
+        private readonly ReferenceRegionChoiceInterface $regionChoice,
+        #[Autowire(env: 'PROJECT_REGION')] private readonly ?string $region = null,
     )
-    {
-        $this->regionChoice = $regionChoice;
-    }
+    {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event): void {
+
+            $data = $event->getData();
+
+            // Если задан PROJECT_REGION
+            if ($this->region)
+            {
+                /** @var RegionFilterDTO $data */
+                $data->setRegion(new RegionUid($this->region));
+
+                return;
+            }
+
+            /** @var Generator $choices */
+            $choices = $this->regionChoice->getRegionChoice();
+
+            $data->setRegion($choices->current());
+
+        });
+
         $builder->add('region', ChoiceType::class, [
             'choices' => $this->regionChoice->getRegionChoice(),
             'choice_value' => function(?RegionUid $region) {

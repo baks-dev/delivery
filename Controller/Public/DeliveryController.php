@@ -31,6 +31,7 @@ use BaksDev\Delivery\Forms\RegionFilter\RegionFilterDTO;
 use BaksDev\Delivery\Forms\RegionFilter\RegionFilterForm;
 use BaksDev\Delivery\Repository\AllDeliveryDetail\DeliveryByTypeProfileInterface;
 use BaksDev\Delivery\Repository\DeliveryRegionDefault\DeliveryRegionDefaultInterface;
+use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Repository\AllProfileType\AllProfileTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,7 +76,7 @@ final class DeliveryController extends AbstractController
 
         /** Пункты выдачи товаров */
         $calls =
-            $callRegion->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion(), true);
+            $callRegion->fetchContactCallByRegionResult($RegionFilterDTO->getRegion(), true);
 
 
         // Поиск по всему сайту
