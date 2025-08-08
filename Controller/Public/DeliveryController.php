@@ -33,6 +33,7 @@ use BaksDev\Delivery\Repository\AllDeliveryDetail\DeliveryByTypeProfileInterface
 use BaksDev\Delivery\Repository\DeliveryRegionDefault\DeliveryRegionDefaultInterface;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Repository\AllProfileType\AllProfileTypeInterface;
+use BaksDev\Users\Profile\UserProfile\Repository\UserProfileByRegion\UserProfileByRegionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -44,14 +45,13 @@ final class DeliveryController extends AbstractController
     #[Route('/delivery', name: 'public.delivery')]
     public function index(
         Request $request,
-        AllProfileTypeInterface $allTypeProfile, // Типы профилей
+        AllProfileTypeInterface $AllProfileTypeRepository, // Типы профилей
         DeliveryByTypeProfileInterface $delivery,
         DeliveryRegionDefaultInterface $defaultRegion,
         ContactCallByRegionInterface $callRegion,
+        UserProfileByRegionInterface $UserProfileByRegionRepository
     ): Response
     {
-
-        $profiles = $allTypeProfile->getTypeProfile();
 
         $RegionFilterDTO = new RegionFilterDTO();
         $DefaultRegion = $defaultRegion->getDefaultDeliveryRegion();
@@ -61,8 +61,13 @@ final class DeliveryController extends AbstractController
         $form = $this->createForm(RegionFilterForm::class, $RegionFilterDTO);
         $form->handleRequest($request);
 
-        /** Способы доставки согласно профилю пользователя */
+        /**
+         * Способы доставки согласно профилю пользователя
+         */
+
         $delivers = null;
+
+        $profiles = $AllProfileTypeRepository->getTypeProfile();
 
         if($profiles)
         {
@@ -74,9 +79,10 @@ final class DeliveryController extends AbstractController
         }
 
 
-        /** Пункты выдачи товаров */
-        $calls =
-            $callRegion->fetchContactCallByRegionResult($RegionFilterDTO->getRegion(), true);
+        /** Пункты выдачи заказов */
+        $calls = $UserProfileByRegionRepository
+            ->onlyCurrentRegion()
+            ->findAll();
 
 
         // Поиск по всему сайту
@@ -85,7 +91,7 @@ final class DeliveryController extends AbstractController
             'action' => $this->generateUrl('delivery:public.delivery'),
         ]);
 
-        // 'all_search' => $allSearchForm->createView(),
+
         return $this->render([
             'profiles' => $profiles,
             'delivers' => $delivers,

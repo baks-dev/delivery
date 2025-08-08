@@ -1,1 +1,33 @@
-Временно недоступно
+{% extends Template('/public/base.html.twig') %}
+
+{% block title %}Доставка{% endblock %}
+
+{% block stylesheets %}
+    <link href="/assets/plugins/nice-select2/nice-select2.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    {{ include(_self|replace({ "template.html.twig" : baks_settings.device ~ "/content.html.twig" })) }}
+{% endblock %}
+
+ {% block javascript %}
+ <script nonce="{{ csp_nonce() }}" data-src='/assets/plugins/nice-select2/nice-select2.min.js?v={{ version }}' class='lazy'></script>
+
+  <script nonce="{{ csp_nonce() }}" >
+  
+  document.getElementById("region_filter_form_region").addEventListener("change", () => {
+      let $form = document.forms.namedItem("region_filter_form");
+      if ($form) { $form.submit(); }
+  });
+  
+  document.getElementById("btn_pickup").addEventListener("click", () => {
+      /* Плавная прокрутка к элементу */
+        document.getElementById("pickup").scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+  });
+
+</script>
+ 
+ 
+ {% endblock %}
+
