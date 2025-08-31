@@ -53,12 +53,13 @@ use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Attribute\When;
 
 /**
  * @covers \BaksDev\Delivery\Messenger\DeliveryMessage
- * @group delivery
  */
 #[Group('delivery')]
+#[When(env: 'test')]
 final class DeliveryMessageTest extends TestCase
 {
     public function testGettersWithLastEvent(): void

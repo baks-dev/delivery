@@ -36,7 +36,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @covers \BaksDev\Delivery\Messenger\DeliveryDispatch
- * @group delivery
  */
 #[Group('delivery')]
 final class DeliveryDispatchDebugTest extends KernelTestCase

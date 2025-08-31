@@ -49,11 +49,6 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group delivery
- * @group delivery-handler
- * @group orders-order-controller
- */
 #[Group('delivery')]
 #[When(env: 'test')]
 final class NewDeliveryHandleTest extends KernelTestCase
