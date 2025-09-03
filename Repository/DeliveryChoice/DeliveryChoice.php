@@ -1,17 +1,17 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
- *
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,8 +31,10 @@ use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Entity\Price\DeliveryPrice;
 use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
+use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use Generator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class DeliveryChoice implements DeliveryChoiceInterface
 {
@@ -41,7 +43,8 @@ final class DeliveryChoice implements DeliveryChoiceInterface
     private ?TypeProfileUid $type = null;
 
     public function __construct(
-        private readonly DBALQueryBuilder $DBALQueryBuilder
+        private readonly DBALQueryBuilder $DBALQueryBuilder,
+        #[Autowire(env: 'PROJECT_REGION')] private readonly ?string $region = null,
     ) {}
 
     /**
@@ -79,25 +82,38 @@ final class DeliveryChoice implements DeliveryChoiceInterface
 
         $dbal->from(Delivery::class, 'delivery');
 
-        $dbal->leftJoin(
+
+        /** Если указан регион проекта - получаем только способы доставки в этом регионе */
+
+        $dbal->join(
             'delivery',
             DeliveryEvent::class,
             'delivery_event',
             'delivery_event.id = delivery.event'
+            .($this->region ? ' AND (delivery_event.region = :region OR delivery_event.region IS NULL) ' : ''),
         );
+
+        if(false === empty($this->region))
+        {
+            $dbal->setParameter(
+                key: 'region',
+                value: new RegionUid($this->region),
+                type: RegionUid::TYPE,
+            );
+        }
 
         $dbal->leftJoin(
             'delivery',
             DeliveryTrans::class,
             'delivery_trans',
-            'delivery_trans.event = delivery.event AND delivery_trans.local = :local'
+            'delivery_trans.event = delivery.event AND delivery_trans.local = :local',
         );
 
         $dbal->leftJoin(
             'delivery',
             DeliveryPrice::class,
             'price',
-            'price.event = delivery.event'
+            'price.event = delivery.event',
         );
 
 
@@ -107,6 +123,7 @@ final class DeliveryChoice implements DeliveryChoiceInterface
         {
             $condition .= ' AND event.active = true';
         }
+
 
         if($this->type)
         {
@@ -119,7 +136,7 @@ final class DeliveryChoice implements DeliveryChoiceInterface
                 'delivery',
                 DeliveryEvent::class,
                 'event',
-                $condition
+                $condition,
             );
         }
 
