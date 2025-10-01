@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ namespace BaksDev\Delivery\Forms\RegionFilter;
 
 use BaksDev\Reference\Region\Repository\ReferenceRegionChoice\ReferenceRegionChoiceInterface;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,16 +34,13 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Generator;
-
 final class RegionFilterForm extends AbstractType
 {
 
     public function __construct(
-        private readonly ReferenceRegionChoiceInterface $regionChoice,
+        private readonly ReferenceRegionChoiceInterface $ReferenceRegionChoiceRepository,
         #[Autowire(env: 'PROJECT_REGION')] private readonly ?string $region = null,
-    )
-    {}
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -52,7 +50,7 @@ final class RegionFilterForm extends AbstractType
             $data = $event->getData();
 
             // Если задан PROJECT_REGION
-            if ($this->region)
+            if(false === is_null($this->region))
             {
                 /** @var RegionFilterDTO $data */
                 $data->setRegion(new RegionUid($this->region));
@@ -61,21 +59,26 @@ final class RegionFilterForm extends AbstractType
             }
 
             /** @var Generator $choices */
-            $choices = $this->regionChoice->getRegionChoice();
+            $regionChoice = $this->ReferenceRegionChoiceRepository->getRegionChoice();
+
+            if(false === $regionChoice || false === $regionChoice->valid())
+            {
+                return;
+            }
 
             $data->setRegion($choices->current());
 
         });
 
         $builder->add('region', ChoiceType::class, [
-            'choices' => $this->regionChoice->getRegionChoice(),
+            'choices' => $this->ReferenceRegionChoiceRepository->getRegionChoice(),
             'choice_value' => function(?RegionUid $region) {
                 return $region?->getValue();
             },
             'choice_label' => function(RegionUid $region) {
                 return $region->getOption();
             },
-            'label' => false
+            'label' => false,
         ]);
 
     }
@@ -87,7 +90,7 @@ final class RegionFilterForm extends AbstractType
             [
                 'data_class' => RegionFilterDTO::class,
                 'method' => 'POST',
-            ]
+            ],
         );
     }
 

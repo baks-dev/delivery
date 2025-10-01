@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -41,22 +41,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DeliveryForm extends AbstractType
 {
-    private TypeProfileChoiceInterface $profileChoice;
-
-    private ReferenceRegionChoiceInterface $regionChoice;
-
-
-    public function __construct(TypeProfileChoiceInterface $profileChoice, ReferenceRegionChoiceInterface $regionChoice)
-    {
-        $this->profileChoice = $profileChoice;
-        $this->regionChoice = $regionChoice;
-    }
+    public function __construct(
+        private readonly TypeProfileChoiceInterface $TypeProfileChoiceRepository,
+        private readonly ReferenceRegionChoiceInterface $ReferenceRegionChoiceRepository
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** Профиль пользователя, которому доступна доставка (null - все) */
 
-        $profileChoice = $this->profileChoice->getAllTypeProfileChoice();
+        $profileChoice = $this->TypeProfileChoiceRepository->getAllTypeProfileChoice();
 
         $builder
             ->add('type', ChoiceType::class, [
@@ -70,12 +64,11 @@ final class DeliveryForm extends AbstractType
                 'label' => false,
                 'expanded' => false,
                 'multiple' => false,
-                'required' => false
+                'required' => false,
             ]);
 
 
-        $regionChoice = $this->regionChoice->getRegionChoice();
-
+        $regionChoice = $this->ReferenceRegionChoiceRepository->getRegionChoice();
 
         $builder
             ->add('region', ChoiceType::class, [
@@ -89,7 +82,7 @@ final class DeliveryForm extends AbstractType
                 'label' => false,
                 'expanded' => false,
                 'multiple' => false,
-                'required' => false
+                'required' => false,
             ]);
 
 
@@ -134,7 +127,7 @@ final class DeliveryForm extends AbstractType
             [
                 'label' => false,
                 'attr' => ['min' => 0, 'max' => 999],
-            ]
+            ],
         );
 
 
@@ -146,7 +139,7 @@ final class DeliveryForm extends AbstractType
             [
                 'label' => false,
                 'required' => false,
-            ]
+            ],
         );
 
         /** Сохранить */
@@ -154,7 +147,7 @@ final class DeliveryForm extends AbstractType
         $builder->add(
             'delivery',
             SubmitType::class,
-            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']]
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']],
         );
     }
 
