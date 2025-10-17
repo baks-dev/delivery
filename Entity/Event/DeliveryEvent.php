@@ -32,6 +32,7 @@ use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Fields\DeliveryField;
 use BaksDev\Delivery\Entity\Modify\DeliveryModify;
 use BaksDev\Delivery\Entity\Price\DeliveryPrice;
+use BaksDev\Delivery\Entity\Term\DeliveryTerm;
 use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
 use BaksDev\Delivery\Type\Event\DeliveryEventUid;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
@@ -91,6 +92,9 @@ class DeliveryEvent extends EntityEvent
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     private bool $active = true;
 
+    /** Срок доставки заказа */
+    #[ORM\OneToOne(targetEntity: DeliveryTerm::class, mappedBy: 'event', cascade: ['all'])]
+    private ?DeliveryTerm $term = null;
 
     /** Профиль пользователя, которому доступна доставка  (null - всем) */
     #[ORM\Column(type: TypeProfileUid::TYPE, nullable: true)]

@@ -25,6 +25,9 @@ declare(strict_types=1);
 
 namespace BaksDev\Delivery\UseCase\Admin\NewEdit;
 
+use BaksDev\Delivery\UseCase\Admin\NewEdit\Cover\DeliveryCoverForm;
+use BaksDev\Delivery\UseCase\Admin\NewEdit\Price\DeliveryPriceForm;
+use BaksDev\Delivery\UseCase\Admin\NewEdit\Term\DeliveryTermForm;
 use BaksDev\Reference\Region\Repository\ReferenceRegionChoice\ReferenceRegionChoiceInterface;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\TypeProfile\Repository\TypeProfileChoice\TypeProfileChoiceInterface;
@@ -88,10 +91,12 @@ final class DeliveryForm extends AbstractType
 
         /** Обложка способа оплаты */
 
-        $builder->add('cover', Cover\DeliveryCoverForm::class);
+        $builder->add('cover', DeliveryCoverForm::class);
 
-        $builder->add('price', Price\DeliveryPriceForm::class);
+        $builder->add('price', DeliveryPriceForm::class);
 
+        /** Срок доставки заказа */
+        $builder->add('term', DeliveryTermForm::class);
 
         /** Настройки локали службы доставки */
 
