@@ -29,6 +29,7 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Delivery\Entity\Delivery;
 use BaksDev\Delivery\Entity\Event\DeliveryEvent;
 use BaksDev\Delivery\Entity\Price\DeliveryPrice;
+use BaksDev\Delivery\Entity\Term\DeliveryTerm;
 use BaksDev\Delivery\Entity\Trans\DeliveryTrans;
 use BaksDev\Delivery\Type\Id\DeliveryUid;
 use BaksDev\Orders\Order\Repository\DeliveryByProfileChoice\DeliveryByProfileChoiceInterface;
@@ -126,6 +127,14 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
                 'price.event = delivery.event',
             );
 
+        $dbal
+            ->leftJoin(
+                'delivery',
+                DeliveryTerm::class,
+                'term',
+                'term.event = delivery.event',
+            );
+
 
         $dbal->orderBy('event.sort');
 
@@ -136,6 +145,7 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
         $dbal->addSelect('(price.price / 100) AS price');
         $dbal->addSelect('(price.excess / 100) AS excess');
         $dbal->addSelect('price.currency AS currency');
+        $dbal->addSelect('term.value AS term');
 
         $result = $dbal
             ->enableCache('delivery')
@@ -176,6 +186,13 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
             'price.event = delivery.event',
         );
 
+        $dbal->leftJoin(
+            'delivery',
+            DeliveryTerm::class,
+            'term',
+            'term.event = delivery.event',
+        );
+
 
         $dbal->orderBy('event.sort');
 
@@ -186,6 +203,7 @@ final class DeliveryByProfileChoiceRepository implements DeliveryByProfileChoice
         $dbal->addSelect('(price.price / 100) AS price');
         $dbal->addSelect('(price.excess / 100) AS excess');
         $dbal->addSelect('price.currency AS currency');
+        $dbal->addSelect('term.value AS term');
 
         $result = $dbal
             ->enableCache('delivery')

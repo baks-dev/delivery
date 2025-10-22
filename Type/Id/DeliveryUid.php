@@ -51,6 +51,8 @@ final class DeliveryUid extends Uid
 
     private ?Currency $currency;
 
+    private int $term;
+
     public function __construct(
         AbstractUid|TypeDeliveryInterface|self|string|null $value = null,
         DeliveryEventUid|string|null $event = null,
@@ -59,6 +61,7 @@ final class DeliveryUid extends Uid
         mixed $price = null,
         mixed $excess = null,
         mixed $currency = null,
+        int $term = 0,
     )
     {
         if(is_string($value) && class_exists($value))
@@ -104,6 +107,7 @@ final class DeliveryUid extends Uid
         $this->price = $price;
         $this->excess = $excess;
         $this->currency = $currency;
+        $this->term = $term;
     }
 
 
@@ -166,4 +170,10 @@ final class DeliveryUid extends Uid
             }
         );
     }
+
+    public function getTerm(): int
+    {
+        return $this->term;
+    }
+
 }
