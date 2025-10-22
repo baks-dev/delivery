@@ -61,7 +61,7 @@ final class DeliveryUid extends Uid
         mixed $price = null,
         mixed $excess = null,
         mixed $currency = null,
-        int $term = 0,
+        ?int $term = 0,
     )
     {
         if(is_string($value) && class_exists($value))
@@ -107,7 +107,7 @@ final class DeliveryUid extends Uid
         $this->price = $price;
         $this->excess = $excess;
         $this->currency = $currency;
-        $this->term = $term;
+        $this->term = $term ?: 0;
     }
 
 
