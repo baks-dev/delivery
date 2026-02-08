@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ namespace BaksDev\Delivery\Type\Id\Choice;
 use BaksDev\Delivery\Type\Id\Choice\Collection\TypeDeliveryInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+/** Самовывоз (pickup) */
 #[AutoconfigureTag('baks.delivery.type')]
 final class TypeDeliveryPickup implements TypeDeliveryInterface
 {
-    /** Самовывоз (pickup) */
     public const string TYPE = '01876ba4-c3e3-7ff6-8faf-4f444199fa03';
 
     public function __toString(): string
