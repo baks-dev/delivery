@@ -38,7 +38,7 @@ final class DeliveryDeleteForm extends AbstractType
         $builder->add(
             'delivery_delete',
             SubmitType::class,
-            ['label' => 'Delete', 'label_html' => true, 'attr' => ['class' => 'btn-danger']]
+            ['label' => 'Delete', 'label_html' => true, 'attr' => ['class' => 'btn-danger']],
         );
     }
 

@@ -62,6 +62,12 @@ class UpgradeDeliveryTypePickupCommand extends Command
         parent::__construct();
     }
 
+    /** Чам выше число - тем первым в итерации будет значение */
+    public static function priority(): int
+    {
+        return 99;
+    }
+
     /** Добавляет доставку Yandex Market  */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -136,12 +142,6 @@ class UpgradeDeliveryTypePickupCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-
-    /** Чам выше число - тем первым в итерации будет значение */
-    public static function priority(): int
-    {
-        return 99;
     }
 
 }

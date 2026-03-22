@@ -76,7 +76,7 @@ final class DeliveryFieldForm extends AbstractType
             [
                 'label' => false,
                 'attr' => ['min' => 0, 'max' => 999],
-            ]
+            ],
         );
 
 
@@ -93,7 +93,7 @@ final class DeliveryFieldForm extends AbstractType
                 'choice_label' => function($choice) {
                     return $this->translator->trans('label', domain: $choice->domain());
                 },
-            ]
+            ],
         );
 
         $builder->get('type')->addModelTransformer(
@@ -103,8 +103,8 @@ final class DeliveryFieldForm extends AbstractType
                 },
                 function($type) {
                     return $type instanceof FieldsChoiceInterface ? new InputField($type) : null;
-                }
-            )
+                },
+            ),
         );
 
         /** Обязательное к заполнению */
@@ -120,7 +120,7 @@ final class DeliveryFieldForm extends AbstractType
                 'label_html' => true,
                 'attr' =>
                     ['class' => 'btn btn-sm btn-icon btn-light-danger del-item-field'],
-            ]
+            ],
         );
     }
 

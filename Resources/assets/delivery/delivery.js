@@ -23,18 +23,18 @@
 
 /* кнопка Добавить коллекцию */
 
-let $addButtonField = document.getElementById('field_addCollection');
+let $addButtonField = document.getElementById("field_addCollection");
 
 if($addButtonField)
 {
     /* Блок для новой коллекции */
-    let $blockCollection = document.getElementById('field_collection');
+    let $blockCollection = document.getElementById("field_collection");
 
     if($blockCollection)
     {
 
         /* Добавляем новую коллекцию */
-        $addButtonField.addEventListener('click', function()
+        $addButtonField.addEventListener("click", function()
         {
             /* получаем прототип коллекции  */
             let newForm = this.dataset.prototype;
@@ -52,9 +52,9 @@ if($addButtonField)
 
 
             /* Вставляем новую коллекцию */
-            let div = document.createElement('div');
-            div.id = 'item_delivery_form_field_' + index;
-            div.classList.add('mb-3');
+            let div = document.createElement("div");
+            div.id = "item_delivery_form_field_" + index;
+            div.classList.add("mb-3");
 
 
             div.innerHTML = newForm;
@@ -62,9 +62,9 @@ if($addButtonField)
 
 
             /* Плавная прокрутка к элементу */
-            div.scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+            div.scrollIntoView({block : "center", inline : "center", behavior : "smooth"});
 
-            (div.querySelector('.del-item-field'))?.addEventListener('click', deleteField);
+            (div.querySelector(".del-item-field"))?.addEventListener("click", deleteField);
 
             // let field = document.getElementById('field-collection-' + index);
             // field.innerHTML = field.innerHTML.replace(/__FIELDS__/g, '0')
@@ -91,9 +91,9 @@ if($addButtonField)
 
 }
 
-document.querySelectorAll('.del-item-field').forEach(function(item)
+document.querySelectorAll(".del-item-field").forEach(function(item)
 {
-    item.addEventListener('click', deleteField);
+    item.addEventListener("click", deleteField);
 });
 
 function deleteField()

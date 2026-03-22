@@ -53,21 +53,21 @@ final readonly class FieldByDeliveryChoiceRepository implements FieldByDeliveryC
             ->setParameter(
                 key: 'delivery',
                 value: $delivery,
-                type: DeliveryUid::TYPE
+                type: DeliveryUid::TYPE,
             );
 
         $qb->join(
             DeliveryField::class,
             'field',
             'WITH',
-            'field.event = delivery.event'
+            'field.event = delivery.event',
         );
 
         $qb->leftJoin(
             DeliveryFieldTrans::class,
             'trans',
             'WITH',
-            'trans.field = field.id AND trans.local = :local'
+            'trans.field = field.id AND trans.local = :local',
         );
 
 

@@ -61,6 +61,35 @@ final class DeleteDeliveryHandleTest extends KernelTestCase
         $CurrencyCollection->cases();
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        /** @var CurrencyCollection $CurrencyCollection */
+        $CurrencyCollection = self::getContainer()->get(CurrencyCollection::class);
+        $CurrencyCollection->cases();
+
+        /** @var EntityManagerInterface $em */
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+
+        $main = $em->getRepository(Delivery::class)
+            ->find(DeliveryUid::TEST);
+
+        if($main)
+        {
+            $em->remove($main);
+        }
+
+        $events = $em->getRepository(DeliveryEvent::class)
+            ->findBy(['main' => DeliveryUid::TEST]);
+
+        foreach($events as $remove)
+        {
+            $em->remove($remove);
+        }
+
+        $em->flush();
+        $em->clear();
+    }
+
     #[DependsOnClass(EditDeliveryHandleTest::class)]
     public function testUseCase(): void
     {
@@ -145,35 +174,6 @@ final class DeleteDeliveryHandleTest extends KernelTestCase
         self::assertTrue(($handle instanceof Delivery), $handle.': Ошибка Delivery');
 
 
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        /** @var CurrencyCollection $CurrencyCollection */
-        $CurrencyCollection = self::getContainer()->get(CurrencyCollection::class);
-        $CurrencyCollection->cases();
-
-        /** @var EntityManagerInterface $em */
-        $em = self::getContainer()->get(EntityManagerInterface::class);
-
-        $main = $em->getRepository(Delivery::class)
-            ->find(DeliveryUid::TEST);
-
-        if($main)
-        {
-            $em->remove($main);
-        }
-
-        $events = $em->getRepository(DeliveryEvent::class)
-            ->findBy(['main' => DeliveryUid::TEST]);
-
-        foreach($events as $remove)
-        {
-            $em->remove($remove);
-        }
-
-        $em->flush();
-        $em->clear();
     }
 
 }

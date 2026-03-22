@@ -65,11 +65,6 @@ class DeliveryTerm extends EntityEvent
         return (string) $this->event;
     }
 
-    public function getValue(): int
-    {
-        return $this->value;
-    }
-
     /** @return DeliveryTermInterface */
     public function getDto($dto): mixed
     {
@@ -100,5 +95,10 @@ class DeliveryTerm extends EntityEvent
         }
 
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
     }
 }

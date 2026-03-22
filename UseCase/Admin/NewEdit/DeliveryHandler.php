@@ -68,7 +68,7 @@ final class DeliveryHandler extends AbstractHandler
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(
             message: new DeliveryMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'delivery'
+            transport: 'delivery',
         );
 
         return $this->main;

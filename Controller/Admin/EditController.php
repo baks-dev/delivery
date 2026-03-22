@@ -67,7 +67,7 @@ final class EditController extends AbstractController
                 'page.edit',
                 $handle instanceof Delivery ? 'success.edit' : 'danger.edit',
                 'delivery.admin',
-                $handle
+                $handle,
             );
 
             return $handle instanceof Delivery ? $this->redirectToRoute('delivery:admin.index') : $this->redirectToReferer();

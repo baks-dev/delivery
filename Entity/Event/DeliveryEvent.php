@@ -121,23 +121,20 @@ class DeliveryEvent extends EntityEvent
         return (string) $this->id;
     }
 
-    public function getId(): DeliveryEventUid
+    public function getMain(): ?DeliveryUid
     {
-        return $this->id;
+        return $this->main;
     }
-
 
     public function setMain(DeliveryUid|Delivery $main): void
     {
         $this->main = $main instanceof Delivery ? $main->getId() : $main;
     }
 
-
-    public function getMain(): ?DeliveryUid
+    public function getId(): DeliveryEventUid
     {
-        return $this->main;
+        return $this->id;
     }
-
 
     public function getDto($dto): mixed
     {

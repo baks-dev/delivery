@@ -67,7 +67,7 @@ final class DeleteController extends AbstractController
                 'page.delete',
                 $handle instanceof Delivery ? 'success.delete' : 'danger.delete',
                 'delivery.admin',
-                $handle
+                $handle,
             );
 
             return $handle instanceof Delivery ? $this->redirectToRoute('delivery:admin.index') : $this->redirectToReferer();

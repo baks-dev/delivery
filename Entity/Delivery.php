@@ -57,21 +57,19 @@ class Delivery
         return (string) $this->id;
     }
 
-    public function getId(): DeliveryUid
-    {
-        return $this->id;
-    }
-
-
     public function getEvent(): DeliveryEventUid
     {
         return $this->event;
     }
 
-
     public function setEvent(DeliveryEventUid|DeliveryEvent $event): void
     {
         $this->event = $event instanceof DeliveryEvent ? $event->getId() : $event;
+    }
+
+    public function getId(): DeliveryUid
+    {
+        return $this->id;
     }
 
 }

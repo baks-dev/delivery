@@ -112,14 +112,6 @@ final class DeliveryDTO implements DeliveryEventInterface
         return $this->delivery;
     }
 
-    /** Перевод */
-
-    public function setTranslate(ArrayCollection $trans): void
-    {
-        $this->translate = $trans;
-    }
-
-
     public function getTranslate(): ArrayCollection
     {
         /* Вычисляем расхождение и добавляем неопределенные локали */
@@ -133,6 +125,12 @@ final class DeliveryDTO implements DeliveryEventInterface
         return $this->translate;
     }
 
+    /** Перевод */
+
+    public function setTranslate(ArrayCollection $trans): void
+    {
+        $this->translate = $trans;
+    }
 
     public function addTranslate(Trans\DeliveryTransDTO $trans): void
     {

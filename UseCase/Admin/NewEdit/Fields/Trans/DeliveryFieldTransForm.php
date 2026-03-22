@@ -49,8 +49,8 @@ final class DeliveryFieldTransForm extends AbstractType
                 function($local) {
 
                     return new Locale($local);
-                }
-            )
+                },
+            ),
         );
 
         /** Название поля для заполнения */

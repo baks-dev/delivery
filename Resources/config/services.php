@@ -47,7 +47,7 @@ return static function(ContainerConfigurator $configurator) {
 
     $services->load(
         $NAMESPACE.'Type\Id\Choice\\',
-        $PATH.implode(DIRECTORY_SEPARATOR, ['Type', 'Id', 'Choice']) //'Type/Id/Choice'
+        $PATH.implode(DIRECTORY_SEPARATOR, ['Type', 'Id', 'Choice']), //'Type/Id/Choice'
     );
 
 

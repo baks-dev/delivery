@@ -59,7 +59,7 @@ final class DeliveryForm extends AbstractType
             },
             'label' => false,
             'translation_domain' => 'delivery',
-            'attr' => ['class' => 'w-100']
+            'attr' => ['class' => 'w-100'],
             //'expanded' => true,
         ]);
     }

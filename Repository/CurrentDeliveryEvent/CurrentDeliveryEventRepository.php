@@ -65,6 +65,28 @@ final class CurrentDeliveryEventRepository implements CurrentDeliveryEventInterf
         return $this;
     }
 
+    public function getId(): DeliveryEventUid|false
+    {
+        if(false === ($this->delivery instanceof DeliveryUid))
+        {
+            throw new InvalidArgumentException('Invalid Argument Delivery');
+        }
+
+        $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+
+        $dbal
+            ->select('delivery.event AS value')
+            ->from(Delivery::class, 'delivery')
+            ->where('delivery.id = :delivery')
+            ->setParameter(
+                key: 'delivery',
+                value: $this->delivery,
+                type: DeliveryUid::TYPE,
+            );
+
+        return $dbal->fetchHydrate(DeliveryEventUid::class);
+    }
+
     /**
      * Метод возвращает активное событие доставки
      */
@@ -83,7 +105,7 @@ final class CurrentDeliveryEventRepository implements CurrentDeliveryEventInterf
             ->setParameter(
                 key: 'delivery',
                 value: $this->delivery,
-                type: DeliveryUid::TYPE
+                type: DeliveryUid::TYPE,
             );
 
         $qb
@@ -92,31 +114,9 @@ final class CurrentDeliveryEventRepository implements CurrentDeliveryEventInterf
                 DeliveryEvent::class,
                 'event',
                 'WITH',
-                'event.id = delivery.event'
+                'event.id = delivery.event',
             );
 
         return $qb->getOneOrNullResult();
-    }
-
-    public function getId(): DeliveryEventUid|false
-    {
-        if(false === ($this->delivery instanceof DeliveryUid))
-        {
-            throw new InvalidArgumentException('Invalid Argument Delivery');
-        }
-
-        $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
-
-        $dbal
-            ->select('delivery.event AS value')
-            ->from(Delivery::class, 'delivery')
-            ->where('delivery.id = :delivery')
-            ->setParameter(
-                key: 'delivery',
-                value: $this->delivery,
-                type: DeliveryUid::TYPE
-            );
-
-        return $dbal->fetchHydrate(DeliveryEventUid::class);
     }
 }

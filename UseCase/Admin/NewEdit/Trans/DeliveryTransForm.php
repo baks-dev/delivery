@@ -50,8 +50,8 @@ final class DeliveryTransForm extends AbstractType
                 function($local) {
 
                     return new Locale($local);
-                }
-            )
+                },
+            ),
         );
 
         /** Название службы доставки */

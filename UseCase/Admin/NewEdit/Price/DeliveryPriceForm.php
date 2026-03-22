@@ -43,7 +43,7 @@ final class DeliveryPriceForm extends AbstractType
         $builder->add(
             'price',
             MoneyType::class,
-            ['currency' => false, 'required' => false]
+            ['currency' => false, 'required' => false],
         );
 
         $builder->get('price')->addModelTransformer(
@@ -54,15 +54,15 @@ final class DeliveryPriceForm extends AbstractType
                 function($price) {
 
                     return new Money($price);
-                }
-            )
+                },
+            ),
         );
 
 
         $builder->add(
             'excess',
             MoneyType::class,
-            ['currency' => false, 'required' => false]
+            ['currency' => false, 'required' => false],
         );
 
         $builder->get('excess')->addModelTransformer(
@@ -73,8 +73,8 @@ final class DeliveryPriceForm extends AbstractType
                 function($excess) {
 
                     return new Money($excess);
-                }
-            )
+                },
+            ),
         );
 
         $builder->add(
@@ -90,7 +90,7 @@ final class DeliveryPriceForm extends AbstractType
                 },
                 'translation_domain' => 'reference.currency',
                 'label' => false,
-            ]
+            ],
         );
 
     }

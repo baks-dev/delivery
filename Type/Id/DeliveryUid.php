@@ -167,7 +167,7 @@ final class DeliveryUid extends Uid
             get_declared_classes(),
             static function($className) {
                 return in_array(TypeDeliveryInterface::class, class_implements($className), true);
-            }
+            },
         );
     }
 

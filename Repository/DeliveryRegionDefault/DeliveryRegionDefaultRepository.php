@@ -47,7 +47,7 @@ final readonly class DeliveryRegionDefaultRepository implements DeliveryRegionDe
             DeliveryEvent::class,
             'delivery_event',
             'WITH',
-            'delivery_event.id = delivery.event AND delivery_event.region IS NOT NULL'
+            'delivery_event.id = delivery.event AND delivery_event.region IS NOT NULL',
         );
 
         $orm->orderBy('delivery_event.sort');

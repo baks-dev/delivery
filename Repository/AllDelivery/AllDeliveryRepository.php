@@ -67,7 +67,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
                 'delivery',
                 DeliveryEvent::class,
                 'event',
-                'event.id = delivery.event'
+                'event.id = delivery.event',
             );
 
         $qb
@@ -77,7 +77,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
                 'event',
                 DeliveryTrans::class,
                 'trans',
-                'trans.event = event.id AND trans.local = :local'
+                'trans.event = event.id AND trans.local = :local',
             );
 
         /** Стоимость доставки */
@@ -89,7 +89,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
                 'event',
                 DeliveryPrice::class,
                 'price',
-                'price.event = event.id'
+                'price.event = event.id',
             );
 
 
@@ -104,14 +104,14 @@ final class AllDeliveryRepository implements AllDeliveryInterface
 					CONCAT ( '/upload/".$qb->table(DeliveryCover::class)."' , '/', cover.name)
 			   ELSE NULL
 			END AS delivery_cover_name
-		"
+		",
             );
 
         $qb->leftJoin(
             'event',
             DeliveryCover::class,
             'cover',
-            'cover.event = event.id'
+            'cover.event = event.id',
         );
 
         /** Ограничение профилем */
@@ -120,14 +120,14 @@ final class AllDeliveryRepository implements AllDeliveryInterface
             'event',
             TypeProfile::class,
             'type_profile',
-            'event.type IS NOT NULL AND type_profile.id = event.type'
+            'event.type IS NOT NULL AND type_profile.id = event.type',
         );
 
         $qb->leftJoin(
             'type_profile',
             TypeProfileEvent::class,
             'type_profile_event',
-            'type_profile_event.id = type_profile.event'
+            'type_profile_event.id = type_profile.event',
         );
 
         $qb->addSelect('type_profile_trans.name AS type_profile_name');
@@ -136,7 +136,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
             'type_profile_event',
             TypeProfileTrans::class,
             'type_profile_trans',
-            'type_profile_trans.event = type_profile_event.id AND type_profile_trans.local = :local'
+            'type_profile_trans.event = type_profile_event.id AND type_profile_trans.local = :local',
         );
 
         /** Ограничение регионом */
@@ -144,14 +144,14 @@ final class AllDeliveryRepository implements AllDeliveryInterface
             'event',
             Region::class,
             'region',
-            'event.region IS NOT NULL AND region.id = event.region'
+            'event.region IS NOT NULL AND region.id = event.region',
         );
 
         $qb->leftJoin(
             'region',
             RegionEvent::class,
             'region_event',
-            'region_event.id = region.event'
+            'region_event.id = region.event',
         );
 
         $qb->addSelect('region_trans.name AS region_name');
@@ -160,7 +160,7 @@ final class AllDeliveryRepository implements AllDeliveryInterface
             'region_event',
             RegionTrans::class,
             'region_trans',
-            'region_trans.event = region_event.id AND region_trans.local = :local'
+            'region_trans.event = region_event.id AND region_trans.local = :local',
         );
 
         /* Поиск */

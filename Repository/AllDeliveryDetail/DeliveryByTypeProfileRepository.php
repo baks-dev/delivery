@@ -63,7 +63,7 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
             $dbal->setParameter(
                 'region',
                 $region,
-                RegionUid::TYPE
+                RegionUid::TYPE,
             );
 
         }
@@ -75,12 +75,12 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
             '
 			delivery_event.id = delivery.event AND
 			delivery_event.active = true AND
-			(delivery_event.type = :profile OR delivery_event.type IS NULL)'.$condition
+			(delivery_event.type = :profile OR delivery_event.type IS NULL)'.$condition,
         )
             ->setParameter(
                 'profile',
                 $profile,
-                TypeProfileUid::TYPE
+                TypeProfileUid::TYPE,
             );
 
 
@@ -92,7 +92,7 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
                 'delivery_event',
                 DeliveryTrans::class,
                 'delivery_trans',
-                'delivery_trans.event = delivery_event.id AND delivery_trans.local = :local'
+                'delivery_trans.event = delivery_event.id AND delivery_trans.local = :local',
             );
 
         /** Обложка */
@@ -106,14 +106,14 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
 					CONCAT ( '/upload/".$dbal->table(DeliveryCover::class)."' , '/', delivery_cover.name)
 			   		ELSE NULL
 			END AS delivery_cover_name
-		"
+		",
             );
 
         $dbal->leftJoin(
             'delivery_event',
             DeliveryCover::class,
             'delivery_cover',
-            'delivery_cover.event = delivery_event.id'
+            'delivery_cover.event = delivery_event.id',
         );
 
         $dbal
@@ -124,7 +124,7 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
                 'delivery_event',
                 DeliveryPrice::class,
                 'delivery_price',
-                'delivery_price.event = delivery_event.id'
+                'delivery_price.event = delivery_event.id',
             );
 
 
@@ -136,14 +136,14 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
                 'delivery_event',
                 Region::class,
                 'region',
-                'region.id = delivery_event.region'
+                'region.id = delivery_event.region',
             );
 
         $dbal->leftJoin(
             'region',
             RegionInvariable::class,
             'region_invariable',
-            'region_invariable.main = region.id'
+            'region_invariable.main = region.id',
         );
 
         $dbal
@@ -153,7 +153,7 @@ final class DeliveryByTypeProfileRepository implements DeliveryByTypeProfileInte
                 'region',
                 RegionTrans::class,
                 'region_trans',
-                'region_trans.event = region.event AND region_trans.local = :local'
+                'region_trans.event = region.event AND region_trans.local = :local',
             );
 
         $dbal->addOrderBy('delivery_event.sort');

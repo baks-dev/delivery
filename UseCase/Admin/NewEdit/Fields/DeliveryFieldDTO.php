@@ -55,15 +55,6 @@ final class DeliveryFieldDTO implements DeliveryFieldInterface
         $this->translate = new ArrayCollection();
     }
 
-
-    /** Перевод */
-
-    public function setTranslate(ArrayCollection $trans): void
-    {
-        $this->translate = $trans;
-    }
-
-
     public function getTranslate(): ArrayCollection
     {
         /* Вычисляем расхождение и добавляем неопределенные локали */
@@ -77,6 +68,12 @@ final class DeliveryFieldDTO implements DeliveryFieldInterface
         return $this->translate;
     }
 
+    /** Перевод */
+
+    public function setTranslate(ArrayCollection $trans): void
+    {
+        $this->translate = $trans;
+    }
 
     public function addTranslate(Trans\DeliveryFieldTransDTO $trans): void
     {
